@@ -24,7 +24,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     // Rute Dashboard Pengunjung (jika tidak ada peran khusus)
-    Route::get('/dashboard', [PengunjungDashboardController::class, 'index'])->name('dashboard');
+    // Route::get('/dashboard', [PengunjungDashboardController::class, 'index'])->name('dashboard'); // Hapus ini
 });
 
 
@@ -53,7 +53,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 // Ini adalah rute-rute autentikasi bawaan Laravel Breeze
 require __DIR__.'/auth.php';
 
-// Route untuk redirect setelah login, sesuaikan agar pengunjung diarahkan ke dashboard baru
+// Setelah login, redirect by role
 Route::get('/redirect-by-role', function () {
     $user = auth()->user();
     if ($user->role === 'admin') {
@@ -61,7 +61,6 @@ Route::get('/redirect-by-role', function () {
     } elseif ($user->role === 'umkm') {
         return redirect()->route('umkm.dashboard');
     } else {
-        // Asumsi peran selain admin/umkm adalah pengunjung
-        return redirect()->route('dashboard'); // Arahkan ke dashboard pengunjung
+        return redirect('/'); // Pengunjung diarahkan ke home
     }
 })->middleware(['auth']);

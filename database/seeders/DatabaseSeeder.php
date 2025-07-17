@@ -11,15 +11,15 @@ class DatabaseSeeder extends Seeder
     /**
      * Seed the application's database.
      */
-    public function run(): void
-    {
-        // User::factory(10)->create();
-
-        // panggil seeder utama
-        $this->call([
-            CategorySeeder::class,
-            ProductStatusSeeder::class,
-            AdminUserSeeder::class,
-        ]);
-    }
+    // database/seeders/DatabaseSeeder.php
+public function run(): void
+{
+    $this->call([
+        CategorySeeder::class,
+        ProductStatusSeeder::class,
+        AdminUserSeeder::class,
+        UmkmSeeder::class, // Tambahkan ini
+    ]);
+}
+    
 }
