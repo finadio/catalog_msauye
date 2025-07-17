@@ -48,7 +48,7 @@ class User extends Authenticatable
 
     public function umkm()
     {
-        return $this->belongsTo(Umkm::class);
+        return $this->hasOne(Umkm::class);
     }
 
     public function produk()
