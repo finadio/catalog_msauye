@@ -5,7 +5,7 @@ namespace App\Http\Middleware;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Illuminate\Support\Facades\Auth; // Tambahkan ini
+use Illuminate\Support\Facades\Auth;
 
 class RoleMiddleware
 {
@@ -14,19 +14,16 @@ class RoleMiddleware
      */
     public function handle(Request $request, Closure $next, ...$roles): Response
     {
-        // Debugging step 1: Periksa apakah user terautentikasi
         if (!Auth::check()) {
-            dd('Middleware: User NOT Authenticated'); // Jika ini muncul, user belum login atau sesi hilang
+            // Redirect to login if user is not authenticated
+            return redirect('/login');
         }
 
-        $user = Auth::user(); // Dapatkan user yang sedang login
+        $user = Auth::user();
 
-        // Debugging step 2: Periksa role user yang terautentikasi
-        dd('Middleware: User Authenticated. User Role:', $user->role, 'Expected Roles:', $roles);
-        // Jika ini muncul, perhatikan nilai $user->role dan $roles
-
+        // Check if the authenticated user has any of the required roles
         if (!in_array($user->role, $roles)) {
-            // Jika baris ini tereksekusi, berarti role tidak cocok
+            // If the user does not have the required role, abort with 403 Forbidden
             abort(403, 'Unauthorized');
         }
 
