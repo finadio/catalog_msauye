@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ProfileController; // Pastikan ini ada
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PublicController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\PengunjungDashboardController; // Pastikan ini juga ada
 
 // Routing halaman publik
 Route::get('/', [PublicController::class, 'home'])->name('home');
@@ -15,8 +16,17 @@ Route::get('/tentang', [PublicController::class, 'tentang'])->name('tentang');
 Route::get('/contact', [ContactController::class, 'create'])->name('contact');
 Route::post('/contact', [ContactController::class, 'store']);
 
-// Daftar produk publik (bisa filter kategori, pencarian, dsb)
-Route::get('/produk', [\App\Http\Controllers\PublicController::class, 'produkIndex'])->name('produk.index');
+// Rute-rute yang memerlukan autentikasi (untuk semua peran)
+Route::middleware('auth')->group(function () {
+    // Rute Profil
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    // Rute Dashboard Pengunjung (jika tidak ada peran khusus)
+    Route::get('/dashboard', [PengunjungDashboardController::class, 'index'])->name('dashboard');
+});
+
 
 // Dashboard UMKM
 Route::middleware(['auth', 'role:umkm'])->group(function () {
@@ -40,25 +50,18 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
     Route::resource('/admin/contact', \App\Http\Controllers\AdminContactController::class, [ 'as' => 'admin' ]);
 });
 
+// Ini adalah rute-rute autentikasi bawaan Laravel Breeze
 require __DIR__.'/auth.php';
 
-Route::get('/dashboard', function () {
-    $user = auth()->user();
-    if (!$user) {
-        return redirect()->route('login');
-    }
-    if ($user->role === 'admin') {
-        return redirect()->route('admin.dashboard');
-    } else {
-        return redirect()->route('umkm.dashboard');
-    }
-})->middleware(['auth'])->name('dashboard');
-
+// Route untuk redirect setelah login, sesuaikan agar pengunjung diarahkan ke dashboard baru
 Route::get('/redirect-by-role', function () {
     $user = auth()->user();
     if ($user->role === 'admin') {
         return redirect()->route('admin.dashboard');
-    } else {
+    } elseif ($user->role === 'umkm') {
         return redirect()->route('umkm.dashboard');
+    } else {
+        // Asumsi peran selain admin/umkm adalah pengunjung
+        return redirect()->route('dashboard'); // Arahkan ke dashboard pengunjung
     }
 })->middleware(['auth']);

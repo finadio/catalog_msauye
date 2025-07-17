@@ -5,7 +5,7 @@
     <div class="py-12 bg-gray-50 min-h-screen">
         <div class="max-w-5xl mx-auto bg-white rounded-xl shadow-lg p-8 flex flex-col md:flex-row gap-8 md:gap-12">
             <div class="flex-shrink-0 w-full md:w-1/3 rounded-lg overflow-hidden shadow-md">
-                <img src="{{ $umkm->photo ? asset('storage/'.$umkm->photo) : 'https://via.placeholder.com/400x400?text=Foto+UMKM' }}" alt="{{ $umkm->name }}" class="w-full h-56 md:h-72 object-cover">
+                <img src="{{ $umkm->photo ? asset('storage/'.$umkm->photo) : asset('img/umkm-default.jpg') }}" alt="{{ $umkm->name }}" class="w-full h-56 md:h-72 object-cover">
             </div>
             <div class="flex-1 flex flex-col">
                 <h2 class="text-3xl font-bold mb-3 text-gray-900">{{ $umkm->name }}</h2>
@@ -44,7 +44,7 @@
                 @forelse($umkm->products ?? [] as $product)
                     <div class="bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden flex flex-col group">
                         <div class="relative overflow-hidden w-full aspect-square">
-                            <img src="{{ $product->photo ? asset('storage/'.$product->photo) : 'https://via.placeholder.com/300x300?text=Foto+Produk' }}" alt="{{ $product->name }}" class="absolute inset-0 w-full h-full object-cover transform transition-transform duration-300 group-hover:scale-105">
+                            <img src="{{ $product->photo ? asset('storage/'.$product->photo) : asset('img/produk-dummy-1.jpg') }}" alt="{{ $product->name }}" class="absolute inset-0 w-full h-full object-cover transform transition-transform duration-300 group-hover:scale-105">
                             @if($product->status->name != 'approved')
                                 <span class="absolute top-2 left-2 bg-red-500 text-white text-xs font-semibold px-2 py-1 rounded-md z-10">
                                     {{ ucfirst($product->status->name) }}

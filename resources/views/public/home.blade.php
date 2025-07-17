@@ -1,9 +1,8 @@
 <x-app-layout>
     {{-- Hero Section --}}
-    {{-- Latar belakang hitam dengan overlay transparan untuk memastikan teks putih selalu terbaca jelas --}}
     <section class="relative bg-black h-[550px] md:h-[650px] flex items-center justify-center text-white overflow-hidden">
-        {{-- Gambar latar belakang dari Unsplash, dipilih secara spesifik untuk kesan profesional dan modern --}}
-        <div class="absolute inset-0 bg-cover bg-center z-0" style="background-image: url('https://images.unsplash.com/photo-1598042456578-2f8832a87265?auto=format&fit=crop&w=2940&q=80');"></div>
+        {{-- Gambar latar belakang dari aset lokal --}}
+        <div class="absolute inset-0 bg-cover bg-center z-0" style="background-image: url('{{ asset('img/hero.png') }}');"></div>
         <div class="absolute inset-0 bg-gray-900 opacity-60 z-10"></div> {{-- Overlay abu-abu gelap transparan --}}
 
         <div class="max-w-4xl mx-auto text-center relative z-20 px-6 py-10">
@@ -11,7 +10,7 @@
                 Gerbang Digital UMKM Binaan <br class="hidden md:inline">PT BPR MSA
             </h1>
             <p class="text-base sm:text-lg md:text-xl mb-10 leading-relaxed text-gray-200 drop-shadow-md">
-                Jelajahi koleksi produk dan layanan berkualitas tinggi dari pengusaha lokal terkemuka.
+                Jelajahi koleksi produk dan layanan berkualitas tinggi dari para pelaku UMKM lokal terkemuka.
                 Dukung pertumbuhan ekonomi daerah dengan setiap klik dan eksplorasi Anda!
             </p>
             <a href="#produk-terbaru" class="inline-block px-12 py-4 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 font-bold text-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105">
@@ -56,22 +55,19 @@
                     @forelse($categories as $cat)
                         <a href="{{ route('home', ['kategori' => $cat->id]) }}" class="flex-none w-36 h-44 sm:w-40 sm:h-52 md:w-48 md:h-60 flex flex-col items-center justify-center bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 transform hover:-translate-y-1 p-4 text-center group">
                             @php
-                                // URL gambar unik per kategori, pastikan ini relevan dengan kategori Anda
-                                $categoryImages = [
-                                    'Makanan' => 'https://images.unsplash.com/photo-1556910103-ecc767954972?auto=format&fit=crop&w=180&h=180&q=80',
-                                    'Minuman' => 'https://images.unsplash.com/photo-1543886574-e34927b2b80a?auto=format&fit=crop&w=180&h=180&q=80',
-                                    'Kerajinan' => 'https://images.unsplash.com/photo-1563200924-f7b5b7f9b8c0?auto=format&fit=crop&w=180&h=180&q=80',
-                                    'Jasa' => 'https://images.unsplash.com/photo-1520698188177-3e11d6e1d7a3?auto=format&fit=crop&w=180&h=180&q=80',
-                                    'Fashion' => 'https://images.unsplash.com/photo-1523359765279-d3753e6b22b0?auto=format&fit=crop&w=180&h=180&q=80',
-                                    'Kesehatan' => 'https://images.unsplash.com/photo-1532092288636-f0331003f56b?auto=format&fit=crop&w=180&h=180&q=80',
-                                    'Elektronik' => 'https://images.unsplash.com/photo-1588117260172-bd78577ad36d?auto=format&fit=crop&w=180&h=180&q=80',
-                                    'Rumah Tangga' => 'https://images.unsplash.com/photo-1517409219664-9a4f6d89b142?auto=format&fit=crop&w=180&h=180&q=80',
+                                // Mengambil gambar berdasarkan nama kategori, dengan fallback ke dummy jika tidak ditemukan
+                                $categoryImageMap = [
+                                    'Makanan' => 'makanan.jpg',
+                                    'Minuman' => 'minuman.jpg',
+                                    'Kerajinan' => 'kerajinan.jpg',
+                                    'Jasa' => 'jasa.jpg',
+                                    'Fashion' => 'fashion.jpg',
+                                    // Tambahkan kategori lain jika ada, dengan nama file gambar yang sesuai di public/img/
                                 ];
-                                // Mengambil gambar berdasarkan nama kategori, jika tidak ada, gunakan default yang lebih generik dan variatif
-                                $imageUrl = $categoryImages[$cat->name] ?? $categoryImages[array_rand($categoryImages)]; // Fallback ke random jika nama tidak matching
+                                $localImagePath = $categoryImageMap[$cat->name] ?? 'category-default.jpg'; // Fallback umum
                             @endphp
                             <div class="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-full overflow-hidden mb-4 shadow-inner">
-                                <img src="{{ $imageUrl }}" alt="Kategori {{ $cat->name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
+                                <img src="{{ asset('img/' . $localImagePath) }}" alt="Kategori {{ $cat->name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                             </div>
                             <h4 class="font-semibold text-base sm:text-lg text-gray-800 group-hover:text-blue-600 transition-colors duration-300">{{ $cat->name }}</h4>
                         </a>
@@ -91,14 +87,15 @@
                 @forelse($articles->take(3) as $article)
                     <div class="bg-gray-50 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden flex flex-col">
                         @php
-                            $articlePlaceholderImages = [
-                                'edukasi' => 'https://images.unsplash.com/photo-1516321497487-e288ad7ab135?auto=format&fit=crop&w=400&h=250&q=80',
-                                'berita' => 'https://images.unsplash.com/photo-1507679799977-947bee902263?auto=format&fit=crop&w=400&h=250&q=80',
-                                'default' => 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=400&h=250&q=80'
+                            // Mengambil gambar berdasarkan tipe artikel, dengan fallback ke dummy jika tidak ditemukan
+                            $articleImageMap = [
+                                'edukasi' => 'artikel-edukasi.jpg',
+                                'berita' => 'artikel-berita.jpg',
+                                'default' => 'artikel-default.jpg', // Fallback umum
                             ];
-                            $randomArticleImage = $article->type ? ($articlePlaceholderImages[$article->type] ?? $articlePlaceholderImages['default']) : $articlePlaceholderImages['default'];
+                            $localImagePath = $articleImageMap[$article->type] ?? $articleImageMap['default'];
                         @endphp
-                        <img src="{{ $article->photo ? asset('storage/'.$article->photo) : $randomArticleImage }}" alt="{{ $article->title }}" class="w-full h-48 md:h-56 object-cover transform group-hover:scale-105 transition-transform duration-300">
+                        <img src="{{ $article->photo ? asset('storage/'.$article->photo) : asset('img/' . $localImagePath) }}" alt="{{ $article->title }}" class="w-full h-48 md:h-56 object-cover transform group-hover:scale-105 transition-transform duration-300">
                         <div class="p-6 flex-1 flex flex-col">
                             <span class="text-blue-600 text-sm font-semibold capitalize mb-2">{{ $article->type }}</span>
                             <h3 class="font-bold text-xl text-gray-900 leading-tight mb-3">{{ Str::limit($article->title, 70) }}</h3>
@@ -136,17 +133,18 @@
                     <div class="bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden flex flex-col group">
                         <div class="relative overflow-hidden w-full aspect-square">
                             @php
-                                $productPlaceholderImages = [
-                                    'https://images.unsplash.com/photo-1588117260172-bd78577ad36d?auto=format&fit=crop&w=300&h=300&q=80',
-                                    'https://images.unsplash.com/photo-1559136531-c423a246a495?auto=format&fit=crop&w=300&h=300&q=80',
-                                    'https://images.unsplash.com/photo-1579584347713-176378c3c2f0?auto=format&fit=crop&w=300&h=300&q=80',
-                                    'https://images.unsplash.com/photo-1563292446-24e5264b4c73?auto=format&fit=crop&w=300&h=300&q=80',
-                                    'https://images.unsplash.com/photo-1549465138-0245037dd38e?auto=format&fit=crop&w=300&h=300&q=80',
-                                    'https://images.unsplash.com/photo-1549298711-20a273b1b9d4?auto=format&fit=crop&w=300&h=300&q=80',
+                                // Menggunakan array gambar dummy produk lokal yang bervariasi
+                                $productDummyImages = [
+                                    'produk-dummy-1.jpg',
+                                    'produk-dummy-2.jpg',
+                                    'produk-dummy-3.jpg',
+                                    'produk-dummy-4.jpg',
+                                    'produk-dummy-5.jpg',
+                                    'produk-dummy-6.jpg',
                                 ];
-                                $randomProductImage = $productPlaceholderImages[$loop->index % count($productPlaceholderImages)];
+                                $localDummyImagePath = $productDummyImages[$loop->index % count($productDummyImages)];
                             @endphp
-                            <img src="{{ $product->photo ? asset('storage/'.$product->photo) : $randomProductImage }}" alt="{{ $product->name }}" class="absolute inset-0 w-full h-full object-cover transform transition-transform duration-300 group-hover:scale-105">
+                            <img src="{{ $product->photo ? asset('storage/'.$product->photo) : asset('img/' . $localDummyImagePath) }}" alt="{{ $product->name }}" class="absolute inset-0 w-full h-full object-cover transform transition-transform duration-300 group-hover:scale-105">
                             @if($product->status->name != 'approved')
                                 <span class="absolute top-2 left-2 bg-red-500 text-white text-xs font-semibold px-2 py-1 rounded-md z-10">
                                     {{ ucfirst($product->status->name) }}
@@ -173,7 +171,7 @@
     <footer class="bg-gray-900 text-white py-12 mt-10">
         <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 px-4">
             <div class="flex items-center gap-3">
-                <img src="/img/logo3.png" alt="Logo PT BPR MSA" class="h-10 w-auto">
+                <img src="{{ asset('img/logo3.png') }}" alt="Logo PT BPR MSA" class="h-10 w-auto">
                 <span class="font-extrabold text-xl">PT BPR MSA</span>
             </div>
             <div class="text-gray-400 text-sm text-center md:text-left">&copy; {{ date('Y') }} PT BPR MSA. All rights reserved.</div>

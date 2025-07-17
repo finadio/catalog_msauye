@@ -9,14 +9,15 @@
                 @forelse($articles ?? [] as $article)
                     <div class="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden flex flex-col">
                         @php
-                            $articlePlaceholderImages = [
-                                'edukasi' => 'https://images.unsplash.com/photo-1516321497487-e288ad7ab135?auto=format&fit=crop&w=400&h=250&q=80',
-                                'berita' => 'https://images.unsplash.com/photo-1507679799977-947bee902263?auto=format&fit=crop&w=400&h=250&q=80',
-                                'default' => 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=400&h=250&q=80'
+                            // Mengambil gambar berdasarkan tipe artikel, dengan fallback ke dummy jika tidak ditemukan
+                            $articleImageMap = [
+                                'edukasi' => 'artikel-edukasi.jpg',
+                                'berita' => 'artikel-berita.jpg',
+                                'default' => 'artikel-default.jpg', // Fallback umum
                             ];
-                            $randomArticleImage = $article->type ? ($articlePlaceholderImages[$article->type] ?? $articlePlaceholderImages['default']) : $articlePlaceholderImages['default'];
+                            $localImagePath = $articleImageMap[$article->type] ?? $articleImageMap['default'];
                         @endphp
-                        <img src="{{ $article->photo ? asset('storage/'.$article->photo) : $randomArticleImage }}" alt="{{ $article->title }}" class="w-full h-48 md:h-56 object-cover transform group-hover:scale-105 transition-transform duration-300">
+                        <img src="{{ $article->photo ? asset('storage/'.$article->photo) : asset('img/' . $localImagePath) }}" alt="{{ $article->title }}" class="w-full h-48 md:h-56 object-cover transform group-hover:scale-105 transition-transform duration-300">
                         <div class="p-6 flex-1 flex flex-col">
                             <span class="text-blue-600 text-sm font-semibold capitalize mb-2">{{ $article->type }}</span>
                             <h3 class="font-bold text-xl text-gray-900 leading-tight mb-3">{{ Str::limit($article->title, 70) }}</h3>
