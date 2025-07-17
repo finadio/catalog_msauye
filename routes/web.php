@@ -1,25 +1,13 @@
 <?php
 
+use App\Http\Controllers\ProfileController; // Pastikan ini ada
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicController;
 use App\Http\Controllers\ContactController;
-use App\Http\Controllers\PengunjungDashboardController;
-use App\Http\Controllers\UmkmDashboardController;
-use App\Http\Controllers\UmkmProfileController;
-use App\Http\Controllers\UmkmProductController;
-use App\Http\Controllers\AdminDashboardController;
-use App\Http\Controllers\AdminUmkmController;
-use App\Http\Controllers\AdminProductController;
-use App\Http\Controllers\AdminCategoryController;
-use App\Http\Controllers\AdminArticleController;
-use App\Http\Controllers\AdminContactController;
+use App\Http\Controllers\PengunjungDashboardController; // Pastikan ini juga ada
 
-// --------------------
-// Halaman Publik
-// --------------------
+// Routing halaman publik
 Route::get('/', [PublicController::class, 'home'])->name('home');
-Route::get('/produk', [PublicController::class, 'produkIndex'])->name('produk.index');
 Route::get('/produk/{id}', [PublicController::class, 'produkDetail'])->name('produk.detail');
 Route::get('/umkm/{id}', [PublicController::class, 'umkmDetail'])->name('umkm.detail');
 Route::get('/artikel', [PublicController::class, 'artikel'])->name('artikel.index');
@@ -28,61 +16,52 @@ Route::get('/tentang', [PublicController::class, 'tentang'])->name('tentang');
 Route::get('/contact', [ContactController::class, 'create'])->name('contact');
 Route::post('/contact', [ContactController::class, 'store']);
 
-// --------------------
-// Otentikasi & Profil
-// --------------------
+// Rute-rute yang memerlukan autentikasi (untuk semua peran)
 Route::middleware('auth')->group(function () {
-    // Profil
+    // Rute Profil
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // Dashboard untuk pengunjung biasa (tanpa role)
-    Route::get('/dashboard', [PublicController::class, 'index'])->name('dashboard');
+    // Rute Dashboard Pengunjung (jika tidak ada peran khusus)
+    Route::get('/dashboard', [PengunjungDashboardController::class, 'index'])->name('dashboard');
 });
 
-// --------------------
-// UMKM
-// --------------------
-Route::middleware(['auth', 'role:umkm'])->prefix('umkm')->name('umkm.')->group(function () {
-    Route::get('/dashboard', [UmkmDashboardController::class, 'index'])->name('dashboard');
-    Route::get('/profil', [UmkmProfileController::class, 'edit'])->name('profil');
-    Route::post('/profil', [UmkmProfileController::class, 'update']);
-    Route::resource('/produk', UmkmProductController::class);
+
+// Dashboard UMKM
+Route::middleware(['auth', 'role:umkm'])->group(function () {
+    Route::get('/umkm/dashboard', [\App\Http\Controllers\UmkmDashboardController::class, 'index'])->name('umkm.dashboard');
+    Route::get('/umkm/profil', [\App\Http\Controllers\UmkmProfileController::class, 'edit'])->name('umkm.profil');
+    Route::post('/umkm/profil', [\App\Http\Controllers\UmkmProfileController::class, 'update']);
+    Route::resource('/umkm/produk', \App\Http\Controllers\UmkmProductController::class, [
+        'as' => 'umkm'
+    ]);
 });
 
-// --------------------
-// Admin
-// --------------------
-Route::middleware(['auth', 'role:admin'])->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/dashboard', [AdminDashboardController::class, 'index'])->name('dashboard');
-    Route::resource('/umkm', AdminUmkmController::class);
-    Route::resource('/produk', AdminProductController::class);
-    Route::post('/produk/{id}/approve', [AdminProductController::class, 'approve'])->name('produk.approve');
-    Route::post('/produk/{id}/reject', [AdminProductController::class, 'reject'])->name('produk.reject');
-    Route::resource('/kategori', AdminCategoryController::class);
-    Route::resource('/artikel', AdminArticleController::class);
-    Route::resource('/contact', AdminContactController::class);
+// Dashboard Admin
+Route::middleware(['auth', 'role:admin'])->group(function () {
+    Route::get('/admin/dashboard', [\App\Http\Controllers\AdminDashboardController::class, 'index'])->name('admin.dashboard');
+    Route::resource('/admin/umkm', \App\Http\Controllers\AdminUmkmController::class, [ 'as' => 'admin' ]);
+    Route::resource('/admin/produk', \App\Http\Controllers\AdminProductController::class, [ 'as' => 'admin' ]);
+    Route::post('/admin/produk/{id}/approve', [\App\Http\Controllers\AdminProductController::class, 'approve'])->name('admin.produk.approve');
+    Route::post('/admin/produk/{id}/reject', [\App\Http\Controllers\AdminProductController::class, 'reject'])->name('admin.produk.reject');
+    Route::resource('/admin/kategori', \App\Http\Controllers\AdminCategoryController::class, [ 'as' => 'admin' ]);
+    Route::resource('/admin/artikel', \App\Http\Controllers\AdminArticleController::class, [ 'as' => 'admin' ]);
+    Route::resource('/admin/contact', \App\Http\Controllers\AdminContactController::class, [ 'as' => 'admin' ]);
 });
 
-// --------------------
-// Autentikasi Laravel Breeze/Fortify
-// --------------------
+// Ini adalah rute-rute autentikasi bawaan Laravel Breeze
 require __DIR__.'/auth.php';
 
-// --------------------
-// Redirect berdasarkan peran
-// --------------------
+// Route untuk redirect setelah login, sesuaikan agar pengunjung diarahkan ke dashboard baru
 Route::get('/redirect-by-role', function () {
     $user = auth()->user();
-
     if ($user->role === 'admin') {
         return redirect()->route('admin.dashboard');
     } elseif ($user->role === 'umkm') {
         return redirect()->route('umkm.dashboard');
     } else {
-        return redirect()->route('dashboard');
+        // Asumsi peran selain admin/umkm adalah pengunjung
+        return redirect()->route('dashboard'); // Arahkan ke dashboard pengunjung
     }
 })->middleware(['auth']);
-
-
