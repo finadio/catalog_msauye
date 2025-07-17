@@ -5,14 +5,15 @@
     <div class="py-12 bg-gray-50 min-h-screen">
         <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8">
             @php
-                $articlePlaceholderImages = [
-                    'edukasi' => 'https://images.unsplash.com/photo-1516321497487-e288ad7ab135?auto=format&fit=crop&w=800&h=450&q=80',
-                    'berita' => 'https://images.unsplash.com/photo-1507679799977-947bee902263?auto=format&fit=crop&w=800&h=450&q=80',
-                    'default' => 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=800&h=450&q=80'
+                // Mengambil gambar berdasarkan tipe artikel, dengan fallback ke dummy jika tidak ditemukan
+                $articleImageMap = [
+                    'edukasi' => 'artikel-edukasi.jpg',
+                    'berita' => 'artikel-berita.jpg',
+                    'default' => 'artikel-default.jpg', // Fallback umum
                 ];
-                $randomArticleImage = $article->type ? ($articlePlaceholderImages[$article->type] ?? $articlePlaceholderImages['default']) : $articlePlaceholderImages['default'];
+                $localImagePath = $articleImageMap[$article->type] ?? $articleImageMap['default'];
             @endphp
-            <img src="{{ $article->photo ? asset('storage/'.$article->photo) : $randomArticleImage }}" alt="{{ $article->title }}" class="rounded-lg w-full object-cover h-64 md:h-80 mb-8 shadow-md">
+            <img src="{{ $article->photo ? asset('storage/'.$article->photo) : asset('img/' . $localImagePath) }}" alt="{{ $article->title }}" class="rounded-lg w-full object-cover h-64 md:h-80 mb-8 shadow-md">
             <div class="mb-4 text-gray-600 text-sm">
                 <span class="font-semibold">Tipe:</span> <span class="capitalize">{{ $article->type }}</span>
                 <span class="mx-2">|</span>
