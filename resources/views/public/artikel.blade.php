@@ -2,23 +2,35 @@
     <x-slot name="header">
         <h1 class="text-2xl font-bold text-gray-800">Artikel & Edukasi</h1>
     </x-slot>
-    <div class="py-8 bg-gray-50 min-h-screen">
-        <div class="max-w-5xl mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <div class="py-12 bg-gray-50 min-h-screen">
+        <div class="max-w-7xl mx-auto px-4">
+            <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-10 text-center">Wawasan dan Inspirasi untuk UMKM</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
                 @forelse($articles ?? [] as $article)
-                    <div class="bg-white rounded-lg shadow hover:shadow-lg transition overflow-hidden flex flex-col">
-                        <img src="{{ $article->photo ?? 'https://via.placeholder.com/600x300?text=Foto+Artikel' }}" alt="{{ $article->title }}" class="h-48 w-full object-cover">
-                        <div class="p-4 flex-1 flex flex-col">
-                            <h2 class="font-semibold text-lg mb-1">{{ $article->title }}</h2>
-                            <div class="text-gray-500 text-sm mb-2 capitalize">{{ $article->type }}</div>
-                            <div class="text-gray-700 mb-2">{{ Str::limit(strip_tags($article->content), 100) }}</div>
-                            <a href="{{ route('artikel.detail', $article->id) }}" class="mt-auto inline-block px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">Baca Selengkapnya</a>
+                    <div class="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden flex flex-col">
+                        @php
+                            $articlePlaceholderImages = [
+                                'edukasi' => 'https://images.unsplash.com/photo-1516321497487-e288ad7ab135?auto=format&fit=crop&w=400&h=250&q=80',
+                                'berita' => 'https://images.unsplash.com/photo-1507679799977-947bee902263?auto=format&fit=crop&w=400&h=250&q=80',
+                                'default' => 'https://images.unsplash.com/photo-1522202176988-66273c2fd55f?auto=format&fit=crop&w=400&h=250&q=80'
+                            ];
+                            $randomArticleImage = $article->type ? ($articlePlaceholderImages[$article->type] ?? $articlePlaceholderImages['default']) : $articlePlaceholderImages['default'];
+                        @endphp
+                        <img src="{{ $article->photo ? asset('storage/'.$article->photo) : $randomArticleImage }}" alt="{{ $article->title }}" class="w-full h-48 md:h-56 object-cover transform group-hover:scale-105 transition-transform duration-300">
+                        <div class="p-6 flex-1 flex flex-col">
+                            <span class="text-blue-600 text-sm font-semibold capitalize mb-2">{{ $article->type }}</span>
+                            <h3 class="font-bold text-xl text-gray-900 leading-tight mb-3">{{ Str::limit($article->title, 70) }}</h3>
+                            <p class="text-gray-700 text-sm md:text-base mb-4 flex-1 leading-relaxed">{{ Str::limit(strip_tags($article->content), 120) }}</p>
+                            <a href="{{ route('artikel.detail', $article->id) }}" class="text-blue-600 hover:underline font-semibold text-base flex items-center justify-end">Baca Selengkapnya <span class="ml-1">&rarr;</span></a>
                         </div>
                     </div>
                 @empty
-                    <div class="col-span-2 text-center text-gray-500 py-12">Belum ada artikel.</div>
+                    <div class="col-span-full text-center text-gray-500 py-12 text-lg">Belum ada artikel.</div>
                 @endforelse
+            </div>
+            <div class="mt-12 flex justify-center">
+                {{ $articles->links() }}
             </div>
         </div>
     </div>
-</x-app-layout> 
+</x-app-layout>
