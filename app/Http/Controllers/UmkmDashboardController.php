@@ -10,13 +10,7 @@ class UmkmDashboardController extends Controller
 {
     public function index()
     {
-        // Debugging step 1: Pastikan user terautentikasi dan role-nya
-        dd('User Role:', auth()->check() ? auth()->user()->role : 'Not Authenticated');
-
         $user = auth()->user();
-
-        // Debugging step 2: Periksa apakah user memiliki relasi UMKM
-        dd('UMKM Relationship:', $user->umkm); // Ini harus menampilkan model Umkm
 
         $umkm = $user->umkm ?? null;
 
