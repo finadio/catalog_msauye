@@ -50,4 +50,10 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Umkm::class);
     }
+
+    public function produk()
+    {
+        return $this->hasMany(\App\Models\Produk::class);
+    }
+
 }

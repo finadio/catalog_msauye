@@ -1,3 +1,4 @@
+@unless(Str::startsWith(Route::currentRouteName(), 'umkm.'))
 <nav x-data="{ open: false }" class="bg-white text-gray-800 shadow-md relative z-50">
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
@@ -150,9 +151,10 @@
             @else
                 <x-responsive-nav-link :href="route('login')" class="text-gray-700 hover:bg-gray-100">{{ __('Login') }}</x-responsive-nav-link>
                 @if (Route::has('register'))
-                    <x-responsive-nav-link :href="route('register')" class="text-gray-700 hover:bg-gray-100">{{ __('Register') }}</x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('register')" class="text-gray-700 hover:bg-gray-100">{{ __('Register') }}</x-dropdown-link>
                 @endif
             @endauth
         </div>
     </div>
 </nav>
+@endunless
