@@ -1,4 +1,4 @@
-<?php
+rr<?php
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
@@ -90,5 +90,4 @@ Route::get('/redirect-by-role', function () {
         return redirect()->route('dashboard'); // Arahkan ke dashboard pengunjung
     }
 })->middleware(['auth']);
-
 
