@@ -54,6 +54,10 @@ Route::get('/dashboard', function () {
     }
 })->middleware(['auth'])->name('dashboard');
 
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profile/edit', [ProfileController::class, 'edit'])->name('profile.edit');
+});
+
 Route::get('/redirect-by-role', function () {
     $user = auth()->user();
     if ($user->role === 'admin') {
