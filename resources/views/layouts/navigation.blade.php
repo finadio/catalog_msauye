@@ -4,38 +4,32 @@
         <!-- Logo -->
         <div class="flex items-center flex-shrink-0">
             <a href="{{ route('home') }}" class="flex items-center group -ml-2 sm:-ml-4">
-                <img src="{{ asset('img/shaka_utama.png') }}" alt="Logo MSA Katalog UMKM" class="h-12 w-auto"> {{-- Logo lebih besar: h-16 --}}
-                <span class="font-black text-xl ml-0.5 text-blue-700 whitespace-nowrap">MSA Katalog UMKM</span> {{-- Ukuran teks diubah menjadi text-xl --}}
+                <img src="{{ asset('img/shaka_utama.png') }}" alt="Logo MSA Katalog UMKM" class="h-12 w-auto">
+                <span class="font-black text-xl ml-0.5 text-blue-700 whitespace-nowrap">MSA Katalog UMKM</span>
             </a>
         </div>
 
+        <!-- Desktop Navigation -->
         <div class="hidden sm:flex items-center ml-auto space-x-6">
-            <x-nav-link :href="route('home')" :active="request()->routeIs('home')" class="flex items-center text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0h4"></path></svg>
-                {{ __('Home') }}
-            </x-nav-link>
-            <x-nav-link href="#produk-terbaru" class="flex items-center text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
-                {{ __('Produk') }}
-            </x-nav-link>
-            <x-nav-link :href="route('artikel.index')" :active="request()->routeIs('artikel.index')" class="flex items-center text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-3m-2 20l-4-2m-4-2h8m-4 2v2m-6 2H6m10 0h2m-6 0h2"></path></svg>
-                {{ __('Artikel') }}
-            </x-nav-link>
-            <x-nav-link :href="route('tentang')" :active="request()->routeIs('tentang')" class="flex items-center text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                {{ __('Tentang Kami') }}
-            </x-nav-link>
-            <x-nav-link :href="route('contact')" :active="request()->routeIs('contact')" class="flex items-center text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.105A9.702 9.702 0 0112 4c4.97 0 9 3.582 9 8z"></path></svg>
-                {{ __('Contact Us') }}
-            </x-nav-link>
-            {{-- Tautan dashboard admin/umkm jika user login (dalam dropdown) --}}
             @auth
-                @if(auth()->user()->role == 'admin' || auth()->user()->role == 'umkm')
+                @if(Auth::user()->role == 'umkm')
+                    <!-- UMKM Logged In Navigation -->
+                    <x-nav-link :href="route('umkm.dashboard')" :active="request()->routeIs('umkm.dashboard')" class="flex items-center text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0h4"></path></svg>
+                        {{ __('Dashboard') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('umkm.produk.index')" :active="request()->routeIs('umkm.produk.*')" class="flex items-center text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                        {{ __('Produk Saya') }}
+                    </x-nav-link>
+                    
+                    <!-- UMKM Profile Dropdown -->
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
                             <button class="flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 focus:outline-none transition ease-in-out duration-150">
+                                <div class="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center mr-2">
+                                    <span class="text-white font-semibold text-sm">{{ substr(Auth::user()->name, 0, 1) }}</span>
+                                </div>
                                 <div>{{ Auth::user()->name }}</div>
                                 <div class="ml-1">
                                     <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
@@ -46,18 +40,69 @@
                         </x-slot>
 
                         <x-slot name="content">
-                            @if(Auth::user()->role == 'umkm')
-                                <x-dropdown-link :href="route('umkm.dashboard')">{{ __('Dashboard UMKM') }}</x-dropdown-link>
-                                <x-dropdown-link :href="route('umkm.profil')" class="text-gray-700 hover:bg-gray-100">{{ __('Profil UMKM') }}</x-dropdown-link>
-                                <x-dropdown-link :href="route('umkm.produk.index')" class="text-gray-700 hover:bg-gray-100">{{ __('Kelola Produk') }}</x-dropdown-link>
-                            @elseif(Auth::user()->role == 'admin')
-                                <x-dropdown-link :href="route('admin.dashboard')" class="text-gray-700 hover:bg-gray-100">{{ __('Dashboard Admin') }}</x-dropdown-link>
-                                <x-dropdown-link :href="route('admin.umkm.index')" class="text-gray-700 hover:bg-gray-100">{{ __('Kelola UMKM') }}</x-dropdown-link>
-                                <x-dropdown-link :href="route('admin.produk.index')" class="text-gray-700 hover:bg-gray-100">{{ __('Kelola Produk') }}</x-dropdown-link>
-                                <x-dropdown-link :href="route('admin.kategori.index')" class="text-gray-700 hover:bg-gray-100">{{ __('Kelola Kategori') }}</x-dropdown-link>
-                                <x-dropdown-link :href="route('admin.artikel.index')" class="text-gray-700 hover:bg-gray-100">{{ __('Kelola Artikel') }}</x-dropdown-link>
-                                <x-dropdown-link :href="route('admin.contact.index')" class="text-gray-700 hover:bg-gray-100">{{ __('Pesan Masuk') }}</x-dropdown-link>
-                            @endif
+                            <x-dropdown-link :href="route('umkm.profil')" class="text-gray-700 hover:bg-gray-100">
+                                <svg class="w-4 h-4 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>
+                                {{ __('Edit Profil') }}
+                            </x-dropdown-link>
+                            <x-dropdown-link :href="route('profile.edit')" class="text-gray-700 hover:bg-gray-100">
+                                <svg class="w-4 h-4 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                                {{ __('Pengaturan Akun') }}
+                            </x-dropdown-link>
+                            <form method="POST" action="{{ route('logout') }}">
+                                @csrf
+                                <x-dropdown-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();" class="text-red-600 hover:bg-red-50">
+                                    <svg class="w-4 h-4 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path></svg>
+                                    {{ __('Logout') }}
+                                </x-dropdown-link>
+                            </form>
+                        </x-slot>
+                    </x-dropdown>
+                @elseif(Auth::user()->role == 'admin')
+                    <!-- Admin Logged In Navigation -->
+                    <x-nav-link :href="route('home')" :active="request()->routeIs('home')" class="flex items-center text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0h4"></path></svg>
+                        {{ __('Home') }}
+                    </x-nav-link>
+                    <x-nav-link href="#produk-terbaru" class="flex items-center text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                        {{ __('Produk') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('artikel.index')" :active="request()->routeIs('artikel.index')" class="flex items-center text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-3m-2 20l-4-2m-4-2h8m-4 2v2m-6 2H6m10 0h2m-6 0h2"></path></svg>
+                        {{ __('Artikel') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('tentang')" :active="request()->routeIs('tentang')" class="flex items-center text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                        {{ __('Tentang Kami') }}
+                    </x-nav-link>
+                    <x-nav-link :href="route('contact')" :active="request()->routeIs('contact')" class="flex items-center text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
+                        <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.105A9.702 9.702 0 0112 4c4.97 0 9 3.582 9 8z"></path></svg>
+                        {{ __('Contact Us') }}
+                    </x-nav-link>
+                    
+                    <!-- Admin Dropdown -->
+                    <x-dropdown align="right" width="48">
+                        <x-slot name="trigger">
+                            <button class="flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 focus:outline-none transition ease-in-out duration-150">
+                                <div class="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center mr-2">
+                                    <span class="text-white font-semibold text-sm">{{ substr(Auth::user()->name, 0, 1) }}</span>
+                                </div>
+                                <div>{{ Auth::user()->name }}</div>
+                                <div class="ml-1">
+                                    <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                    </svg>
+                                </div>
+                            </button>
+                        </x-slot>
+
+                        <x-slot name="content">
+                            <x-dropdown-link :href="route('admin.dashboard')" class="text-gray-700 hover:bg-gray-100">{{ __('Dashboard Admin') }}</x-dropdown-link>
+                            <x-dropdown-link :href="route('admin.umkm.index')" class="text-gray-700 hover:bg-gray-100">{{ __('Kelola UMKM') }}</x-dropdown-link>
+                            <x-dropdown-link :href="route('admin.produk.index')" class="text-gray-700 hover:bg-gray-100">{{ __('Kelola Produk') }}</x-dropdown-link>
+                            <x-dropdown-link :href="route('admin.kategori.index')" class="text-gray-700 hover:bg-gray-100">{{ __('Kelola Kategori') }}</x-dropdown-link>
+                            <x-dropdown-link :href="route('admin.artikel.index')" class="text-gray-700 hover:bg-gray-100">{{ __('Kelola Artikel') }}</x-dropdown-link>
+                            <x-dropdown-link :href="route('admin.contact.index')" class="text-gray-700 hover:bg-gray-100">{{ __('Pesan Masuk') }}</x-dropdown-link>
                             <x-dropdown-link :href="route('profile.edit')" class="text-gray-700 hover:bg-gray-100">{{ __('Pengaturan Akun') }}</x-dropdown-link>
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
@@ -67,10 +112,43 @@
                     </x-dropdown>
                 @endif
             @else
-                {{-- Bagian Login/Register dihilangkan di sini sesuai permintaan --}}
+                <!-- Guest Navigation (Before Login) -->
+                <x-nav-link :href="route('home')" :active="request()->routeIs('home')" class="flex items-center text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0h4"></path></svg>
+                    {{ __('Home') }}
+                </x-nav-link>
+                <x-nav-link href="#produk-terbaru" class="flex items-center text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                    {{ __('Produk') }}
+                </x-nav-link>
+                <x-nav-link :href="route('artikel.index')" :active="request()->routeIs('artikel.index')" class="flex items-center text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-3m-2 20l-4-2m-4-2h8m-4 2v2m-6 2H6m10 0h2m-6 0h2"></path></svg>
+                    {{ __('Artikel') }}
+                </x-nav-link>
+                <x-nav-link :href="route('tentang')" :active="request()->routeIs('tentang')" class="flex items-center text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    {{ __('Tentang Kami') }}
+                </x-nav-link>
+                <x-nav-link :href="route('contact')" :active="request()->routeIs('contact')" class="flex items-center text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
+                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.105A9.702 9.702 0 0112 4c4.97 0 9 3.582 9 8z"></path></svg>
+                    {{ __('Contact Us') }}
+                </x-nav-link>
+                
+                <!-- Login/Register Buttons -->
+                <div class="flex items-center space-x-4">
+                    <x-nav-link :href="route('login')" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200">
+                        {{ __('Login') }}
+                    </x-nav-link>
+                    @if (Route::has('register'))
+                        <x-nav-link :href="route('register')" class="border border-blue-600 text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-50 transition-colors duration-200">
+                            {{ __('Register') }}
+                        </x-nav-link>
+                    @endif
+                </div>
             @endauth
         </div>
 
+        <!-- Mobile menu button -->
         <div class="-mr-2 flex items-center sm:hidden">
             <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">
                 <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
@@ -81,64 +159,83 @@
         </div>
     </div>
 
+    <!-- Mobile Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden bg-gray-50">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('home')" :active="request()->routeIs('home')" class="text-gray-700 hover:bg-gray-100">
-                {{ __('Home') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link href="#produk-terbaru" class="text-gray-700 hover:bg-gray-100">
-                {{ __('Produk') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('artikel.index')" :active="request()->routeIs('artikel.index')" class="text-gray-700 hover:bg-gray-100">
-                {{ __('Artikel') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('tentang')" :active="request()->routeIs('tentang')" class="text-gray-700 hover:bg-gray-100">
-                {{ __('Tentang Kami') }}
-            </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('contact')" :active="request()->routeIs('contact')" class="text-gray-700 hover:bg-gray-100">
-                {{ __('Contact Us') }}
-            </x-responsive-nav-link>
             @auth
-                @if(Auth::user()->role == 'admin')
+                @if(Auth::user()->role == 'umkm')
+                    <!-- UMKM Mobile Menu -->
+                    <x-responsive-nav-link :href="route('umkm.dashboard')" :active="request()->routeIs('umkm.dashboard')" class="text-gray-700 hover:bg-gray-100">
+                        {{ __('Dashboard') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('umkm.produk.index')" :active="request()->routeIs('umkm.produk.*')" class="text-gray-700 hover:bg-gray-100">
+                        {{ __('Produk Saya') }}
+                    </x-responsive-nav-link>
+                @elseif(Auth::user()->role == 'admin')
+                    <!-- Admin Mobile Menu -->
                     <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')" class="text-gray-700 hover:bg-gray-100">
                         {{ __('Dashboard Admin') }}
                     </x-responsive-nav-link>
-                @elseif(Auth::user()->role == 'umkm')
-                    <x-responsive-nav-link :href="route('umkm.dashboard')" :active="request()->routeIs('umkm.dashboard')" class="text-gray-700 hover:bg-gray-100">
-                        {{ __('Dashboard UMKM') }}
-                    </x-responsive-nav-link>
                 @endif
+            @else
+                <!-- Guest Mobile Menu -->
+                <x-responsive-nav-link :href="route('home')" :active="request()->routeIs('home')" class="text-gray-700 hover:bg-gray-100">
+                    {{ __('Home') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link href="#produk-terbaru" class="text-gray-700 hover:bg-gray-100">
+                    {{ __('Produk') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('artikel.index')" :active="request()->routeIs('artikel.index')" class="text-gray-700 hover:bg-gray-100">
+                    {{ __('Artikel') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('tentang')" :active="request()->routeIs('tentang')" class="text-gray-700 hover:bg-gray-100">
+                    {{ __('Tentang Kami') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('contact')" :active="request()->routeIs('contact')" class="text-gray-700 hover:bg-gray-100">
+                    {{ __('Contact Us') }}
+                </x-responsive-nav-link>
             @endauth
         </div>
 
+        <!-- Mobile User Info -->
         <div class="pt-4 pb-1 border-t border-gray-200">
             @auth
-            <div class="px-4">
-                <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
-                <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
-            </div>
+                <div class="px-4">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 bg-blue-600 rounded-full flex items-center justify-center mr-3">
+                            <span class="text-white font-semibold">{{ substr(Auth::user()->name, 0, 1) }}</span>
+                        </div>
+                        <div>
+                            <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
+                            <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
+                        </div>
+                    </div>
+                </div>
 
-            <div class="mt-3 space-y-1">
-                @if(Auth::user()->role == 'umkm')
-                    <x-dropdown-link :href="route('umkm.profil')" class="text-gray-700 hover:bg-gray-100">{{ __('Profil UMKM') }}</x-dropdown-link>
-                    <x-dropdown-link :href="route('umkm.produk.index')" class="text-gray-700 hover:bg-gray-100">{{ __('Kelola Produk') }}</x-dropdown-link>
-                @elseif(Auth::user()->role == 'admin')
-                    <x-dropdown-link :href="route('admin.umkm.index')" class="text-gray-700 hover:bg-gray-100">{{ __('Kelola UMKM') }}</x-dropdown-link>
-                    <x-dropdown-link :href="route('admin.produk.index')" class="text-gray-700 hover:bg-gray-100">{{ __('Kelola Produk') }}</x-dropdown-link>
-                    <x-dropdown-link :href="route('admin.kategori.index')" class="text-gray-700 hover:bg-gray-100">{{ __('Kelola Kategori') }}</x-dropdown-link>
-                    <x-dropdown-link :href="route('admin.artikel.index')" class="text-gray-700 hover:bg-gray-100">{{ __('Kelola Artikel') }}</x-dropdown-link>
-                    <x-dropdown-link :href="route('admin.contact.index')" class="text-gray-700 hover:bg-gray-100">{{ __('Pesan Masuk') }}</x-dropdown-link>
-                @endif
-                <x-dropdown-link :href="route('profile.edit')" class="text-gray-700 hover:bg-gray-100">{{ __('Pengaturan Akun') }}</x-dropdown-link>
-                <form method="POST" action="{{ route('logout') }}">
-                    @csrf
-                    <x-dropdown-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();">{{ __('Log Out') }}</x-dropdown-link>
-                </form>
+                <div class="mt-3 space-y-1">
+                    @if(Auth::user()->role == 'umkm')
+                        <x-responsive-nav-link :href="route('umkm.profil')" class="text-gray-700 hover:bg-gray-100">{{ __('Edit Profil') }}</x-responsive-nav-link>
+                        <x-responsive-nav-link :href="route('profile.edit')" class="text-gray-700 hover:bg-gray-100">{{ __('Pengaturan Akun') }}</x-responsive-nav-link>
+                    @elseif(Auth::user()->role == 'admin')
+                        <x-responsive-nav-link :href="route('admin.umkm.index')" class="text-gray-700 hover:bg-gray-100">{{ __('Kelola UMKM') }}</x-responsive-nav-link>
+                        <x-responsive-nav-link :href="route('admin.produk.index')" class="text-gray-700 hover:bg-gray-100">{{ __('Kelola Produk') }}</x-responsive-nav-link>
+                        <x-responsive-nav-link :href="route('admin.kategori.index')" class="text-gray-700 hover:bg-gray-100">{{ __('Kelola Kategori') }}</x-responsive-nav-link>
+                        <x-responsive-nav-link :href="route('admin.artikel.index')" class="text-gray-700 hover:bg-gray-100">{{ __('Kelola Artikel') }}</x-responsive-nav-link>
+                        <x-responsive-nav-link :href="route('admin.contact.index')" class="text-gray-700 hover:bg-gray-100">{{ __('Pesan Masuk') }}</x-responsive-nav-link>
+                        <x-responsive-nav-link :href="route('profile.edit')" class="text-gray-700 hover:bg-gray-100">{{ __('Pengaturan Akun') }}</x-responsive-nav-link>
+                    @endif
+                    <form method="POST" action="{{ route('logout') }}">
+                        @csrf
+                        <x-responsive-nav-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();" class="text-red-600 hover:bg-red-50">{{ __('Logout') }}</x-responsive-nav-link>
+                    </form>
+                </div>
             @else
-                <x-responsive-nav-link :href="route('login')" class="text-gray-700 hover:bg-gray-100">{{ __('Login') }}</x-responsive-nav-link>
-                @if (Route::has('register'))
-                    <x-responsive-nav-link :href="route('register')" class="text-gray-700 hover:bg-gray-100">{{ __('Register') }}</x-responsive-nav-link>
-                @endif
+                <div class="px-4 space-y-2">
+                    <x-responsive-nav-link :href="route('login')" class="text-gray-700 hover:bg-gray-100">{{ __('Login') }}</x-responsive-nav-link>
+                    @if (Route::has('register'))
+                        <x-responsive-nav-link :href="route('register')" class="text-gray-700 hover:bg-gray-100">{{ __('Register') }}</x-responsive-nav-link>
+                    @endif
+                </div>
             @endauth
         </div>
     </div>

@@ -50,15 +50,12 @@ Route::middleware('auth')->group(function () {
 
 
 // Dashboard UMKM (Memerlukan autentikasi SAJA, tanpa middleware 'role' sementara)
-Route::middleware(['auth'])->group(function () {
-    Route::get('/dashboard', [UmkmDashboardController::class, 'index'])->name('dashboard');
-    Route::get('/umkm/dashboard', [UmkmDashboardController::class, 'index'])->name('umkm.dashboard');
-    Route::get('/umkm/profil', [\App\Http\Controllers\UmkmProfileController::class, 'index'])->name('umkm.profil');
-    Route::get('/profil', [UmkmProfileController::class, 'edit'])->name('profil');
-    Route::post('/profil', [UmkmProfileController::class, 'update']);
+Route::middleware(['auth', 'role:umkm'])->prefix('umkm')->group(function () {
+    Route::get('/dashboard', [UmkmDashboardController::class, 'index'])->name('umkm.dashboard');
+    Route::get('/umkm/profil', [UmkmProfileController::class, 'index'])->name('umkm.profil');
+    Route::post('/profil', [UmkmProfileController::class, 'update'])->name('profil');
     Route::prefix('umkm')->name('umkm.')->group(function () {
-    Route::get('/produk', [UmkmProductController::class, 'index'])->name('produk.index');
-    Route::resource('/produk', UmkmProductController::class);
+        Route::resource('produk', UmkmProductController::class);
     });
 });
 
