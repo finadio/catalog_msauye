@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\PublicController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\PengunjungDashboardController;
@@ -50,12 +51,15 @@ Route::middleware('auth')->group(function () {
 
 // Dashboard UMKM (Memerlukan autentikasi SAJA, tanpa middleware 'role' sementara)
 Route::middleware(['auth'])->group(function () {
+    Route::get('/dashboard', [UmkmDashboardController::class, 'index'])->name('dashboard');
     Route::get('/umkm/dashboard', [UmkmDashboardController::class, 'index'])->name('umkm.dashboard');
-    Route::get('/umkm/profil', [UmkmProfileController::class, 'edit'])->name('umkm.profil');
-    Route::post('/umkm/profil', [UmkmProfileController::class, 'update']);
-    Route::resource('/umkm/produk', UmkmProductController::class, [
-        'as' => 'umkm'
-    ]);
+    Route::get('/umkm/profil', [\App\Http\Controllers\UmkmProfileController::class, 'index'])->name('umkm.profil');
+    Route::get('/profil', [UmkmProfileController::class, 'edit'])->name('profil');
+    Route::post('/profil', [UmkmProfileController::class, 'update']);
+    Route::prefix('umkm')->name('umkm.')->group(function () {
+    Route::get('/produk', [UmkmProductController::class, 'index'])->name('produk.index');
+    Route::resource('/produk', UmkmProductController::class);
+    });
 });
 
 // Dashboard Admin (Memerlukan autentikasi SAJA, tanpa middleware 'role' sementara)
@@ -89,3 +93,5 @@ Route::get('/redirect-by-role', function () {
         return redirect()->route('dashboard'); // Arahkan ke dashboard pengunjung
     }
 })->middleware(['auth']);
+
+
