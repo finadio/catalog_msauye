@@ -20,7 +20,7 @@
     </section>
 
     {{-- Feature Section (Keunggulan PT BPR MSA) --}}
-    <section class="py-16 md:py-20 bg-gray-50"> {{-- Latar belakang abu-abu terang --}}
+    <section class="py-12 md:py-14 bg-gray-50"> {{-- Padding dikurangi: py-12 md:py-16 --}}
         <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 text-center">
             <div class="flex flex-col items-center p-8 bg-white rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300 transform hover:-translate-y-1">
                 <div class="p-4 bg-blue-100 rounded-full mb-5 shadow-inner">
@@ -46,30 +46,33 @@
         </div>
     </section>
 
-    {{-- Category Section (Scrollable Grid) --}}
-    <section class="py-16 md:py-20 bg-gray-100">
+    {{-- Category Section (Scrollable Cards - Revised) --}}
+    <section class="py-8 md:py-10 bg-gray-100"> {{-- Padding dikurangi: py-12 md:py-16 --}}
         <div class="max-w-7xl mx-auto px-4">
             <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-10 text-center">Jelajahi Berdasarkan Kategori Produk</h2>
             <div class="overflow-x-auto pb-6 custom-scrollbar-hide">
-                <div class="flex space-x-6 md:space-x-8 items-stretch justify-center sm:justify-start min-w-max">
+                <div class="flex space-x-4 sm:space-x-6 md:space-x-8 px-4 sm:px-6 lg:px-8 -ml-4 sm:-ml-6 lg:-ml-8 min-w-max"> {{-- Penyesuaian margin/padding untuk konsistensi --}}
                     @forelse($categories as $cat)
-                        <a href="{{ route('home', ['kategori' => $cat->id]) }}" class="flex-none w-36 h-44 sm:w-40 sm:h-52 md:w-48 md:h-60 flex flex-col items-center justify-center bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 transform hover:-translate-y-1 p-4 text-center group">
+                        <a href="{{ route('home', ['kategori' => $cat->id]) }}" class="flex-none w-44 sm:w-52 md:w-60 flex flex-col bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 group overflow-hidden">
                             @php
-                                // Mengambil gambar berdasarkan nama kategori, dengan fallback ke dummy jika tidak ditemukan
                                 $categoryImageMap = [
                                     'Makanan' => 'makanan.jpg',
                                     'Minuman' => 'minuman.jpg',
                                     'Kerajinan' => 'kerajinan.jpg',
                                     'Jasa' => 'jasa.jpg',
                                     'Fashion' => 'fashion.jpg',
-                                    // Tambahkan kategori lain jika ada, dengan nama file gambar yang sesuai di public/img/
+                                    'Kesehatan' => 'kesehatan.jpg',
+                                    'Elektronik' => 'elektronik.jpg',
+                                    'Rumah Tangga' => 'rumahtangga.jpg',
                                 ];
-                                $localImagePath = $categoryImageMap[$cat->name] ?? 'category-default.jpg'; // Fallback umum
+                                $localImagePath = $categoryImageMap[$cat->name] ?? 'category-default.jpg';
                             @endphp
-                            <div class="w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 rounded-full overflow-hidden mb-4 shadow-inner">
+                            <div class="w-full h-40 sm:h-48 md:h-56 overflow-hidden rounded-t-xl"> {{-- Tinggi gambar lebih besar --}}
                                 <img src="{{ asset('img/' . $localImagePath) }}" alt="Kategori {{ $cat->name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                             </div>
-                            <h4 class="font-semibold text-base sm:text-lg text-gray-800 group-hover:text-blue-600 transition-colors duration-300">{{ $cat->name }}</h4>
+                            <div class="p-4 flex flex-col items-center text-center flex-grow">
+                                <h4 class="font-semibold text-lg text-gray-800 group-hover:text-blue-600 transition-colors duration-300">{{ $cat->name }}</h4>
+                            </div>
                         </a>
                     @empty
                         <div class="text-center text-gray-500 w-full py-12">Belum ada kategori.</div>
@@ -80,18 +83,17 @@
     </section>
 
     {{-- Flexible Section (Berita & Artikel Terbaru) --}}
-    <section class="py-16 md:py-20 bg-white">
+    <section class="py-12 md:py-16 bg-white">
         <div class="max-w-7xl mx-auto px-4">
             <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-10 text-center">Wawasan Terbaru dari Blog Kami</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
                 @forelse($articles->take(3) as $article)
                     <div class="bg-gray-50 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden flex flex-col">
                         @php
-                            // Mengambil gambar berdasarkan tipe artikel, dengan fallback ke dummy jika tidak ditemukan
                             $articleImageMap = [
                                 'edukasi' => 'artikel-edukasi.jpg',
                                 'berita' => 'artikel-berita.jpg',
-                                'default' => 'artikel-default.jpg', // Fallback umum
+                                'default' => 'artikel-default.jpg',
                             ];
                             $localImagePath = $articleImageMap[$article->type] ?? $articleImageMap['default'];
                         @endphp
@@ -114,7 +116,7 @@
     </section>
 
     {{-- Product Cards Section --}}
-    <div class="py-16 md:py-20 bg-gray-50" id="produk-terbaru">
+    <div class="py-12 md:py-16 bg-gray-50" id="produk-terbaru">
         <div class="max-w-7xl mx-auto px-4">
             <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-10 text-center">Temukan Produk UMKM Unggulan</h2>
             <form method="GET" action="{{ route('home') }}" class="mb-12 flex flex-col sm:flex-row flex-wrap justify-center items-center gap-4">
@@ -133,7 +135,6 @@
                     <div class="bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden flex flex-col group">
                         <div class="relative overflow-hidden w-full aspect-square">
                             @php
-                                // Menggunakan array gambar dummy produk lokal yang bervariasi
                                 $productDummyImages = [
                                     'produk-dummy-1.jpg',
                                     'produk-dummy-2.jpg',
