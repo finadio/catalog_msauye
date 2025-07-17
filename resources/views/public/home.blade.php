@@ -102,7 +102,7 @@
                             <span class="text-blue-600 text-sm font-semibold capitalize mb-2">{{ $article->type }}</span>
                             <h3 class="font-bold text-xl text-gray-900 leading-tight mb-3">{{ Str::limit($article->title, 70) }}</h3>
                             <p class="text-gray-700 text-sm md:text-base mb-4 flex-1 leading-relaxed">{{ Str::limit(strip_tags($article->content), 120) }}</p>
-                            <a href="{{ route('artikel.detail', $article->id) }}" class="text-blue-600 hover:underline font-semibold text-base flex items-center justify-end">Baca Selengkapnya <span class="ml-1">&rarr;</span></a>
+                            <a href="{{ route('artikel.detail', $article->id) }}" class="text-blue-600 hover:underline font-semibold text-base flex items-center justify-end">Baca Selengkapnya <span class="ml-1">→</span></a>
                         </div>
                     </div>
                 @empty
@@ -170,54 +170,54 @@
     </div>
 
     {{-- Footer Section --}}
-    <footer class="bg-gray-900 text-white py-16 md:py-20 mt-16"> {{-- Background gelap, padding vertikal besar, margin atas --}}
+    <footer class="bg-gray-900 text-white py-10 md:py-12 mt-10"> {{-- **Padding dan margin atas dikurangi** --}}
         <div class="max-w-7xl mx-auto px-4"> {{-- Container utama footer --}}
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12 mb-10 md:mb-16"> {{-- Grid 3 kolom untuk desktop, 2 kolom untuk tablet, 1 kolom untuk mobile --}}
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-8 md:mb-10"> {{-- **Gap antar kolom dikurangi** --}}
 
                 <div class="footer-section">
-                    <div class="footer-logo mb-4">
-                        <h4 class="text-2xl md:text-3xl font-bold text-white mb-2">PT BPR MSA Yogyakarta</h4> {{-- Nama perusahaan --}}
+                    <div class="footer-logo mb-3"> {{-- **Margin bawah logo dikurangi** --}}
+                        <h4 class="text-xl md:text-2xl font-bold text-white mb-1">PT BPR MSA Yogyakarta</h4> {{-- **Ukuran font judul dikurangi** --}}
                     </div>
-                    <p class="company-description text-gray-300 text-sm leading-relaxed mb-4">
+                    <p class="company-description text-gray-300 text-sm leading-relaxed mb-3"> {{-- **Margin bawah deskripsi dikurangi** --}}
                         Lembaga keuangan terpercaya yang menyediakan solusi permodalan bagi UMKM dan kebutuhan bisnis profesional Anda.
                     </p>
-                    <div class="social-links flex gap-3 mt-4">
+                    <div class="social-links flex gap-2 mt-3"> {{-- **Gap ikon sosial dikurangi** --}}
                         <a href="https://www.instagram.com/bprmsa.official/" target="_blank" aria-label="Instagram"
-                           class="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center text-white text-xl hover:bg-blue-700 transition-all duration-300 transform hover:-translate-y-1">
+                           class="w-9 h-9 bg-white/10 rounded-lg flex items-center justify-center text-white text-lg hover:bg-blue-700 transition-all duration-300 transform hover:-translate-y-1"> {{-- **Ukuran ikon sosial dikurangi** --}}
                             <i class='bx bxl-instagram'></i>
                         </a>
                         <a href="https://web.facebook.com/bprmsa.official" target="_blank" aria-label="Facebook"
-                           class="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center text-white text-xl hover:bg-blue-700 transition-all duration-300 transform hover:-translate-y-1">
+                           class="w-9 h-9 bg-white/10 rounded-lg flex items-center justify-center text-white text-lg hover:bg-blue-700 transition-all duration-300 transform hover:-translate-y-1">
                             <i class='bx bxl-facebook'></i>
                         </a>
                         <a href="https://www.tiktok.com/@bprmsa" target="_blank" aria-label="TikTok"
-                           class="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center text-white text-xl hover:bg-blue-700 transition-all duration-300 transform hover:-translate-y-1">
+                           class="w-9 h-9 bg-white/10 rounded-lg flex items-center justify-center text-white text-lg hover:bg-blue-700 transition-all duration-300 transform hover:-translate-y-1">
                             <i class='bx bxl-tiktok'></i>
                         </a>
                     </div>
                 </div>
 
                 <div class="footer-section">
-                    <h4 class="text-xl md:text-2xl font-semibold text-white mb-6 relative footer-heading-underline">Kontak Kami</h4>
-                    <div class="contact-info flex flex-col gap-4">
-                        <div class="contact-item flex items-start gap-3">
-                            <i class='bx bxs-phone text-blue-400 text-2xl flex-shrink-0 mt-0.5'></i>
+                    <h4 class="text-lg md:text-xl font-semibold text-white mb-4 relative footer-heading-underline">Kontak Kami</h4> {{-- **Ukuran font judul dikurangi** --}}
+                    <div class="contact-info flex flex-col gap-3"> {{-- **Gap antar item kontak dikurangi** --}}
+                        <div class="contact-item flex items-start gap-2"> {{-- **Gap ikon dan teks dikurangi** --}}
+                            <i class='bx bxs-phone text-blue-400 text-xl flex-shrink-0 mt-0.5'></i> {{-- **Ukuran ikon dikurangi** --}}
                             <div>
-                                <strong class="block text-white text-sm font-semibold mb-1">Telepon</strong>
+                                <strong class="block text-white text-sm font-semibold mb-0.5">Telepon</strong> {{-- **Margin dan ukuran font dikurangi** --}}
                                 <p class="text-gray-300 text-sm">0274-549400</p>
                             </div>
                         </div>
-                        <div class="contact-item flex items-start gap-3">
-                            <i class='bx bx-envelope text-blue-400 text-2xl flex-shrink-0 mt-0.5'></i>
+                        <div class="contact-item flex items-start gap-2">
+                            <i class='bx bx-envelope text-blue-400 text-xl flex-shrink-0 mt-0.5'></i>
                             <div>
-                                <strong class="block text-white text-sm font-semibold mb-1">Email</strong>
+                                <strong class="block text-white text-sm font-semibold mb-0.5">Email</strong>
                                 <p class="text-gray-300 text-sm">bprmadani@gmail.com</p>
                             </div>
                         </div>
-                        <div class="contact-item flex items-start gap-3">
-                            <i class='bx bx-globe text-blue-400 text-2xl flex-shrink-0 mt-0.5'></i>
+                        <div class="contact-item flex items-start gap-2">
+                            <i class='bx bx-globe text-blue-400 text-xl flex-shrink-0 mt-0.5'></i>
                             <div>
-                                <strong class="block text-white text-sm font-semibold mb-1">Website</strong>
+                                <strong class="block text-white text-sm font-semibold mb-0.5">Website</strong>
                                 <p class="text-gray-300 text-sm">www.bprmsa.co.id</p>
                             </div>
                         </div>
@@ -225,19 +225,19 @@
                 </div>
 
                 <div class="footer-section">
-                    <h4 class="text-xl md:text-2xl font-semibold text-white mb-6 relative footer-heading-underline">Kantor Pusat</h4>
-                    <div class="office-info mb-6">
-                        <div class="address-info flex items-start gap-3">
-                            <i class='bx bx-map-pin text-blue-400 text-2xl flex-shrink-0 mt-0.5'></i>
+                    <h4 class="text-lg md:text-xl font-semibold text-white mb-4 relative footer-heading-underline">Kantor Pusat</h4> {{-- **Ukuran font judul dikurangi** --}}
+                    <div class="office-info mb-4"> {{-- **Margin bawah info kantor dikurangi** --}}
+                        <div class="address-info flex items-start gap-2">
+                            <i class='bx bx-map-pin text-blue-400 text-xl flex-shrink-0 mt-0.5'></i>
                             <div>
-                                <strong class="block text-white text-sm font-semibold mb-1">Alamat</strong>
+                                <strong class="block text-white text-sm font-semibold mb-0.5">Alamat</strong>
                                 <p class="text-gray-300 text-sm leading-relaxed">Jalan C. Simanjuntak No. 26<br>Kota Yogyakarta 55223</p>
                             </div>
                         </div>
                     </div>
-                    <div class="map-container w-full h-48 rounded-xl overflow-hidden shadow-lg">
+                    <div class="map-container w-full h-40 rounded-xl overflow-hidden shadow-lg"> {{-- **Tinggi iframe peta dikurangi** --}}
                         <iframe
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3953.136894541097!2d110.3779836147775!3d-7.776605294024843!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a577d2d3a3f01%3A0x6b4c1a2d1d4f0d7e!2sJalan%20C.%20Simanjuntak%20No.26%2C%20Terban%2C%20Kec.%20Gondokusuman%2C%20Kota%20Yogyakarta%2C%20Daerah%20Istimewa%20Yogyakarta%2055223!5e0!3m2!1sen!2sid!4v1678912345678!5m2!1sen!2sid"
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3953.111860293233!2d110.37525381477797!3d-7.777080694086657!2m3!1f0!2m3!1f0!2m3!1f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a57700e3f28f5%3A0xc48c03e3a4e9b921!2sPT%20BPR%20MSA%20Yogyakarta!5e0!3m2!1sen!2sid!4v1678891234567!5m2!1sen!2sid"
                             width="100%"
                             height="100%"
                             style="border:0;"
@@ -251,15 +251,14 @@
 
             </div>
 
-            <div class="border-t border-gray-700 py-6 mt-12 flex flex-col md:flex-row items-center justify-between gap-3">
-                <p class="copyright text-gray-400 text-sm text-center md:text-left mb-0">
+            <div class="border-t border-gray-700 py-5 mt-8 flex flex-col md:flex-row items-center justify-between gap-2"> {{-- **Padding vertikal dan margin atas pembatas dikurangi** --}}
+                <p class="copyright text-gray-400 text-xs text-center md:text-left mb-0"> {{-- **Ukuran font hak cipta dikurangi** --}}
                     © {{ date('Y') }} PT BPR MSA Yogyakarta. All rights reserved.
                 </p>
-                <div class="footer-links flex gap-4 sm:gap-6 md:gap-8 justify-center"> {{-- Links di tengah untuk mobile, kanan untuk desktop --}}
-                    <a href="{{ route('tentang') }}" class="text-gray-300 text-sm hover:text-white font-medium transition-colors duration-300">Tentang Kami</a>
-                    <a href="{{ route('artikel.index') }}" class="text-gray-300 text-sm hover:text-white font-medium transition-colors duration-300">Artikel</a>
-                    <a href="{{ route('contact') }}" class="text-gray-300 text-sm hover:text-white font-medium transition-colors duration-300">Kontak</a>
-                    {{-- Tautan "Meeting Rooms" dihapus karena tidak ada route yang sesuai --}}
+                <div class="footer-links flex gap-3 sm:gap-4 md:gap-5 justify-center"> {{-- **Gap tautan footer dikurangi** --}}
+                    <a href="{{ route('tentang') }}" class="text-gray-300 text-xs hover:text-white font-medium transition-colors duration-300">Tentang Kami</a> {{-- **Ukuran font tautan dikurangi** --}}
+                    <a href="{{ route('artikel.index') }}" class="text-gray-300 text-xs hover:text-white font-medium transition-colors duration-300">Artikel</a>
+                    <a href="{{ route('contact') }}" class="text-gray-300 text-xs hover:text-white font-medium transition-colors duration-300">Kontak</a>
                 </div>
             </div>
         </div>
@@ -270,10 +269,10 @@
     .footer-heading-underline::after {
         content: '';
         position: absolute;
-        bottom: -8px; /* Jarak dari teks */
+        bottom: -6px; /* Jarak dari teks dikurangi */
         left: 0;
-        width: 40px; /* Lebar garis bawah */
-        height: 3px; /* Tinggi garis bawah */
+        width: 30px; /* Lebar garis bawah dikurangi */
+        height: 2px; /* Tinggi garis bawah dikurangi */
         background: linear-gradient(135deg, #3B82F6, #10B981); /* Warna gradien biru-hijau */
         border-radius: 2px;
     }
