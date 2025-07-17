@@ -169,29 +169,122 @@
         </div>
     </div>
 
-    <footer class="bg-gray-900 text-white py-12 mt-10">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 px-4">
-            <div class="flex items-center gap-3">
-                <img src="{{ asset('img/logo3.png') }}" alt="Logo PT BPR MSA" class="h-10 w-auto">
-                <span class="font-extrabold text-xl">PT BPR MSA</span>
+    {{-- Footer Section --}}
+    <footer class="bg-gray-900 text-white py-16 md:py-20 mt-16"> {{-- Background gelap, padding vertikal besar, margin atas --}}
+        <div class="max-w-7xl mx-auto px-4"> {{-- Container utama footer --}}
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-12 mb-10 md:mb-16"> {{-- Grid 3 kolom untuk desktop, 2 kolom untuk tablet, 1 kolom untuk mobile --}}
+
+                <div class="footer-section">
+                    <div class="footer-logo mb-4">
+                        <h4 class="text-2xl md:text-3xl font-bold text-white mb-2">PT BPR MSA Yogyakarta</h4> {{-- Nama perusahaan --}}
+                    </div>
+                    <p class="company-description text-gray-300 text-sm leading-relaxed mb-4">
+                        Lembaga keuangan terpercaya yang menyediakan solusi permodalan bagi UMKM dan kebutuhan bisnis profesional Anda.
+                    </p>
+                    <div class="social-links flex gap-3 mt-4">
+                        <a href="https://www.instagram.com/bprmsa.official/" target="_blank" aria-label="Instagram"
+                           class="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center text-white text-xl hover:bg-blue-700 transition-all duration-300 transform hover:-translate-y-1">
+                            <i class='bx bxl-instagram'></i>
+                        </a>
+                        <a href="https://web.facebook.com/bprmsa.official" target="_blank" aria-label="Facebook"
+                           class="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center text-white text-xl hover:bg-blue-700 transition-all duration-300 transform hover:-translate-y-1">
+                            <i class='bx bxl-facebook'></i>
+                        </a>
+                        <a href="https://www.tiktok.com/@bprmsa" target="_blank" aria-label="TikTok"
+                           class="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center text-white text-xl hover:bg-blue-700 transition-all duration-300 transform hover:-translate-y-1">
+                            <i class='bx bxl-tiktok'></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="footer-section">
+                    <h4 class="text-xl md:text-2xl font-semibold text-white mb-6 relative footer-heading-underline">Kontak Kami</h4>
+                    <div class="contact-info flex flex-col gap-4">
+                        <div class="contact-item flex items-start gap-3">
+                            <i class='bx bxs-phone text-blue-400 text-2xl flex-shrink-0 mt-0.5'></i>
+                            <div>
+                                <strong class="block text-white text-sm font-semibold mb-1">Telepon</strong>
+                                <p class="text-gray-300 text-sm">0274-549400</p>
+                            </div>
+                        </div>
+                        <div class="contact-item flex items-start gap-3">
+                            <i class='bx bx-envelope text-blue-400 text-2xl flex-shrink-0 mt-0.5'></i>
+                            <div>
+                                <strong class="block text-white text-sm font-semibold mb-1">Email</strong>
+                                <p class="text-gray-300 text-sm">bprmadani@gmail.com</p>
+                            </div>
+                        </div>
+                        <div class="contact-item flex items-start gap-3">
+                            <i class='bx bx-globe text-blue-400 text-2xl flex-shrink-0 mt-0.5'></i>
+                            <div>
+                                <strong class="block text-white text-sm font-semibold mb-1">Website</strong>
+                                <p class="text-gray-300 text-sm">www.bprmsa.co.id</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="footer-section">
+                    <h4 class="text-xl md:text-2xl font-semibold text-white mb-6 relative footer-heading-underline">Kantor Pusat</h4>
+                    <div class="office-info mb-6">
+                        <div class="address-info flex items-start gap-3">
+                            <i class='bx bx-map-pin text-blue-400 text-2xl flex-shrink-0 mt-0.5'></i>
+                            <div>
+                                <strong class="block text-white text-sm font-semibold mb-1">Alamat</strong>
+                                <p class="text-gray-300 text-sm leading-relaxed">Jalan C. Simanjuntak No. 26<br>Kota Yogyakarta 55223</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="map-container w-full h-48 rounded-xl overflow-hidden shadow-lg">
+                        <iframe
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3953.136894541097!2d110.3779836147775!3d-7.776605294024843!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a577d2d3a3f01%3A0x6b4c1a2d1d4f0d7e!2sJalan%20C.%20Simanjuntak%20No.26%2C%20Terban%2C%20Kec.%20Gondokusuman%2C%20Kota%20Yogyakarta%2C%20Daerah%20Istimewa%20Yogyakarta%2055223!5e0!3m2!1sen!2sid!4v1678912345678!5m2!1sen!2sid"
+                            width="100%"
+                            height="100%"
+                            style="border:0;"
+                            allowfullscreen=""
+                            loading="lazy"
+                            referrerpolicy="no-referrer-when-downgrade"
+                            title="Lokasi BPR MSA Yogyakarta">
+                        </iframe>
+                    </div>
+                </div>
+
             </div>
-            <div class="text-gray-400 text-sm text-center md:text-left">&copy; {{ date('Y') }} PT BPR MSA. All rights reserved.</div>
-            <div class="flex gap-6 text-base">
-                <a href="{{ route('tentang') }}" class="hover:text-blue-300 transition-colors duration-300">Tentang Kami</a>
-                <a href="{{ route('artikel.index') }}" class="hover:text-blue-300 transition-colors duration-300">Artikel</a>
-                <a href="{{ route('contact') }}" class="hover:text-blue-300 transition-colors duration-300">Kontak</a>
+
+            <div class="border-t border-gray-700 py-6 mt-12 flex flex-col md:flex-row items-center justify-between gap-3">
+                <p class="copyright text-gray-400 text-sm text-center md:text-left mb-0">
+                    © {{ date('Y') }} PT BPR MSA Yogyakarta. All rights reserved.
+                </p>
+                <div class="footer-links flex gap-4 sm:gap-6 md:gap-8 justify-center"> {{-- Links di tengah untuk mobile, kanan untuk desktop --}}
+                    <a href="{{ route('tentang') }}" class="text-gray-300 text-sm hover:text-white font-medium transition-colors duration-300">Tentang Kami</a>
+                    <a href="{{ route('artikel.index') }}" class="text-gray-300 text-sm hover:text-white font-medium transition-colors duration-300">Artikel</a>
+                    <a href="{{ route('contact') }}" class="text-gray-300 text-sm hover:text-white font-medium transition-colors duration-300">Kontak</a>
+                    {{-- Tautan "Meeting Rooms" dihapus karena tidak ada route yang sesuai --}}
+                </div>
             </div>
         </div>
     </footer>
-</x-app-layout>
 
-{{-- Custom CSS untuk menyembunyikan scrollbar di bagian category slider --}}
-<style>
-.custom-scrollbar-hide::-webkit-scrollbar {
-    display: none;
-}
-.custom-scrollbar-hide {
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none;  /* Firefox */
-}
-</style>
+    {{-- Custom CSS untuk pseudo-element ::after pada judul footer --}}
+    <style>
+    .footer-heading-underline::after {
+        content: '';
+        position: absolute;
+        bottom: -8px; /* Jarak dari teks */
+        left: 0;
+        width: 40px; /* Lebar garis bawah */
+        height: 3px; /* Tinggi garis bawah */
+        background: linear-gradient(135deg, #3B82F6, #10B981); /* Warna gradien biru-hijau */
+        border-radius: 2px;
+    }
+
+    /* Memastikan custom-scrollbar-hide tetap ada */
+    .custom-scrollbar-hide::-webkit-scrollbar {
+        display: none;
+    }
+    .custom-scrollbar-hide {
+        -ms-overflow-style: none; /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+    }
+    </style>
+</x-app-layout>
