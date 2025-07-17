@@ -15,6 +15,9 @@ Route::get('/tentang', [PublicController::class, 'tentang'])->name('tentang');
 Route::get('/contact', [ContactController::class, 'create'])->name('contact');
 Route::post('/contact', [ContactController::class, 'store']);
 
+// Daftar produk publik (bisa filter kategori, pencarian, dsb)
+Route::get('/produk', [\App\Http\Controllers\PublicController::class, 'produkIndex'])->name('produk.index');
+
 // Dashboard UMKM
 Route::middleware(['auth', 'role:umkm'])->group(function () {
     Route::get('/umkm/dashboard', [\App\Http\Controllers\UmkmDashboardController::class, 'index'])->name('umkm.dashboard');
@@ -38,6 +41,18 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+Route::get('/dashboard', function () {
+    $user = auth()->user();
+    if (!$user) {
+        return redirect()->route('login');
+    }
+    if ($user->role === 'admin') {
+        return redirect()->route('admin.dashboard');
+    } else {
+        return redirect()->route('umkm.dashboard');
+    }
+})->middleware(['auth'])->name('dashboard');
 
 Route::get('/redirect-by-role', function () {
     $user = auth()->user();

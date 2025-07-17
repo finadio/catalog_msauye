@@ -34,7 +34,8 @@ class AuthenticatedSessionController extends Controller
         } elseif ($user->role === 'umkm') {
             return redirect()->route('umkm.dashboard');
         } else {
-            return redirect()->route('home');
+            Auth::logout();
+            return redirect()->route('login')->withErrors(['email' => 'Akun Anda tidak memiliki role yang valid.']);
         }
     }
 

@@ -6,29 +6,35 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Umkm;
 use App\Models\Category;
-use App\Models\Article;
+use App\Models\Article; // Pastikan ini di-import
+use App\Models\ProductStatus;
 
 class PublicController extends Controller
 {
     public function home(Request $request)
     {
         $categories = Category::all();
-        $products = Product::with(['umkm', 'category'])
+        $products = Product::with(['umkm', 'category', 'status'])
             ->when($request->q, fn($q) => $q->where('name', 'like', '%'.$request->q.'%'))
             ->when($request->kategori, fn($q) => $q->where('category_id', $request->kategori))
             ->latest()->paginate(12);
-        return view('public.home', compact('categories', 'products'));
+
+        // Tambahkan pengambilan data artikel di sini
+        $articles = Article::latest()->get(); // Mengambil semua artikel, nanti akan dibatasi di view dengan take(3)
+
+        // Lewatkan $articles ke view
+        return view('public.home', compact('categories', 'products', 'articles'));
     }
 
     public function produkDetail($id)
     {
-        $product = Product::with('umkm')->findOrFail($id);
+        $product = Product::with(['umkm', 'status'])->findOrFail($id);
         return view('public.produk_detail', compact('product'));
     }
 
     public function umkmDetail($id)
     {
-        $umkm = Umkm::with('products')->findOrFail($id);
+        $umkm = Umkm::with(['products.status'])->findOrFail($id);
         return view('public.umkm_detail', compact('umkm'));
     }
 
@@ -47,5 +53,26 @@ class PublicController extends Controller
     public function tentang()
     {
         return view('public.tentang');
+    }
+
+    public function produkIndex(Request $request)
+    {
+        $query = Product::query()->with(['umkm', 'status']);
+
+        if ($request->filled('q')) {
+            $q = $request->q;
+            $query->where('name', 'like', "%$q%")
+                  ->orWhereHas('umkm', function($u) use ($q) {
+                      $u->where('name', 'like', "%$q%");
+                  });
+        }
+        if ($request->filled('kategori')) {
+            $query->where('category_id', $request->kategori);
+        }
+
+        $products = $query->latest()->paginate(12);
+        $categories = Category::all();
+
+        return view('public.produk-index', compact('products', 'categories'));
     }
 }
