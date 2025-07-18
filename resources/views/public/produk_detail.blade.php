@@ -5,7 +5,7 @@
     <div class="py-12 bg-gray-50 min-h-screen">
         <div class="max-w-6xl mx-auto bg-white rounded-xl shadow-2xl p-8 md:p-12 flex flex-col lg:flex-row gap-8 lg:gap-16">
             <div class="flex-shrink-0 w-full lg:w-1/2 rounded-xl overflow-hidden shadow-xl group">
-                <img src="{{ $product->photo ? asset('storage/'.$product->photo) : 'https://via.placeholder.com/600x400?text=Foto+Produk' }}" 
+                <img src="{{ Str::startsWith($product->photo, 'produk-dummy') ? asset('img/' . $product->photo) : asset('storage/' . $product->photo) }}" 
                      alt="{{ $product->name }}" 
                      class="w-full h-72 md:h-96 object-cover transform transition-transform duration-300 group-hover:scale-105">
             </div>
