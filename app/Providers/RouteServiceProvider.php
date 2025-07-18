@@ -12,7 +12,7 @@ class RouteServiceProvider extends ServiceProvider
      *
      * @var string
      */
-    public const HOME = '/umkm/dashboard';
+    public const HOME = '/';
 
 
     /**

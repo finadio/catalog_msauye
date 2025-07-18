@@ -13,13 +13,18 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('umkm_id')->constrained()->onDelete('cascade');
-            $table->foreignId('category_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->string('name');
             $table->text('description');
-            $table->decimal('price', 12, 2);
-            $table->string('photo');
-            $table->foreignId('status_id')->constrained('product_statuses');
+            $table->decimal('price', 15, 2)->nullable();
+            $table->string('category');
+            $table->string('location');
+            $table->boolean('show_price')->default(true);
+            $table->string('whatsapp')->nullable();
+            $table->string('instagram')->nullable();
+            $table->string('tiktok_shop')->nullable();
+            $table->json('images')->nullable();
+            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
             $table->timestamps();
         });
     }

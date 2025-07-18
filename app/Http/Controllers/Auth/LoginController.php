@@ -23,6 +23,6 @@ class LoginController extends Controller
         return redirect()->route('dashboard'); // fallback untuk role lain
         }
 
-        return redirect('/'); // fallback jika role tidak dikenali
+        return back()->withErrors(['email' => 'Login gagal']);
     }
 }

@@ -1,69 +1,157 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            Dashboard UMKM
-        </h2>
-    </x-slot>
+@extends('layouts.app')
 
-    <div class="py-6">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-
-            <!-- Navigasi Menu -->
-            <div class="flex justify-between items-center mb-6">
-                <div class="space-x-4">
-                    <a href="{{ route('umkm.produk.index') }}" class="text-blue-600 hover:underline">Kelola Produk</a>
-                    <a href="{{ route('umkm.profil') }}" class="text-blue-600 hover:underline">Edit Profil</a>
+@section('content')
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1 class="h3">Dashboard UMKM</h1>
+                <a href="{{ route('umkm.products.create') }}" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Tambah Produk
+                </a>
+            </div>
+            
+            @if(session('success'))
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
-
-                <!-- Foto & Dropdown -->
-                <div class="relative">
-                    <button class="flex items-center space-x-2">
-                        <img src="https://ui-avatars.com/api/?name=UMKM&background=random" class="w-8 h-8 rounded-full" />
-                        <span>{{ Auth::user()->name }}</span>
-                    </button>
-                    <div class="absolute right-0 mt-2 w-48 bg-white rounded shadow z-50">
-                        <a href="{{ route('profil') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Edit Profil</a>
-                        <form method="POST" action="{{ route('logout') }}">
-                            @csrf
-                            <button class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Logout</button>
-                        </form>
+            @endif
+            
+            <!-- Statistik Cards -->
+            <div class="row mb-4">
+                <div class="col-md-3 mb-3">
+                    <div class="card bg-primary text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h4>{{ $totalProducts }}</h4>
+                                    <p class="mb-0">Total Produk</p>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="fas fa-box fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-3 mb-3">
+                    <div class="card bg-success text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h4>{{ $activeProducts }}</h4>
+                                    <p class="mb-0">Produk Aktif</p>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="fas fa-check-circle fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-3 mb-3">
+                    <div class="card bg-warning text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h4>{{ $pendingProducts }}</h4>
+                                    <p class="mb-0">Menunggu Persetujuan</p>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="fas fa-clock fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="col-md-3 mb-3">
+                    <div class="card bg-danger text-white">
+                        <div class="card-body">
+                            <div class="d-flex justify-content-between">
+                                <div>
+                                    <h4>{{ $rejectedProducts }}</h4>
+                                    <p class="mb-0">Ditolak</p>
+                                </div>
+                                <div class="align-self-center">
+                                    <i class="fas fa-times-circle fa-2x"></i>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-
-            <!-- Status Produk -->
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6">
-                    <h3 class="text-lg font-bold mb-4">Status Produk</h3>
-                    <table class="min-w-full text-sm">
-                        <thead>
-                            <tr>
-                                <th class="py-2 text-left">Nama Produk</th>
-                                <th class="py-2 text-left">Status</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($products as $product)
-                                <tr class="border-t">
-                                    <td class="py-2">{{ $product->name }}</td>
-                                    <td class="py-2">
-                                        <span class="px-2 py-1 rounded-full text-xs
-                                            {{ $product->status === 'Aktif' ? 'bg-green-100 text-green-700' : '' }}
-                                            {{ $product->status === 'Pending' ? 'bg-yellow-100 text-yellow-700' : '' }}
-                                            {{ $product->status === 'Ditolak' ? 'bg-red-100 text-red-700' : '' }}">
-                                            {{ $product->status }}
-                                        </span>
-                                    </td>
-                                </tr>
-                            @endforeach
-                            @if($products->isEmpty())
-                                <tr><td colspan="2" class="py-4 text-center text-gray-500">Belum ada produk</td></tr>
+            
+            <!-- Produk Terbaru -->
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title mb-0">Produk Terbaru</h5>
+                        </div>
+                        <div class="card-body">
+                            @if($recentProducts->count() > 0)
+                                <div class="table-responsive">
+                                    <table class="table table-striped">
+                                        <thead>
+                                            <tr>
+                                                <th>Nama Produk</th>
+                                                <th>Kategori</th>
+                                                <th>Harga</th>
+                                                <th>Status</th>
+                                                <th>Tanggal</th>
+                                                <th>Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @foreach($recentProducts as $product)
+                                                <tr>
+                                                    <td>{{ $product->name }}</td>
+                                                    <td>{{ $product->category_name }}</td>
+                                                    <td>{{ $product->formatted_price }}</td>
+                                                    <td>{!! $product->status_badge !!}</td>
+                                                    <td>{{ $product->created_at->format('d/m/Y') }}</td>
+                                                    <td>
+                                                        <a href="{{ route('umkm.products.edit', $product) }}" class="btn btn-sm btn-outline-primary">
+                                                            <i class="fas fa-edit"></i> Edit
+                                                        </a>
+                                                    </td>
+                                                </tr>
+                                            @endforeach
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="text-center mt-3">
+                                    <a href="{{ route('umkm.products') }}" class="btn btn-outline-primary">
+                                        Lihat Semua Produk
+                                    </a>
+                                </div>
+                            @else
+                                <div class="text-center py-4">
+                                    <i class="fas fa-box fa-3x text-muted mb-3"></i>
+                                    <p class="text-muted">Belum ada produk. Mulai tambahkan produk pertama Anda!</p>
+                                    <a href="{{ route('umkm.products.create') }}" class="btn btn-primary">
+                                        <i class="fas fa-plus"></i> Tambah Produk
+                                    </a>
+                                </div>
                             @endif
-                        </tbody>
-                    </table>
+                        </div>
+                    </div>
                 </div>
             </div>
-
         </div>
     </div>
-</x-app-layout>
+</div>
+@endsection
+
+@section('scripts')
+<script>
+    // Auto dismiss alerts after 5 seconds
+    setTimeout(function() {
+        $('.alert').fadeOut();
+    }, 5000);
+</script>
+@endsection
