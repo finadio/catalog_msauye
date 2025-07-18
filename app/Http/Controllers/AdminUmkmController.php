@@ -15,9 +15,22 @@ class AdminUmkmController extends Controller
      */
     public function index(Request $request)
     {
-        $umkms = Umkm::when($request->q, function($q) use ($request) {
-            $q->where('name', 'like', '%'.$request->q.'%');
+        $umkms = Umkm::when($request->q, function($query) use ($request) {
+            $query->where('name', 'like', '%'.$request->q.'%')
+                  ->orWhere('description', 'like', '%'.$request->q.'%')
+                  ->orWhere('address', 'like', '%'.$request->q.'%')
+                  ->orWhere('phone', 'like', '%'.$request->q.'%')
+                  ->orWhere('whatsapp', 'like', '%'.$request->q.'%')
+                  ->orWhere('instagram', 'like', '%'.$request->q.'%')
+                  ->orWhere('tiktok', 'like', '%'.$request->q.'%')
+                  ->orWhere('website', 'like', '%'.$request->q.'%');
         })->latest()->paginate(10);
+
+        // Jika ini adalah permintaan AJAX, kembalikan hanya partial view tabel
+        if ($request->ajax()) {
+            return view('admin.umkm._partials.umkm_table', compact('umkms'))->render();
+        }
+
         return view('admin.umkm.index', compact('umkms'));
     }
 
