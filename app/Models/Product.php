@@ -21,7 +21,7 @@ class Product extends Model
         'instagram',
         'tiktok_shop',
         'images',
-        'status'
+        'status_id',
     ];
     
     protected $casts = [
@@ -34,20 +34,23 @@ class Product extends Model
     {
         return $this->belongsTo(User::class);
     }
+    public function status()
+    {
+        return $this->belongsTo(ProductStatus::class);
+    }
     
     public function getStatusBadgeAttribute()
-    {
-        switch ($this->status) {
-            case 'approved':
-                return '<span class="badge bg-success">Disetujui</span>';
-            case 'pending':
-                return '<span class="badge bg-warning">Menunggu</span>';
-            case 'rejected':
-                return '<span class="badge bg-danger">Ditolak</span>';
-            default:
-                return '<span class="badge bg-secondary">Tidak diketahui</span>';
-        }
-    }
+{
+    $name = $this->status?->name;
+
+    return match ($name) {
+        'approved' => '<span class="badge bg-success">Disetujui</span>',
+        'pending' => '<span class="badge bg-warning">Menunggu</span>',
+        'rejected' => '<span class="badge bg-danger">Ditolak</span>',
+        default => '<span class="badge bg-secondary">Tidak diketahui</span>',
+    };
+}
+
     
     public function getFormattedPriceAttribute()
     {

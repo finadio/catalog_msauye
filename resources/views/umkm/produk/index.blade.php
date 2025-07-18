@@ -6,7 +6,7 @@
         <div class="col-md-12">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h1 class="h3">Kelola Produk</h1>
-                <a href="{{ route('umkm.products.create') }}" class="btn btn-primary">
+                <a href="{{ route('umkm.produk.create') }}" class="btn btn-primary">
                     <i class="fas fa-plus"></i> Tambah Produk
                 </a>
             </div>
@@ -70,7 +70,7 @@
                                             <td>{{ $product->created_at->format('d/m/Y') }}</td>
                                             <td>
                                                 <div class="btn-group" role="group">
-                                                    <a href="{{ route('umkm.products.edit', $product) }}" 
+                                                    <a href="{{ route('umkm.produk.edit', $product) }}" 
                                                        class="btn btn-sm btn-outline-primary">
                                                         <i class="fas fa-edit"></i>
                                                     </a>
@@ -95,7 +95,7 @@
                             <i class="fas fa-box fa-3x text-muted mb-3"></i>
                             <h4 class="text-muted">Belum ada produk</h4>
                             <p class="text-muted">Mulai tambahkan produk pertama Anda untuk memulai berjualan!</p>
-                            <a href="{{ route('umkm.products.create') }}" class="btn btn-primary">
+                            <a href="{{ route('umkm.produk.create') }}" class="btn btn-primary">
                                 <i class="fas fa-plus"></i> Tambah Produk
                             </a>
                         </div>

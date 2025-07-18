@@ -6,7 +6,7 @@
         <div class="col-md-12">
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h1 class="h3">Dashboard UMKM</h1>
-                <a href="{{ route('umkm.products.create') }}" class="btn btn-primary">
+                <a href="{{ route('umkm.produk.create') }}" class="btn btn-primary">
                     <i class="fas fa-plus"></i> Tambah Produk
                 </a>
             </div>
@@ -115,7 +115,7 @@
                                                     <td>{!! $product->status_badge !!}</td>
                                                     <td>{{ $product->created_at->format('d/m/Y') }}</td>
                                                     <td>
-                                                        <a href="{{ route('umkm.products.edit', $product) }}" class="btn btn-sm btn-outline-primary">
+                                                        <a href="{{ route('umkm.produk.edit', $product) }}" class="btn btn-sm btn-outline-primary">
                                                             <i class="fas fa-edit"></i> Edit
                                                         </a>
                                                     </td>
@@ -125,7 +125,7 @@
                                     </table>
                                 </div>
                                 <div class="text-center mt-3">
-                                    <a href="{{ route('umkm.products') }}" class="btn btn-outline-primary">
+                                    <a href="{{ route('umkm.produk') }}" class="btn btn-outline-primary">
                                         Lihat Semua Produk
                                     </a>
                                 </div>
@@ -133,7 +133,7 @@
                                 <div class="text-center py-4">
                                     <i class="fas fa-box fa-3x text-muted mb-3"></i>
                                     <p class="text-muted">Belum ada produk. Mulai tambahkan produk pertama Anda!</p>
-                                    <a href="{{ route('umkm.products.create') }}" class="btn btn-primary">
+                                    <a href="{{ route('umkm.produk.create') }}" class="btn btn-primary">
                                         <i class="fas fa-plus"></i> Tambah Produk
                                     </a>
                                 </div>

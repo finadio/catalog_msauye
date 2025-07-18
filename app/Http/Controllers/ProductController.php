@@ -17,7 +17,7 @@ class ProductController extends Controller
     {
         $umkm = auth()->user()->umkm;
         $products = $umkm ? $umkm->products()->with('category','status')->latest()->paginate(10) : collect();
-        return view('umkm.products.index', compact('products'));
+        return view('umkm.produk.index', compact('products'));
     }
 
     /**
@@ -26,7 +26,7 @@ class ProductController extends Controller
     public function create()
     {
         $categories = Category::all();
-        return view('umkm.products.create', compact('categories'));
+        return view('umkm.produk.create', compact('categories'));
     }
 
     /**

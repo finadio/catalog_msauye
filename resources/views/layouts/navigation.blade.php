@@ -152,7 +152,7 @@
 
                 <div class="mt-3 space-y-1">
                     @if(Auth::user()->role == 'umkm')
-                        <x-responsive-nav-link :href="route('umkm.profil')" class="text-gray-700 hover:bg-gray-100">{{ __('Edit Profil') }}</x-responsive-nav-link>
+                        <x-responsive-nav-link :href="route('umkm.profile.edit')" class="text-gray-700 hover:bg-gray-100">{{ __('Edit Profil') }}</x-responsive-nav-link>
                         <x-responsive-nav-link :href="route('profile.edit')" class="text-gray-700 hover:bg-gray-100">{{ __('Edit Profile') }}</x-responsive-nav-link>
                     @elseif(Auth::user()->role == 'admin')
                         <x-responsive-nav-link :href="route('admin.umkm.index')" class="text-gray-700 hover:bg-gray-100">{{ __('Kelola UMKM') }}</x-responsive-nav-link>

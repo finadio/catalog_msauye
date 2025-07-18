@@ -22,9 +22,10 @@ class UmkmController extends Controller
         }
 
         $myProductCount = $umkm->products()->count();
-        $pendingCount = $umkm->products()->whereHas('status', function ($q) {
-            $q->where('name', 'pending');
-        })->count();
+        $pendingCount = \App\Models\Product::join('product_statuses', 'products.status_id', '=', 'product_statuses.id')
+            ->where('products.umkm_id', $umkm->id)
+            ->where('product_statuses.name', 'pending')
+            ->count();
 
         return view('umkm.dashboard', compact('myProductCount', 'pendingCount'));
     }

@@ -9,7 +9,7 @@
                     <h4 class="mb-0">Tambah Produk Baru</h4>
                 </div>
                 <div class="card-body">
-                    <form method="POST" action="{{ route('umkm.products.store') }}" enctype="multipart/form-data">
+                    <form method="POST" action="{{ route('umkm.produk.store') }}" enctype="multipart/form-data">
                         @csrf
                         
                         <!-- Upload Gambar -->
@@ -180,7 +180,7 @@
                                 <button type="submit" class="btn btn-primary">
                                     <i class="fas fa-save"></i> Simpan Produk
                                 </button>
-                                <a href="{{ route('umkm.products') }}" class="btn btn-secondary ms-2">
+                                <a href="{{ route('umkm.produk') }}" class="btn btn-secondary ms-2">
                                     Batal
                                 </a>
                             </div>
