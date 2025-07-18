@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\PublicController;
@@ -53,21 +54,23 @@ Route::middleware('auth')->group(function () {
 Route::get('/umkm', function () {
     return redirect()->route('umkm.dashboard');
 });
- Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/umkm/dashboard', [UmkmController::class, 'dashboard'])
-    ->middleware('auth', 'role:umkm')
-    ->name('umkm.dashboard');
-    // Profil UMKM
-    Route::get('/umkm/profil', [UmkmController::class, 'profil'])->name('umkm.profil');
-    Route::put('/umkm/profil', [UmkmController::class, 'updateProfil'])->name('umkm.profil.update');
-    Route::get('/umkm/profil', [UmkmProfileController::class, 'index'])->name('umkm.profil');
-    // Produk UMKM
-    Route::get('/umkm/products', [ProductController::class, 'index'])->name('umkm.products');
-    Route::get('/umkm/products/create', [ProductController::class, 'create'])->name('umkm.products.create');
-    Route::post('/umkm/products', [ProductController::class, 'store'])->name('umkm.products.store');
-    Route::get('/umkm/products/{product}/edit', [ProductController::class, 'edit'])->name('umkm.products.edit');
-    Route::put('/umkm/products/{product}', [ProductController::class, 'update'])->name('umkm.products.update');
-    Route::delete('/umkm/products/{product}', [ProductController::class, 'destroy'])->name('umkm.products.destroy');
+
+ // Group khusus UMKM seller (setelah login & role:umkm)
+Route::prefix('umkm')->middleware(['auth', 'role:umkm'])->group(function () {
+    // Dashboard utama
+    Route::get('/dashboard', [UmkmController::class, 'dashboard'])->name('umkm.dashboard');
+
+    // Profil UMKM (lihat & edit)
+    Route::get('/profil', [UmkmProfileController::class, 'edit'])->name('umkm.profile.edit');
+    Route::post('/profil', [UmkmProfileController::class, 'update'])->name('umkm.profile.update');
+
+    // Produk UMKM (tampil, tambah, edit, hapus)
+    Route::get('/produk', [ProductController::class, 'index'])->name('umkm.produk.index');
+    Route::get('/produk/create', [ProductController::class, 'create'])->name('umkm.produk.create');
+    Route::post('/produk', [ProductController::class, 'store'])->name('umkm.produk.store');
+    Route::get('/produk/{id}/edit', [ProductController::class, 'edit'])->name('umkm.produk.edit');
+    Route::put('/produk/{id}', [ProductController::class, 'update'])->name('umkm.produk.update');
+    Route::delete('/produk/{id}', [ProductController::class, 'destroy'])->name('umkm.produk.destroy');
 });
 
 // Dashboard Admin (Memerlukan autentikasi SAJA, tanpa middleware 'role' sementara)
@@ -102,8 +105,8 @@ Route::get('/redirect-by-role', function () {
     }
 })->middleware(['auth']);
 
-Route::get('/tes-umkm', function () {
-    return 'Route UMKM bisa diakses';
+Route::get('/cek-auth', function () {
+    return auth()->check() ? 'Login sebagai user ID: ' . auth()->id() : 'Belum login';
 });
 
 
