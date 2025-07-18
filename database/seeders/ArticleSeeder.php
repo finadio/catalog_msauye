@@ -47,6 +47,39 @@ class ArticleSeeder extends Seeder
                 'created_at' => now()->subDays(15),
                 'updated_at' => now()->subDays(15),
             ],
+            // New dummy articles
+            [
+                'title' => 'Tips Memilih Platform E-commerce Terbaik untuk UMKM',
+                'content' => 'Memilih platform e-commerce yang tepat adalah langkah krusial. Artikel ini membandingkan beberapa platform populer dan memberikan tips memilih yang sesuai dengan kebutuhan dan anggaran UMKM Anda.',
+                'type' => 'edukasi',
+                'photo' => null,
+                'created_at' => now()->subDays(3),
+                'updated_at' => now()->subDays(3),
+            ],
+            [
+                'title' => 'UMKM Makanan Lokal Berhasil Tembus Pasar Internasional Berkat Pembinaan BPR MSA',
+                'content' => 'Kisah sukses UMKM keripik tempe dari Yogyakarta yang berhasil mengekspor produknya ke beberapa negara Asia Tenggara setelah mendapat pendampingan intensif dari BPR MSA dalam aspek manajemen dan pemasaran.',
+                'type' => 'berita',
+                'photo' => null,
+                'created_at' => now()->subDays(7),
+                'updated_at' => now()->subDays(7),
+            ],
+            [
+                'title' => 'Memaksimalkan Penggunaan Media Sosial untuk Promosi Produk',
+                'content' => 'Media sosial bukan hanya untuk bersosialisasi, tetapi juga alat pemasaran yang ampuh. Pelajari strategi konten, interaksi dengan audiens, dan penggunaan fitur-fitur media sosial untuk meningkatkan penjualan UMKM Anda.',
+                'type' => 'edukasi',
+                'photo' => null,
+                'created_at' => now()->subDays(20),
+                'updated_at' => now()->subDays(20),
+            ],
+            [
+                'title' => 'Dukungan BPR MSA Terhadap Digitalisasi UMKM di Masa Pandemi',
+                'content' => 'Bagaimana BPR MSA beradaptasi dan memberikan dukungan kepada UMKM untuk beralih ke platform digital selama pandemi, termasuk pelatihan gratis dan fasilitas kredit khusus untuk modal digitalisasi.',
+                'type' => 'berita',
+                'photo' => null,
+                'created_at' => now()->subDays(22),
+                'updated_at' => now()->subDays(22),
+            ],
         ]);
     }
 }
