@@ -20,6 +20,7 @@ public function run(): void
         AdminUserSeeder::class,
         UmkmSeeder::class, // Tambahkan ini
         ArticleSeeder::class,
+        ProductSeeder::class,
     ]);
 }
     

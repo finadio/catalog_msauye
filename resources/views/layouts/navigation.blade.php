@@ -1,11 +1,11 @@
 @php
     // Logika untuk menentukan apakah menu 'Produk' harus aktif
-    // Ini aktif jika kita di halaman home DAN ada parameter 'q' atau 'kategori'.
-    // Deteksi fragmen (#produk-terbaru) dihapus karena tidak tersedia di sisi server.
-    $isProdukActive = request()->routeIs('home') && (request()->filled('q') || request()->filled('kategori'));
+    // Ini aktif jika kita berada di rute 'produk.index' atau 'produk.detail'
+    $isProdukActive = request()->routeIs('produk.index') || request()->routeIs('produk.detail');
 
-    // Menu 'Home' aktif jika kita di rute home DAN BUKAN di konteks produk
-    $isHomeActive = request()->routeIs('home') && !$isProdukActive;
+    // Menu 'Home' aktif jika kita di rute home DAN BUKAN di konteks produk (yaitu halaman produk.index/produk.detail)
+    $isHomeActive = request()->routeIs('home') && !($isProdukActive); // Pastikan Home tidak aktif saat di halaman produk
+
 @endphp
 
 <nav x-data="{ open: false }" class="bg-gray-50 text-gray-800 shadow-md fixed top-0 w-full z-50">
@@ -20,15 +20,15 @@
         <div class="hidden sm:flex items-center ml-auto space-x-6">
             {{-- Gunakan $isHomeActive --}}
             <x-nav-link :href="route('home')" :active="$isHomeActive" class="flex items-center text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0h4"></path></svg>
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0h4"/></svg>
                 {{ __('Home') }}
             </x-nav-link>
-            {{-- Ubah href ke route('home')#produk-terbaru dan tambahkan :active="$isProdukActive" --}}
-            <x-nav-link href="{{ route('home') }}#produk-terbaru" :active="$isProdukActive" class="flex items-center text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
+            {{-- Ubah href ke route('produk.index') dan perbarui :active --}}
+            <x-nav-link href="{{ route('produk.index') }}" :active="$isProdukActive" class="flex items-center text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
                 {{ __('Produk') }}
             </x-nav-link>
-            <x-nav-link :href="route('artikel.index')" :active="request()->routeIs('artikel.index')" class="flex items-center text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
+            <x-nav-link :href="route('artikel.index')" :active="request()->routeIs('artikel.index') || request()->routeIs('artikel.detail')" class="flex items-center text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-3m-2 20l-4-2m-4-2h8m-4 2v2m-6 2H6m10 0h2m-6 0h2"></path></svg>
                 {{ __('Artikel') }}
             </x-nav-link>
@@ -93,14 +93,14 @@
 
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden bg-gray-50">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('home')" :active="request()->routeIs('home')" class="text-gray-700 hover:bg-gray-100">
+            <x-responsive-nav-link :href="route('home')" :active="$isHomeActive" class="text-gray-700 hover:bg-gray-100">
                 {{ __('Home') }}
             </x-responsive-nav-link>
-            {{-- Ubah href dan tambahkan :active untuk responsive nav --}}
-            <x-responsive-nav-link href="{{ route('home') }}#produk-terbaru" :active="$isProdukActive" class="text-gray-700 hover:bg-gray-100">
+            {{-- Perbarui href dan active untuk responsive nav --}}
+            <x-responsive-nav-link href="{{ route('produk.index') }}" :active="$isProdukActive" class="text-gray-700 hover:bg-gray-100">
                 {{ __('Produk') }}
             </x-responsive-nav-link>
-            <x-responsive-nav-link :href="route('artikel.index')" :active="request()->routeIs('artikel.index')" class="text-gray-700 hover:bg-gray-100">
+            <x-responsive-nav-link :href="route('artikel.index')" :active="request()->routeIs('artikel.index') || request()->routeIs('artikel.detail')" class="text-gray-700 hover:bg-gray-100">
                 {{ __('Artikel') }}
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('tentang')" :active="request()->routeIs('tentang')" class="text-gray-700 hover:bg-gray-100">
