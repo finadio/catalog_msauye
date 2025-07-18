@@ -5,47 +5,49 @@
         </h2>
     </x-slot>
 
-    <div class="py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" x-data="{ q: '{{ request('q') }}' }">
+        {{-- Notifikasi Sukses dengan Tombol Close --}}
+        <x-success-notification :message="session('success')" />
+
         {{-- Main white box/frame --}}
         <div class="bg-white shadow-lg rounded-xl p-6">
 
-            @if(session('success'))
-                {{-- Notifikasi Sukses dengan Tombol Close (sama seperti di produk) --}}
-                <div
-                    x-data="{ show: true }"
-                    x-show="show"
-                    x-transition:opacity.duration.500ms
-                    class="mb-6 p-4 bg-green-100 text-green-700 rounded-lg font-medium shadow-sm relative pr-10"
-                    role="alert"
-                >
-                    {{ session('success') }}
+            {{-- Header section for the main box: Title and Add New UMKM Button --}}
+            <div class="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4">
+                <h3 class="text-2xl font-bold text-gray-900">Daftar UMKM</h3>
+                <a href="{{ route('admin.umkm.create') }}" class="h-10 px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition ease-in-out duration-150 font-semibold shadow-sm w-full sm:w-auto text-center inline-flex items-center justify-center">Tambah UMKM Baru</a>
+            </div>
+
+            {{-- Search Form (di dalam frame utama) --}}
+            <form method="GET" class="mb-6 flex flex-col sm:flex-row gap-3 items-center">
+                <div class="relative w-full sm:flex-1">
+                    <input
+                        x-model="q"
+                        type="text"
+                        name="q"
+                        placeholder="Cari UMKM berdasarkan nama, deskripsi, alamat, telepon, dll..."
+                        class="h-10 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-800 placeholder-gray-500 w-full pr-12"
+                    >
                     <button
+                        x-show="q.length > 0"
+                        @click.prevent="
+                            q = ''; // Kosongkan variabel Alpine.js
+                            $event.target.closest('form').querySelector('input[name=\'q\']').value = ''; // === PENTING: Kosongkan nilai input DOM secara eksplisit ===
+                            $event.target.closest('form').submit(); // Submit form
+                        "
                         type="button"
-                        @click="show = false"
-                        class="absolute top-1/2 -translate-y-1/2 right-3 text-green-700 hover:text-green-900 focus:outline-none"
-                        aria-label="Close"
+                        class="absolute inset-y-0 right-0 w-10 h-10 flex items-center justify-center text-gray-400 hover:text-gray-600 focus:outline-none z-20"
+                        aria-label="Clear search"
                     >
                         <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                         </svg>
                     </button>
                 </div>
-            @endif
-
-            {{-- Header section for the main box: Title and Add New UMKM Button --}}
-            <div class="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4">
-                <h3 class="text-2xl font-bold text-gray-900">Daftar UMKM</h3>
-                {{-- Tombol Tambah UMKM Baru --}}
-                <a href="{{ route('admin.umkm.create') }}" class="h-10 px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition ease-in-out duration-150 font-semibold shadow-sm w-full sm:w-auto text-center inline-flex items-center justify-center">Tambah UMKM Baru</a>
-            </div>
-
-            {{-- Search Form (di dalam frame utama) --}}
-            <form method="GET" class="mb-6 flex flex-col sm:flex-row gap-3 items-center">
-                <input type="text" name="q" value="{{ request('q') }}" placeholder="Cari UMKM berdasarkan nama..." class="h-10 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-800 placeholder-gray-500 w-full sm:flex-1"> {{-- Menggunakan sm:flex-1 untuk search bar --}}
                 <button type="submit" class="h-10 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition ease-in-out duration-150 font-semibold shadow-sm w-full sm:w-auto">Cari</button>
             </form>
 
-            {{-- UMKM List Table (di dalam frame utama) --}}
+            {{-- UMKM List Table (langsung di dalam file ini) --}}
             <div class="overflow-x-auto">
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
