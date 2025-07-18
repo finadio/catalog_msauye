@@ -5,12 +5,9 @@
         </h2>
     </x-slot>
 
-    <div class="py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        @if(session('success'))
-            <div class="mb-6 p-4 bg-green-100 text-green-700 rounded-lg text-center font-medium shadow-sm" role="alert">
-                {{ session('success') }}
-            </div>
-        @endif
+    <div class="py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" x-data="{ q: '{{ request('q') }}', kategori: '{{ request('kategori') }}', status: '{{ request('status') }}' }"> {{-- Tambahkan x-data untuk q, kategori, status --}}
+        {{-- Notifikasi Sukses dengan Tombol Close --}}
+        <x-success-notification :message="session('success')" />
 
         {{-- Main white box/frame --}}
         <div class="bg-white shadow-lg rounded-xl p-6">
@@ -18,32 +15,48 @@
             {{-- Header section for the main box: Title and Add New Product Button --}}
             <div class="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4">
                 <h3 class="text-2xl font-bold text-gray-900">Daftar Produk</h3>
-                {{-- Tombol Tambah Produk Baru --}}
                 <a href="{{ route('admin.produk.create') }}" class="h-10 px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition ease-in-out duration-150 font-semibold shadow-sm w-full sm:w-auto text-center inline-flex items-center justify-center">Tambah Produk Baru</a>
             </div>
 
             {{-- Filter Form --}}
             <form method="GET" class="mb-6 flex flex-col sm:flex-row flex-wrap items-center gap-3">
-                {{-- Search Input: Diperpanjang secara fleksibel dengan sm:flex-1 --}}
-                <input type="text" name="q" value="{{ request('q') }}" placeholder="Cari produk..." class="h-10 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-800 placeholder-gray-500 w-full sm:flex-1">
+                <div class="relative w-full sm:flex-1"> {{-- Wrapper untuk input dan tombol clear --}}
+                    <input
+                        x-model="q" {{-- Gunakan x-model untuk mengikat nilai input --}}
+                        type="text"
+                        name="q"
+                        placeholder="Cari produk..."
+                        class="h-10 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-800 placeholder-gray-500 w-full pr-12" {{-- pr-12 untuk ruang ikon --}}
+                    >
+                    <button
+                        x-show="q.length > 0" {{-- Tampilkan tombol clear jika ada teks --}}
+                        @click.prevent="q = ''; $event.target.closest('form').querySelector('input[name=\'q\']').value = ''; $event.target.closest('form').submit();" {{-- Logika bersih dan submit --}}
+                        type="button"
+                        class="absolute inset-y-0 right-0 w-10 h-10 flex items-center justify-center text-gray-400 hover:text-gray-600 focus:outline-none z-20" {{-- z-index untuk clickability --}}
+                        aria-label="Clear search"
+                    >
+                        <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
 
-                {{-- Category Select: Lebar diperpanjang (sm:w-56 ~ 224px) --}}
-                <select name="kategori" class="h-10 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-800 w-full sm:w-56">
+                {{-- Category Select --}}
+                <select x-model="kategori" name="kategori" class="h-10 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-800 w-full sm:w-56">
                     <option value="">Semua Kategori</option>
                     @foreach($categories as $cat)
-                        <option value="{{ $cat->id }}" @selected(request('kategori') == $cat->id)>{{ $cat->name }}</option>
+                        <option value="{{ $cat->id }}" @selected(old('kategori', request('kategori')) == $cat->id)>{{ $cat->name }}</option>
                     @endforeach
                 </select>
 
-                {{-- Status Select: Lebar diperpanjang (sm:w-56 ~ 224px) --}}
-                <select name="status" class="h-10 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-800 w-full sm:w-56">
+                {{-- Status Select --}}
+                <select x-model="status" name="status" class="h-10 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-800 w-full sm:w-56">
                     <option value="">Semua Status</option>
                     @foreach($statuses as $stat)
-                        <option value="{{ $stat->id }}" @selected(request('status') == $stat->id)>{{ $stat->name }}</option>
+                        <option value="{{ $stat->id }}" @selected(old('status', request('status')) == $stat->id)>{{ $stat->name }}</option>
                     @endforeach
                 </select>
 
-                {{-- Filter Button --}}
                 <button type="submit" class="h-10 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition ease-in-out duration-150 font-semibold shadow-sm w-full sm:w-auto">Filter</button>
             </form>
 
@@ -146,10 +159,10 @@
                     </tbody>
                 </table>
             </div>
-        </div>
 
-        <div class="mt-6">
-            {{ $products->links() }}
+            <div class="mt-6">
+                {{ $products->links() }}
+            </div>
         </div>
     </div>
 </x-app-layout>
