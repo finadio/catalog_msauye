@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Umkm;
 
-class UMKMController extends Controller
+class UmkmController extends Controller
 {
     public function dashboard()
     {
@@ -41,14 +41,18 @@ class UMKMController extends Controller
     {
         $request->validate([
             'nama_umkm' => 'required|string|max:255',
-            'alamat' => 'required|string|max:255',
-            'deskripsi' => 'nullable|string',
+            'description' => 'nullable|string',
+            'address'=> 'required|string|max:255',
+            'phone'      => 'nullable|string|max:20',
+            'whatsapp'   => 'nullable|string|max:20',
+            'instagram'  => 'nullable|string|max:255',
+            'photo'      => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
         ]);
 
         $user = auth()->user();
         $umkm = $user->umkm;
 
-        $umkm->update($request->only('nama_umkm', 'alamat', 'deskripsi'));
+        $umkm->update($request->only('name', 'description','address','phone','whatsapp','istagram','photo'));
 
         return redirect()->route('umkm.profile')->with('success', 'Profil UMKM berhasil diperbarui.');
     }

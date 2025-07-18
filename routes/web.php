@@ -54,7 +54,9 @@ Route::get('/umkm', function () {
     return redirect()->route('umkm.dashboard');
 });
  Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('/umkm/dashboard', [UmkmController::class, 'dashboard'])->name('umkm.dashboard');
+    Route::get('/umkm/dashboard', [UmkmController::class, 'dashboard'])
+    ->middleware('auth', 'role:umkm')
+    ->name('umkm.dashboard');
     // Profil UMKM
     Route::get('/umkm/profil', [UmkmController::class, 'profil'])->name('umkm.profil');
     Route::put('/umkm/profil', [UmkmController::class, 'updateProfil'])->name('umkm.profil.update');
