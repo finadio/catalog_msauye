@@ -11,6 +11,7 @@
 
         <!-- Desktop Navigation -->
         <div class="hidden sm:flex items-center ml-auto space-x-6">
+            <!-- Main Navigation Links (Always Visible) -->
             <x-nav-link :href="route('home')" :active="request()->routeIs('home')" class="flex items-center text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0h4"></path></svg>
                 {{ __('Home') }}
@@ -20,7 +21,7 @@
                 {{ __('Produk') }}
             </x-nav-link>
             <x-nav-link :href="route('artikel.index')" :active="request()->routeIs('artikel.index')" class="flex items-center text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
-                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-3m-2 20l-4-2m-4-2h8m-4 2v2m-6 2H6m10 0h2m-6 0h2"></path></svg>
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 01-2-2V9a2 2 0 00-2-2h-3m-2 20l-4-2m-4-2h8m-4 2v2m-6 2H6m10 0h2m-6 0h2"></path></svg>
                 {{ __('Artikel') }}
             </x-nav-link>
             <x-nav-link :href="route('tentang')" :active="request()->routeIs('tentang')" class="flex items-center text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
@@ -31,7 +32,8 @@
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.105A9.702 9.702 0 0112 4c4.97 0 9 3.582 9 8z"></path></svg>
                 {{ __('Contact Us') }}
             </x-nav-link>
-            {{-- Tautan dashboard admin/umkm jika user login (dalam dropdown) --}}
+
+            <!-- User Authentication Section -->
             @auth
                 @if(auth()->user()->role == 'admin' || auth()->user()->role == 'umkm')
                     <x-dropdown align="right" width="48">
@@ -50,44 +52,32 @@
                         </x-slot>
 
                         <x-slot name="content">
-                            <x-dropdown-link :href="route('admin.dashboard')" class="text-gray-700 hover:bg-gray-100">{{ __('Dashboard Admin') }}</x-dropdown-link>
-                            <x-dropdown-link :href="route('admin.umkm.index')" class="text-gray-700 hover:bg-gray-100">{{ __('Kelola UMKM') }}</x-dropdown-link>
-                            <x-dropdown-link :href="route('admin.produk.index')" class="text-gray-700 hover:bg-gray-100">{{ __('Kelola Produk') }}</x-dropdown-link>
-                            <x-dropdown-link :href="route('admin.kategori.index')" class="text-gray-700 hover:bg-gray-100">{{ __('Kelola Kategori') }}</x-dropdown-link>
-                            <x-dropdown-link :href="route('admin.artikel.index')" class="text-gray-700 hover:bg-gray-100">{{ __('Kelola Artikel') }}</x-dropdown-link>
-                            <x-dropdown-link :href="route('admin.contact.index')" class="text-gray-700 hover:bg-gray-100">{{ __('Pesan Masuk') }}</x-dropdown-link>
+                            @if(auth()->user()->role == 'admin')
+                                <x-dropdown-link :href="route('admin.dashboard')" class="text-gray-700 hover:bg-gray-100">{{ __('Dashboard Admin') }}</x-dropdown-link>
+                                <x-dropdown-link :href="route('admin.umkm.index')" class="text-gray-700 hover:bg-gray-100">{{ __('Kelola UMKM') }}</x-dropdown-link>
+                                <x-dropdown-link :href="route('admin.produk.index')" class="text-gray-700 hover:bg-gray-100">{{ __('Kelola Produk') }}</x-dropdown-link>
+                                <x-dropdown-link :href="route('admin.kategori.index')" class="text-gray-700 hover:bg-gray-100">{{ __('Kelola Kategori') }}</x-dropdown-link>
+                                <x-dropdown-link :href="route('admin.artikel.index')" class="text-gray-700 hover:bg-gray-100">{{ __('Kelola Artikel') }}</x-dropdown-link>
+                                <x-dropdown-link :href="route('admin.contact.index')" class="text-gray-700 hover:bg-gray-100">{{ __('Pesan Masuk') }}</x-dropdown-link>
+                            @elseif(auth()->user()->role == 'umkm')
+                                <x-dropdown-link :href="route('umkm.dashboard')" class="text-gray-700 hover:bg-gray-100">{{ __('Dashboard UMKM') }}</x-dropdown-link>
+                                <x-dropdown-link :href="route('umkm.profil')" class="text-gray-700 hover:bg-gray-100">{{ __('Edit Profil') }}</x-dropdown-link>
+                            @endif
                             <x-dropdown-link :href="route('profile.edit')" class="text-gray-700 hover:bg-gray-100">{{ __('Pengaturan Akun') }}</x-dropdown-link>
+                            
+                            <!-- Fixed Logout Form with Hidden Input for Redirect -->
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
-                                <x-dropdown-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();">{{ __('Log Out') }}</x-dropdown-link>
+                                <input type="hidden" name="redirect" value="{{ route('home') }}">
+                                <x-dropdown-link href="#" onclick="event.preventDefault(); this.closest('form').submit();" class="text-red-600 hover:bg-red-50">
+                                    {{ __('Log Out') }}
+                                </x-dropdown-link>
                             </form>
                         </x-slot>
                     </x-dropdown>
                 @endif
             @else
-                <!-- Guest Navigation (Before Login) -->
-                <x-nav-link :href="route('home')" :active="request()->routeIs('home')" class="flex items-center text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0h4"></path></svg>
-                    {{ __('Home') }}
-                </x-nav-link>
-                <x-nav-link href="#produk-terbaru" class="flex items-center text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
-                    {{ __('Produk') }}
-                </x-nav-link>
-                <x-nav-link :href="route('artikel.index')" :active="request()->routeIs('artikel.index')" class="flex items-center text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-3m-2 20l-4-2m-4-2h8m-4 2v2m-6 2H6m10 0h2m-6 0h2"></path></svg>
-                    {{ __('Artikel') }}
-                </x-nav-link>
-                <x-nav-link :href="route('tentang')" :active="request()->routeIs('tentang')" class="flex items-center text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                    {{ __('Tentang Kami') }}
-                </x-nav-link>
-                <x-nav-link :href="route('contact')" :active="request()->routeIs('contact')" class="flex items-center text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
-                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.105A9.702 9.702 0 0112 4c4.97 0 9 3.582 9 8z"></path></svg>
-                    {{ __('Contact Us') }}
-                </x-nav-link>
-                
-                <!-- Login/Register Buttons -->
+                <!-- Guest Navigation (Login/Register Buttons) -->
                 <div class="flex items-center space-x-4">
                     <x-nav-link :href="route('login')" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200">
                         {{ __('Login') }}
@@ -115,6 +105,7 @@
     <!-- Mobile Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden bg-gray-50">
         <div class="pt-2 pb-3 space-y-1">
+            <!-- Main Navigation Links -->
             <x-responsive-nav-link :href="route('home')" :active="request()->routeIs('home')" class="text-gray-700 hover:bg-gray-100">
                 {{ __('Home') }}
             </x-responsive-nav-link>
@@ -130,6 +121,8 @@
             <x-responsive-nav-link :href="route('contact')" :active="request()->routeIs('contact')" class="text-gray-700 hover:bg-gray-100">
                 {{ __('Contact Us') }}
             </x-responsive-nav-link>
+            
+            <!-- Dashboard Links for Mobile -->
             @auth
                 @if(Auth::user()->role == 'admin')
                     <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')" class="text-gray-700 hover:bg-gray-100">
@@ -170,9 +163,14 @@
                         <x-responsive-nav-link :href="route('admin.contact.index')" class="text-gray-700 hover:bg-gray-100">{{ __('Pesan Masuk') }}</x-responsive-nav-link>
                         <x-responsive-nav-link :href="route('profile.edit')" class="text-gray-700 hover:bg-gray-100">{{ __('Pengaturan Akun') }}</x-responsive-nav-link>
                     @endif
+                    
+                    <!-- Fixed Mobile Logout Form -->
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
-                        <x-responsive-nav-link :href="route('logout')" onclick="event.preventDefault(); this.closest('form').submit();" class="text-red-600 hover:bg-red-50">{{ __('Logout') }}</x-responsive-nav-link>
+                        <input type="hidden" name="redirect" value="{{ route('home') }}">
+                        <x-responsive-nav-link href="#" onclick="event.preventDefault(); this.closest('form').submit();" class="text-red-600 hover:bg-red-50">
+                            {{ __('Logout') }}
+                        </x-responsive-nav-link>
                     </form>
                 </div>
             @else
