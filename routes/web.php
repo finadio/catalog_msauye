@@ -8,7 +8,7 @@ use App\Http\Controllers\PengunjungDashboardController;
 use App\Http\Controllers\UmkmDashboardController;
 use App\Http\Controllers\UmkmProfileController;
 use App\Http\Controllers\UmkmProductController;
-use App\Http\Controllers\AdminDashboardController; // Controller Admin Dashboard yang baru
+use App\Http\Controllers\AdminDashboardController;
 use App\Http\Controllers\AdminUmkmController;
 use App\Http\Controllers\AdminProductController;
 use App\Http\Controllers\AdminCategoryController;
@@ -28,6 +28,7 @@ use App\Http\Controllers\AdminContactController;
 
 // Routing halaman publik
 Route::get('/', [PublicController::class, 'home'])->name('home');
+Route::get('/produk', [PublicController::class, 'produkIndex'])->name('produk.index'); // Tambahkan baris ini
 Route::get('/produk/{id}', [PublicController::class, 'produkDetail'])->name('produk.detail');
 Route::get('/umkm/{id}', [PublicController::class, 'umkmDetail'])->name('umkm.detail');
 Route::get('/artikel', [PublicController::class, 'artikel'])->name('artikel.index');
