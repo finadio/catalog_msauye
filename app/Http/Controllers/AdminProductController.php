@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\ProductStatus;
+use App\Models\Umkm; // Tambahkan ini
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage; // Tambahkan ini untuk hapus foto lama
 
 class AdminProductController extends Controller
 {
@@ -29,7 +31,10 @@ class AdminProductController extends Controller
      */
     public function create()
     {
-        //
+        $categories = Category::all();
+        $statuses = ProductStatus::all();
+        $umkms = Umkm::all(); // Ambil semua UMKM untuk dropdown
+        return view('admin.produk.create', compact('categories', 'statuses', 'umkms'));
     }
 
     /**
@@ -37,7 +42,26 @@ class AdminProductController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'name' => 'required',
+            'description' => 'required',
+            'category_id' => 'required|exists:categories,id',
+            'price' => 'required|numeric',
+            'photo' => 'required|image|max:2048', // Foto wajib saat tambah
+            'umkm_id' => 'required|exists:umkms,id', // Wajib pilih UMKM
+            'status_id' => 'required|exists:product_statuses,id', // Wajib pilih status
+        ]);
+
+        $data = $request->only(['name','description','category_id','price','umkm_id','status_id']);
+
+        // Handle photo upload
+        if ($request->hasFile('photo')) {
+            $data['photo'] = $request->file('photo')->store('produk','public');
+        }
+
+        Product::create($data);
+
+        return redirect()->route('admin.produk.index')->with('success','Produk berhasil ditambahkan!');
     }
 
     /**
@@ -45,7 +69,7 @@ class AdminProductController extends Controller
      */
     public function show(string $id)
     {
-        //
+        // Anda bisa menambahkan tampilan detail jika diperlukan
     }
 
     /**
@@ -75,6 +99,10 @@ class AdminProductController extends Controller
         ]);
         $data = $request->only(['name','description','category_id','price','status_id']);
         if ($request->hasFile('photo')) {
+            // Hapus foto lama jika ada
+            if ($product->photo) {
+                Storage::disk('public')->delete($product->photo);
+            }
             $data['photo'] = $request->file('photo')->store('produk','public');
         }
         $product->update($data);
@@ -87,6 +115,10 @@ class AdminProductController extends Controller
     public function destroy($id)
     {
         $product = Product::findOrFail($id);
+        // Hapus foto produk jika ada
+        if ($product->photo) {
+            Storage::disk('public')->delete($product->photo);
+        }
         $product->delete();
         return redirect()->route('admin.produk.index')->with('success','Produk berhasil dihapus!');
     }
