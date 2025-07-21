@@ -1,8 +1,7 @@
 <x-guest-layout>
     {{-- Kontainer utama untuk halaman login dengan desain split-panel yang lebih profesional --}}
-    <div class="flex flex-col md:flex-row w-full max-w-5xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden my-8 transform transition-all duration-300 hover:shadow-2xl">
-        <!-- Kiri: Form Login -->
-        <div class="w-full md:w-1/2 p-8 md:p-12 lg:p-16 flex flex-col justify-center">
+    <div class="flex flex-col md:flex-row w-full max-w-3xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden my-6 transform transition-all duration-300 hover:shadow-2xl">
+        <div class="w-full md:w-1/2 p-5 md:p-7 lg:p-9 flex flex-col justify-center rounded-l-2xl">
             <div class="mb-8 flex justify-center">
                 {{-- Menggunakan komponen logo aplikasi jika tersedia, atau gambar statis --}}
                 <a href="/">
@@ -29,7 +28,7 @@
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('login') }}" class="space-y-6">
+            <form method="POST" action="{{ route('login') }}" class="space-y-4">
                 @csrf
 
                 {{-- Email Address --}}
@@ -79,10 +78,8 @@
             </div>
         </div>
 
-        <!-- Kanan: Ilustrasi/Gambar Latar Belakang -->
-        {{-- Mengganti latar belakang gambar dengan warna polos --}}
-        <div class="hidden md:flex w-1/2 bg-blue-50 items-center justify-center p-8 relative">
-            <img src="{{ asset('img/shaka_utama.png') }}" alt="Ilustrasi Dukungan UMKM BPR MSA" class="w-full max-w-md h-auto object-contain rounded-lg shadow-lg transform scale-95 transition-transform duration-300 hover:scale-100">
+        <div class="hidden md:flex w-1/2 items-center justify-center p-8 bg-blue-50 rounded-r-2xl">
+            <img src="{{ asset('img/shaka_utama.png') }}" alt="Ilustrasi Dukungan UMKM BPR MSA" class="w-full max-w-md h-auto object-contain transform scale-95 transition-transform duration-300 hover:scale-100">
             <div class="absolute bottom-10 text-blue-900 text-center px-4"> {{-- Mengubah warna teks agar terlihat di background terang --}}
                 <h3 class="text-2xl font-bold mb-2">Mendukung Pertumbuhan UMKM Indonesia</h3>
                 <p class="text-sm opacity-90">Solusi finansial terpercaya untuk usaha mikro, kecil, dan menengah.</p>
