@@ -3,10 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Umkm;
-use App\Models\User; // Tambahkan ini untuk model User
+use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash; // Tambahkan ini untuk hashing password
-use Illuminate\Support\Facades\Storage; // Tambahkan ini untuk upload/hapus foto
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+use App\Models\Category;
 
 class AdminUmkmController extends Controller
 {
@@ -15,23 +16,42 @@ class AdminUmkmController extends Controller
      */
     public function index(Request $request)
     {
-        $umkms = Umkm::when($request->q, function($query) use ($request) {
-            $query->where('name', 'like', '%'.$request->q.'%')
-                  ->orWhere('description', 'like', '%'.$request->q.'%')
-                  ->orWhere('address', 'like', '%'.$request->q.'%')
-                  ->orWhere('phone', 'like', '%'.$request->q.'%')
-                  ->orWhere('whatsapp', 'like', '%'.$request->q.'%')
-                  ->orWhere('instagram', 'like', '%'.$request->q.'%')
-                  ->orWhere('tiktok', 'like', '%'.$request->q.'%')
-                  ->orWhere('website', 'like', '%'.$request->q.'%');
-        })->latest()->paginate(10);
+        $query = Umkm::query();
 
-        // Jika ini adalah permintaan AJAX, kembalikan hanya partial view tabel
-        if ($request->ajax()) {
-            return view('admin.umkm._partials.umkm_table', compact('umkms'))->render();
+        // Pencarian berdasarkan query 'q' (nama, deskripsi, alamat, telepon, dll.)
+        if ($request->filled('q')) {
+            $searchQuery = $request->q;
+            $query->where(function($q) use ($searchQuery) {
+                $q->where('name', 'like', '%'.$searchQuery.'%')
+                  ->orWhere('description', 'like', '%'.$searchQuery.'%')
+                  ->orWhere('address', 'like', '%'.$searchQuery.'%')
+                  ->orWhere('phone', 'like', '%'.$searchQuery.'%')
+                  ->orWhere('whatsapp', 'like', '%'.$searchQuery.'%')
+                  ->orWhere('instagram', 'like', '%'.$searchQuery.'%')
+                  ->orWhere('tiktok', 'like', '%'.$searchQuery.'%')
+                  ->orWhere('website', 'like', '%'.$searchQuery.'%');
+            });
         }
 
-        return view('admin.umkm.index', compact('umkms'));
+        // Tambahkan filter kategori jika diperlukan, misalnya berdasarkan produk UMKM
+        // Asumsi: Kita bisa memfilter UMKM berdasarkan kategori produk yang mereka miliki
+        if ($request->filled('kategori')) {
+            $categoryId = $request->kategori;
+            $query->whereHas('products', function ($q) use ($categoryId) {
+                $q->where('category_id', $categoryId);
+            });
+        }
+
+        $umkms = $query->latest()->paginate(10);
+        $categories = Category::all();
+
+        // Jika ini adalah permintaan AJAX, kembalikan hanya partial view tabel
+        // Bagian ini mungkin tidak diperlukan jika tidak ada AJAX untuk tabel.
+        // if ($request->ajax()) {
+        //     return view('admin.umkm._partials.umkm_table', compact('umkms'))->render();
+        // }
+
+        return view('admin.umkm.index', compact('umkms', 'categories'));
     }
 
     /**
@@ -39,7 +59,6 @@ class AdminUmkmController extends Controller
      */
     public function create()
     {
-        // Ini adalah kode yang benar untuk menampilkan form create UMKM
         return view('admin.umkm.create');
     }
 
@@ -49,108 +68,147 @@ class AdminUmkmController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'user_name' => 'required|string|max:255',
-            'user_email' => 'required|string|email|max:255|unique:users,email',
-            'user_password' => 'required|string|min:8|confirmed',
             'name' => 'required|string|max:255',
-            'description' => 'required|string',
-            'address' => 'required|string|max:255',
-            'phone' => 'required|string|max:20',
+            'description' => 'nullable|string',
+            'address' => 'nullable|string|max:255',
+            'phone' => 'nullable|string|max:20',
             'whatsapp' => 'nullable|string|max:20',
             'instagram' => 'nullable|string|max:255',
-            'tiktok' => 'nullable|string|max:255', // Tambahkan validasi ini
-            'website' => 'nullable|url|max:255',   // Tambahkan validasi ini (nullable|url)
-            'photo' => 'nullable|image|max:2048', // Max 2MB
+            'tiktok' => 'nullable|string|max:255',
+            'website' => 'nullable|string|max:255',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'username' => 'required|string|max:255|unique:users',
+            'password' => 'required|string|min:8|confirmed',
         ]);
 
-        // Buat user baru dengan role 'umkm'
-        $user = User::create([
-            'name' => $request->user_name,
-            'email' => $request->user_email,
-            'password' => Hash::make($request->user_password),
-            'role' => 'umkm',
-            'email_verified_at' => now(), // Verifikasi email otomatis untuk UMKM yang ditambahkan admin
-        ]);
-
-        // Handle upload foto UMKM
+        // Handle photo upload
         $photoPath = null;
         if ($request->hasFile('photo')) {
-            $photoPath = $request->file('photo')->store('umkm','public');
+            $photoPath = $request->file('photo')->store('umkm_photos', 'public');
         }
 
-        // Buat entri UMKM dan tautkan dengan user yang baru dibuat
-        $umkm = new Umkm($request->only(['name', 'description', 'address', 'phone', 'whatsapp', 'instagram', 'tiktok', 'website'])); // Tambahkan 'tiktok' dan 'website'
-        $umkm->user_id = $user->id; // Tautkan ke user
-        $umkm->photo = $photoPath;
-        $umkm->save();
+        // Create a new User
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->username . '@example.com', // Dummy email, consider unique user identifier
+            'username' => $request->username,
+            'password' => Hash::make($request->password),
+            'role' => 'umkm', // Assign role as 'umkm'
+        ]);
 
-        return redirect()->route('admin.umkm.index')->with('success','UMKM baru berhasil ditambahkan!');
+        // Create the UMKM entry linked to the new user
+        Umkm::create([
+            'user_id' => $user->id,
+            'name' => $request->name,
+            'description' => $request->description,
+            'address' => $request->address,
+            'phone' => $request->phone,
+            'whatsapp' => $request->whatsapp,
+            'instagram' => $request->instagram,
+            'tiktok' => $request->tiktok,
+            'website' => $request->website,
+            'photo' => $photoPath,
+        ]);
+
+        return redirect()->route('admin.umkm.index')->with('success', 'UMKM berhasil ditambahkan!');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show($id)
+    public function show(Umkm $umkm)
     {
-        $umkm = Umkm::with('products')->findOrFail($id);
         return view('admin.umkm.show', compact('umkm'));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)
+    public function edit(Umkm $umkm)
     {
-        $umkm = Umkm::findOrFail($id);
         return view('admin.umkm.edit', compact('umkm'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Umkm $umkm)
     {
-        $umkm = Umkm::findOrFail($id);
         $request->validate([
-            'name' => 'required',
-            'description' => 'required',
-            'address' => 'required',
-            'phone' => 'required',
-            'whatsapp' => 'nullable',
-            'instagram' => 'nullable',
-            'tiktok' => 'nullable|string|max:255', // Tambahkan validasi ini
-            'website' => 'nullable|url|max:255',   // Tambahkan validasi ini
-            'photo' => 'nullable|image|max:2048',
+            'name' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'address' => 'nullable|string|max:255',
+            'phone' => 'nullable|string|max:20',
+            'whatsapp' => 'nullable|string|max:20',
+            'instagram' => 'nullable|string|max:255',
+            'tiktok' => 'nullable|string|max:255',
+            'website' => 'nullable|string|max:255',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'username' => 'required|string|max:255|unique:users,username,' . $umkm->user_id,
+            'password' => 'nullable|string|min:8|confirmed',
         ]);
 
-        // Tambahkan 'tiktok' dan 'website' ke array data yang akan disimpan
-        $data = $request->only(['name','description','address','phone','whatsapp','instagram', 'tiktok', 'website']);
+        // Update User data
+        $umkm->user->update([
+            'name' => $request->name,
+            'username' => $request->username,
+            'email' => $request->username . '@example.com', // Keep dummy email or update if needed
+        ]);
+
+        if ($request->filled('password')) {
+            $umkm->user->update([
+                'password' => Hash::make($request->password),
+            ]);
+        }
+
+        // Handle photo update
         if ($request->hasFile('photo')) {
-            // Hapus foto lama jika ada
+            // Delete old photo if exists
             if ($umkm->photo) {
                 Storage::disk('public')->delete($umkm->photo);
             }
-            $data['photo'] = $request->file('photo')->store('umkm','public');
+            $photoPath = $request->file('photo')->store('umkm_photos', 'public');
+            $umkm->photo = $photoPath;
+        } elseif ($request->input('remove_photo')) {
+            // Remove photo if checkbox is checked
+            if ($umkm->photo) {
+                Storage::disk('public')->delete($umkm->photo);
+            }
+            $umkm->photo = null;
         }
-        $umkm->update($data);
-        return redirect()->route('admin.umkm.index')->with('success','Data UMKM berhasil diupdate!');
+
+        $umkm->update([
+            'name' => $request->name,
+            'description' => $request->description,
+            'address' => $request->address,
+            'phone' => $request->phone,
+            'whatsapp' => $request->whatsapp,
+            'instagram' => $request->instagram,
+            'tiktok' => $request->tiktok,
+            'website' => $request->website,
+            // 'photo' is updated above
+        ]);
+
+        return redirect()->route('admin.umkm.index')->with('success', 'UMKM berhasil diperbarui!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(Umkm $umkm)
     {
-        $umkm = Umkm::findOrFail($id);
-        // Hapus user terkait UMKM jika ada
+        // Delete related user first
         if ($umkm->user) {
             $umkm->user->delete();
         }
-        // Hapus foto UMKM jika ada
+
+        // Delete photo if exists
         if ($umkm->photo) {
             Storage::disk('public')->delete($umkm->photo);
         }
+
         $umkm->delete();
-        return redirect()->route('admin.umkm.index')->with('success','UMKM berhasil dihapus!');
+
+        return redirect()->route('admin.umkm.index')->with('success', 'UMKM berhasil dihapus!');
     }
 }
