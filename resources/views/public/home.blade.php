@@ -1,8 +1,12 @@
 <x-app-layout>
     {{-- Hero Section --}}
     <section class="relative bg-black h-[550px] md:h-[650px] flex items-center justify-center text-white overflow-hidden">
-        {{-- Gambar latar belakang dari aset lokal --}}
-        <div class="absolute inset-0 bg-cover bg-center z-0" style="background-image: url('{{ asset('img/hero.png') }}');"></div>
+        {{-- Video latar belakang --}}
+        <video autoplay loop muted playsinline class="absolute inset-0 w-full h-full object-cover z-0">
+            <source src="{{ asset('videos/gtrb.mp4') }}" type="video/mp4">
+            Browser Anda tidak mendukung tag video.
+        </video>
+        
         <div class="absolute inset-0 bg-gray-900 opacity-60 z-10"></div> {{-- Overlay abu-abu gelap transparan --}}
 
         <div class="max-w-4xl mx-auto text-center relative z-20 px-6 py-10">
@@ -20,23 +24,41 @@
     </section>
 
     {{-- Feature Section (Keunggulan PT BPR MSA) --}}
-    <section class="py-12 md:py-14 bg-gray-50"> {{-- Padding dikurangi: py-12 md:py-16 --}}
-        <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 text-center">
-            <div class="flex flex-col items-center p-8 bg-white rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300 transform hover:-translate-y-1">
+    <section class="py-12 md:py-14 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 text-center"
+             x-data="{ showFeatures: false }"
+             x-init="setTimeout(() => { showFeatures = true }, 500)"
+        >
+            <div class="flex flex-col items-center p-8 bg-white rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300 transform hover:-translate-y-1"
+                 x-show="showFeatures"
+                 x-transition:enter="ease-out duration-500"
+                 x-transition:enter-start="opacity-0 transform translate-y-10"
+                 x-transition:enter-end="opacity-100 transform translate-y-0"
+            >
                 <div class="p-4 bg-blue-100 rounded-full mb-5 shadow-inner">
                     <svg class="w-9 h-9 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"></path></svg>
                 </div>
                 <h3 class="text-xl font-semibold text-gray-800 mb-2">Promosi Digital Efektif</h3>
                 <p class="text-gray-600 leading-relaxed text-sm">Meningkatkan visibilitas dan jangkauan produk UMKM melalui platform online modern.</p>
             </div>
-            <div class="flex flex-col items-center p-8 bg-white rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300 transform hover:-translate-y-1">
+            <div class="flex flex-col items-center p-8 bg-white rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300 transform hover:-translate-y-1"
+                 x-show="showFeatures"
+                 x-transition:enter="ease-out duration-500 delay-100"
+                 x-transition:enter-start="opacity-0 transform translate-y-10"
+                 x-transition:enter-end="opacity-100 transform translate-y-0"
+            >
                 <div class="p-4 bg-green-100 rounded-full mb-5 shadow-inner">
                     <svg class="w-9 h-9 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c1.657 0 3 .895 3 2s-1.343 2-3 2-3-.895-3-2 1.343-2 3-2z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.105A9.702 9.702 0 0112 4c4.97 0 9 3.582 9 8z"></path></svg>
                 </div>
                 <h3 class="text-xl font-semibold text-gray-800 mb-2">Edukasi & Pendampingan Holistik</h3>
                 <p class="text-gray-600 leading-relaxed text-sm">Memberikan pengetahuan dan bimbingan komprehensif untuk pengembangan usaha.</p>
             </div>
-            <div class="flex flex-col items-center p-8 bg-white rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300 transform hover:-translate-y-1">
+            <div class="flex flex-col items-center p-8 bg-white rounded-2xl shadow-md hover:shadow-lg transition-shadow duration-300 transform hover:-translate-y-1"
+                 x-show="showFeatures"
+                 x-transition:enter="ease-out duration-500 delay-200"
+                 x-transition:enter-start="opacity-0 transform translate-y-10"
+                 x-transition:enter-end="opacity-100 transform translate-y-0"
+            >
                 <div class="p-4 bg-yellow-100 rounded-full mb-5 shadow-inner">
                     <svg class="w-9 h-9 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z"></path></svg>
                 </div>
@@ -47,13 +69,21 @@
     </section>
 
     {{-- Category Section (Scrollable Cards - Revised) --}}
-    <section class="py-8 md:py-10 bg-gray-100"> {{-- Padding dikurangi: py-12 md:py-16 --}}
+    <section class="py-8 md:py-10 bg-gray-100">
         <div class="max-w-7xl mx-auto px-4">
             <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-10 text-center">Jelajahi Berdasarkan Kategori Produk</h2>
-            <div class="overflow-x-auto pb-6 custom-scrollbar-hide">
-                <div class="flex space-x-4 sm:space-x-6 md:space-x-8 px-4 sm:px-6 lg:px-8 -ml-4 sm:-ml-6 lg:-ml-8 min-w-max"> {{-- Penyesuaian margin/padding untuk konsistensi --}}
+            <div class="overflow-x-auto pb-6 custom-scrollbar-hide"
+                 x-data="{ showCategories: false }"
+                 x-init="setTimeout(() => { showCategories = true }, 800)"
+            >
+                <div class="flex space-x-4 sm:space-x-6 md:space-x-8 px-4 sm:px-6 lg:px-8 -ml-4 sm:-ml-6 lg:-ml-8 min-w-max">
                     @forelse($categories as $cat)
-                        <a href="{{ route('produk.index', ['kategori' => $cat->id]) }}" class="flex-none w-44 sm:w-52 md:w-60 flex flex-col bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 group overflow-hidden">
+                        <a href="{{ route('produk.index', ['kategori' => $cat->id]) }}" class="flex-none w-44 sm:w-52 md:w-60 flex flex-col bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 group overflow-hidden"
+                           x-show="showCategories"
+                           x-transition:enter="ease-out duration-500 delay-{{ $loop->index * 50 }}"
+                           x-transition:enter-start="opacity-0 transform translate-y-10"
+                           x-transition:enter-end="opacity-100 transform translate-y-0"
+                        >
                             @php
                                 $categoryImageMap = [
                                     'Makanan' => 'makanan.jpg',
@@ -67,7 +97,7 @@
                                 ];
                                 $localImagePath = $categoryImageMap[$cat->name] ?? 'category-default.jpg';
                             @endphp
-                            <div class="w-full h-40 sm:h-48 md:h-56 overflow-hidden rounded-t-xl"> {{-- Tinggi gambar lebih besar --}}
+                            <div class="w-full h-40 sm:h-48 md:h-56 overflow-hidden rounded-t-xl">
                                 <img src="{{ asset('img/' . $localImagePath) }}" alt="Kategori {{ $cat->name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">
                             </div>
                             <div class="p-4 flex flex-col items-center text-center flex-grow">
@@ -86,9 +116,17 @@
     <section class="py-12 md:py-16 bg-white">
         <div class="max-w-7xl mx-auto px-4">
             <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-10 text-center">Wawasan Terbaru dari Blog Kami</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10"
+                 x-data="{ showArticles: false }"
+                 x-init="setTimeout(() => { showArticles = true }, 1100)"
+            >
                 @forelse($articles->take(3) as $article)
-                    <div class="bg-gray-50 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden flex flex-col">
+                    <div class="bg-gray-50 rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 overflow-hidden flex flex-col"
+                         x-show="showArticles"
+                         x-transition:enter="ease-out duration-500 delay-{{ $loop->index * 100 }}"
+                         x-transition:enter-start="opacity-0 transform translate-y-10"
+                         x-transition:enter-end="opacity-100 transform translate-y-0"
+                    >
                         @php
                             $articleImageMap = [
                                 'edukasi' => 'artikel-edukasi.jpg',
@@ -116,17 +154,21 @@
     </section>
 
     {{-- Product Cards Section --}}
-    {{-- Bagian ini akan dihapus dari home.blade.php karena sudah ada di produk_index.blade.php --}}
-    {{-- Saya akan mengosongkan bagian ini di sini untuk menghindarinya muncul ganda --}}
     <div class="py-12 md:py-16 bg-gray-50" id="produk-terbaru">
         <div class="max-w-7xl mx-auto px-4">
             <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-10 text-center">Temukan Produk UMKM Unggulan</h2>
             <p class="text-center text-gray-600 mb-8">Untuk melihat daftar lengkap produk, silakan kunjungi halaman <a href="{{ route('produk.index') }}" class="text-blue-600 hover:underline font-semibold">Produk Kami</a>.</p>
-            {{-- Konten produk yang sebelumnya ada di sini akan dipindahkan sepenuhnya ke produk_index.blade.php --}}
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
-                {{-- Artikel terbaru akan ditampilkan, bukan produk lengkap --}}
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6"
+                 x-data="{ showProducts: false }"
+                 x-init="setTimeout(() => { showProducts = true }, 1400)"
+            >
                 @forelse($products->take(6) as $product)
-                    <div class="bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden flex flex-col group">
+                    <div class="bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden flex flex-col group"
+                         x-show="showProducts"
+                         x-transition:enter="ease-out duration-500 delay-{{ $loop->index * 50 }}"
+                         x-transition:enter-start="opacity-0 transform translate-y-10"
+                         x-transition:enter-end="opacity-100 transform translate-y-0"
+                    >
                         <div class="relative overflow-hidden w-full aspect-square">
                             @php
                                 $productDummyImages = [
@@ -139,7 +181,9 @@
                                 ];
                                 $localDummyImagePath = $productDummyImages[$loop->index % count($productDummyImages)];
                             @endphp
-                            <img src="{{ Str::startsWith($product->photo, 'produk-dummy') ? asset('img/' . $product->photo) : asset('storage/' . $product->photo) }}" alt="{{ $product->name }}" class="absolute inset-0 w-full h-full object-cover transform transition-transform duration-300 group-hover:scale-105">
+                            <img src="{{ Str::startsWith($product->photo, 'produk-dummy') ? asset('img/' . $product->photo) : asset('storage/' . $product->photo) }}"
+                                alt="{{ $product->name }}"
+                                class="absolute inset-0 w-full h-full object-cover transform transition-transform duration-300 group-hover:scale-105">
                             @if($product->status->name != 'approved')
                                 <span class="absolute top-2 left-2 bg-red-500 text-white text-xs font-semibold px-2 py-1 rounded-md z-10">
                                     {{ ucfirst($product->status->name) }}
@@ -165,20 +209,20 @@
 
 
     {{-- Footer Section --}}
-    <footer class="bg-gray-900 text-white py-10 md:py-12 mt-10"> {{-- **Padding dan margin atas dikurangi** --}}
-        <div class="max-w-7xl mx-auto px-4"> {{-- Container utama footer --}}
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-8 md:mb-10"> {{-- **Gap antar kolom dikurangi** --}}
+    <footer class="bg-gray-900 text-white py-10 md:py-12 mt-10">
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-8 md:mb-10">
 
                 <div class="footer-section">
-                    <div class="footer-logo mb-3"> {{-- **Margin bawah logo dikurangi** --}}
-                        <h4 class="text-xl md:text-2xl font-bold text-white mb-1">PT BPR MSA Yogyakarta</h4> {{-- **Ukuran font judul dikurangi** --}}
+                    <div class="footer-logo mb-3">
+                        <h4 class="text-xl md:text-2xl font-bold text-white mb-1">PT BPR MSA Yogyakarta</h4>
                     </div>
-                    <p class="company-description text-gray-300 text-sm leading-relaxed mb-3"> {{-- **Margin bawah deskripsi dikurangi** --}}
+                    <p class="company-description text-gray-300 text-sm leading-relaxed mb-3">
                         Lembaga keuangan terpercaya yang menyediakan solusi permodalan bagi UMKM dan kebutuhan bisnis profesional Anda.
                     </p>
-                    <div class="social-links flex gap-2 mt-3"> {{-- **Gap ikon sosial dikurangi** --}}
+                    <div class="social-links flex gap-2 mt-3">
                         <a href="https://www.instagram.com/bprmsa.official/" target="_blank" aria-label="Instagram"
-                           class="w-9 h-9 bg-white/10 rounded-lg flex items-center justify-center text-white text-lg hover:bg-blue-700 transition-all duration-300 transform hover:-translate-y-1"> {{-- **Ukuran ikon sosial dikurangi** --}}
+                           class="w-9 h-9 bg-white/10 rounded-lg flex items-center justify-center text-white text-lg hover:bg-blue-700 transition-all duration-300 transform hover:-translate-y-1">
                             <i class='bx bxl-instagram'></i>
                         </a>
                         <a href="https://web.facebook.com/bprmsa.official" target="_blank" aria-label="Facebook"
@@ -193,12 +237,12 @@
                 </div>
 
                 <div class="footer-section">
-                    <h4 class="text-lg md:text-xl font-semibold text-white mb-4 relative footer-heading-underline">Kontak Kami</h4> {{-- **Ukuran font judul dikurangi** --}}
-                    <div class="contact-info flex flex-col gap-3"> {{-- **Gap antar item kontak dikurangi** --}}
-                        <div class="contact-item flex items-start gap-2"> {{-- **Gap ikon dan teks dikurangi** --}}
-                            <i class='bx bxs-phone text-blue-400 text-xl flex-shrink-0 mt-0.5'></i> {{-- **Ukuran ikon dikurangi** --}}
+                    <h4 class="text-lg md:text-xl font-semibold text-white mb-4 relative footer-heading-underline">Kontak Kami</h4>
+                    <div class="contact-info flex flex-col gap-3">
+                        <div class="contact-item flex items-start gap-2">
+                            <i class='bx bxs-phone text-blue-400 text-xl flex-shrink-0 mt-0.5'></i>
                             <div>
-                                <strong class="block text-white text-sm font-semibold mb-0.5">Telepon</strong> {{-- **Margin dan ukuran font dikurangi** --}}
+                                <strong class="block text-white text-sm font-semibold mb-0.5">Telepon</strong>
                                 <p class="text-gray-300 text-sm">0274-549400</p>
                             </div>
                         </div>
@@ -220,8 +264,8 @@
                 </div>
 
                 <div class="footer-section">
-                    <h4 class="text-lg md:text-xl font-semibold text-white mb-4 relative footer-heading-underline">Kantor Pusat</h4> {{-- **Ukuran font judul dikurangi** --}}
-                    <div class="office-info mb-4"> {{-- **Margin bawah info kantor dikurangi** --}}
+                    <h4 class="text-lg md:text-xl font-semibold text-white mb-4 relative footer-heading-underline">Kantor Pusat</h4>
+                    <div class="office-info mb-4">
                         <div class="address-info flex items-start gap-2">
                             <i class='bx bx-map-pin text-blue-400 text-xl flex-shrink-0 mt-0.5'></i>
                             <div>
@@ -230,9 +274,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="map-container w-full h-40 rounded-xl overflow-hidden shadow-lg"> {{-- **Tinggi iframe peta dikurangi** --}}
+                    <div class="map-container w-full h-40 rounded-xl overflow-hidden shadow-lg">
                         <iframe
-                            src="http://googleusercontent.com/maps/embed?pb=!1m18!1m12!1m3!1d3953.250567083049!2d110.3752538147775!3d-7.75971939441113!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a59929d20c57f%3A0x86f345c26b52a514!2sPT.%20BPR%20MSA%20Yogyakarta!5e0!3m2!1sen!2sid!4v1678250000000!5m2!1sen!2sid"
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3953.103333946491!2d110.37076757439262!3d-7.778867192240737!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a5769f94c5885%3A0xeeffcc651da7e6d6!2sPT%20BPR%20Madani%20Sejahtera%20Abadi!5e0!3m2!1sen!2sid!4v1753067076562!5m2!1sen!2sid"
                             width="100%"
                             height="100%"
                             style="border:0;"
@@ -246,12 +290,12 @@
 
             </div>
 
-            <div class="border-t border-gray-700 py-5 mt-8 flex flex-col md:flex-row items-center justify-between gap-4 px-4"> {{-- **Padding vertikal dan margin atas pembatas dikurangi** --}}
-                <p class="copyright text-gray-400 text-xs text-center md:text-left mb-0"> {{-- **Ukuran font hak cipta dikurangi** --}}
+            <div class="border-t border-gray-700 py-5 mt-8 flex flex-col md:flex-row items-center justify-between gap-4 px-4">
+                <p class="copyright text-gray-400 text-xs text-center md:text-left mb-0">
                     © {{ date('Y') }} PT BPR MSA Yogyakarta. All rights reserved.
                 </p>
-                <div class="footer-links flex gap-3 sm:gap-4 md:gap-5 justify-center"> {{-- **Gap tautan footer dikurangi** --}}
-                    <a href="{{ route('tentang') }}" class="text-gray-300 text-xs hover:text-white font-medium transition-colors duration-300">Tentang Kami</a> {{-- **Ukuran font tautan dikurangi** --}}
+                <div class="footer-links flex gap-3 sm:gap-4 md:gap-5 justify-center">
+                    <a href="{{ route('tentang') }}" class="text-gray-300 text-xs hover:text-white font-medium transition-colors duration-300">Tentang Kami</a>
                     <a href="{{ route('artikel.index') }}" class="text-gray-300 text-xs hover:text-white font-medium transition-colors duration-300">Artikel</a>
                     <a href="{{ route('contact') }}" class="text-gray-300 text-xs hover:text-white font-medium transition-colors duration-300">Kontak</a>
                 </div>
@@ -264,11 +308,11 @@
     .footer-heading-underline::after {
         content: '';
         position: absolute;
-        bottom: -6px; /* Jarak dari teks dikurangi */
+        bottom: -6px;
         left: 0;
-        width: 30px; /* Lebar garis bawah dikurangi */
-        height: 2px; /* Tinggi garis bawah dikurangi */
-        background: linear-gradient(135deg, #3B82F6, #10B981); /* Warna gradien biru-hijau */
+        width: 30px;
+        height: 2px;
+        background: linear-gradient(135deg, #3B82F6, #10B981);
         border-radius: 2px;
     }
 

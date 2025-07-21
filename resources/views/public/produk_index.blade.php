@@ -8,7 +8,7 @@
             <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-10 md:mb-14 text-center leading-tight tracking-tight">Jelajahi Produk UMKM Unggulan Kami</h2>
 
             <form method="GET" action="{{ route('produk.index') }}" class="mb-12 flex flex-col sm:flex-row flex-wrap justify-center items-center gap-4">
-                <input type="text" name="q" placeholder="Cari produk..." 
+                <input type="text" name="q" placeholder="Cari produk..."
                        class="w-full sm:w-auto flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-sm text-gray-800 placeholder-gray-500"
                        value="{{ request('q') }}">
                 <select name="kategori" class="w-full sm:w-auto flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-sm text-gray-800">
@@ -37,8 +37,8 @@
                                 // Use product photo if available, otherwise use a dummy image based on loop index
                                 $localDummyImagePath = $productDummyImages[$loop->index % count($productDummyImages)];
                             @endphp
-                            <img src="{{ Str::startsWith($product->photo, 'produk-dummy') ? asset('img/' . $product->photo) : asset('storage/' . $product->photo) }}" 
-                                alt="{{ $product->name }}" 
+                            <img src="{{ Str::startsWith($product->photo, 'produk-dummy') ? asset('img/' . $product->photo) : asset('storage/' . $product->photo) }}"
+                                alt="{{ $product->name }}"
                                 class="absolute inset-0 w-full h-full object-cover transform transition-transform duration-300 group-hover:scale-105">
                             @if($product->status->name != 'approved')
                                 <span class="absolute top-2 left-2 bg-red-500 text-white text-xs font-semibold px-2 py-1 rounded-md z-10">
@@ -57,27 +57,36 @@
                     <div class="col-span-full text-center text-gray-500 py-12 text-lg">Produk tidak ditemukan. Coba filter lain.</div>
                 @endforelse
             </div>
-            <div class="mt-12 flex justify-center">
-                {{ $products->links() }}
+            <div class="mt-12 flex flex-col sm:flex-row justify-center sm:justify-between items-center text-center">
+                {{-- Text informasi paginasi --}}
+                <div class="pagination-info mb-4 sm:mb-0">
+                    Menampilkan {{ $products->firstItem() }} hingga {{ $products->lastItem() }} dari {{ $products->total() }} hasil.
+                </div>
+                {{-- Pagination Links (Styles from app.css will apply here) --}}
+                <div class="pagination">
+                    {{ $products->links('vendor.pagination.modern') }}
+                </div>
             </div>
         </div>
     </div>
 
     {{-- Footer Section --}}
-    <footer class="bg-gray-900 text-white py-10 md:py-12 mt-10"> {{-- **Padding dan margin atas dikurangi** --}}
-        <div class="max-w-7xl mx-auto px-4"> {{-- Container utama footer --}}
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-8 md:mb-10"> {{-- **Gap antar kolom dikurangi** --}}
+    {{-- Container luar untuk latar belakang full-width --}}
+    <footer class="bg-gray-900 text-white py-10 md:py-12 mt-10">
+        {{-- Container dalam untuk konten agar tetap terpusat dan terbatas lebar --}}
+        <div class="max-w-7xl mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 mb-8 md:mb-10">
 
                 <div class="footer-section">
-                    <div class="footer-logo mb-3"> {{-- **Margin bawah logo dikurangi** --}}
-                        <h4 class="text-xl md:text-2xl font-bold text-white mb-1">PT BPR MSA Yogyakarta</h4> {{-- **Ukuran font judul dikurangi** --}}
+                    <div class="footer-logo mb-3">
+                        <h4 class="text-xl md:text-2xl font-bold text-white mb-1">PT BPR MSA Yogyakarta</h4>
                     </div>
-                    <p class="company-description text-gray-300 text-sm leading-relaxed mb-3"> {{-- **Margin bawah deskripsi dikurangi** --}}
+                    <p class="company-description text-gray-300 text-sm leading-relaxed mb-3">
                         Lembaga keuangan terpercaya yang menyediakan solusi permodalan bagi UMKM dan kebutuhan bisnis profesional Anda.
                     </p>
-                    <div class="social-links flex gap-2 mt-3"> {{-- **Gap ikon sosial dikurangi** --}}
+                    <div class="social-links flex gap-2 mt-3">
                         <a href="https://www.instagram.com/bprmsa.official/" target="_blank" aria-label="Instagram"
-                           class="w-9 h-9 bg-white/10 rounded-lg flex items-center justify-center text-white text-lg hover:bg-blue-700 transition-all duration-300 transform hover:-translate-y-1"> {{-- **Ukuran ikon sosial dikurangi** --}}
+                           class="w-9 h-9 bg-white/10 rounded-lg flex items-center justify-center text-white text-lg hover:bg-blue-700 transition-all duration-300 transform hover:-translate-y-1">
                             <i class='bx bxl-instagram'></i>
                         </a>
                         <a href="https://web.facebook.com/bprmsa.official" target="_blank" aria-label="Facebook"
@@ -92,12 +101,12 @@
                 </div>
 
                 <div class="footer-section">
-                    <h4 class="text-lg md:text-xl font-semibold text-white mb-4 relative footer-heading-underline">Kontak Kami</h4> {{-- **Ukuran font judul dikurangi** --}}
-                    <div class="contact-info flex flex-col gap-3"> {{-- **Gap antar item kontak dikurangi** --}}
-                        <div class="contact-item flex items-start gap-2"> {{-- **Gap ikon dan teks dikurangi** --}}
-                            <i class='bx bxs-phone text-blue-400 text-xl flex-shrink-0 mt-0.5'></i> {{-- **Ukuran ikon dikurangi** --}}
+                    <h4 class="text-lg md:text-xl font-semibold text-white mb-4 relative footer-heading-underline">Kontak Kami</h4>
+                    <div class="contact-info flex flex-col gap-3">
+                        <div class="contact-item flex items-start gap-2">
+                            <i class='bx bxs-phone text-blue-400 text-xl flex-shrink-0 mt-0.5'></i>
                             <div>
-                                <strong class="block text-white text-sm font-semibold mb-0.5">Telepon</strong> {{-- **Margin dan ukuran font dikurangi** --}}
+                                <strong class="block text-white text-sm font-semibold mb-0.5">Telepon</strong>
                                 <p class="text-gray-300 text-sm">0274-549400</p>
                             </div>
                         </div>
@@ -119,8 +128,8 @@
                 </div>
 
                 <div class="footer-section">
-                    <h4 class="text-lg md:text-xl font-semibold text-white mb-4 relative footer-heading-underline">Kantor Pusat</h4> {{-- **Ukuran font judul dikurangi** --}}
-                    <div class="office-info mb-4"> {{-- **Margin bawah info kantor dikurangi** --}}
+                    <h4 class="text-lg md:text-xl font-semibold text-white mb-4 relative footer-heading-underline">Kantor Pusat</h4>
+                    <div class="office-info mb-4">
                         <div class="address-info flex items-start gap-2">
                             <i class='bx bx-map-pin text-blue-400 text-xl flex-shrink-0 mt-0.5'></i>
                             <div>
@@ -129,9 +138,9 @@
                             </div>
                         </div>
                     </div>
-                    <div class="map-container w-full h-40 rounded-xl overflow-hidden shadow-lg"> {{-- **Tinggi iframe peta dikurangi** --}}
+                    <div class="map-container w-full h-40 rounded-xl overflow-hidden shadow-lg">
                         <iframe
-                            src="http://googleusercontent.com/maps/embed?pb=!1m18!1m12!1m3!1d3953.250567083049!2d110.3752538147775!3d-7.75971939441113!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a59929d20c57f%3A0x86f345c26b52a514!2sPT.%20BPR%20MSA%20Yogyakarta!5e0!3m2!1sen!2sid!4v1678250000000!5m2!1sen!2sid"
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3953.103333946491!2d110.37076757439262!3d-7.778867192240737!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a5769f94c5885%3A0xeeffcc651da7e6d6!2sPT%20BPR%20Madani%20Sejahtera%20Abadi!5e0!3m2!1sen!2sid!4v1753067076562!5m2!1sen!2sid"
                             width="100%"
                             height="100%"
                             style="border:0;"
@@ -145,12 +154,12 @@
 
             </div>
 
-            <div class="border-t border-gray-700 py-5 mt-8 flex flex-col md:flex-row items-center justify-between gap-4 px-4"> {{-- **Padding vertikal dan margin atas pembatas dikurangi** --}}
-                <p class="copyright text-gray-400 text-xs text-center md:text-left mb-0"> {{-- **Ukuran font hak cipta dikurangi** --}}
+            <div class="border-t border-gray-700 py-5 mt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+                <p class="copyright text-gray-400 text-xs text-center md:text-left mb-0">
                     © {{ date('Y') }} PT BPR MSA Yogyakarta. All rights reserved.
                 </p>
-                <div class="footer-links flex gap-3 sm:gap-4 md:gap-5 justify-center"> {{-- **Gap tautan footer dikurangi** --}}
-                    <a href="{{ route('tentang') }}" class="text-gray-300 text-xs hover:text-white font-medium transition-colors duration-300">Tentang Kami</a> {{-- **Ukuran font tautan dikurangi** --}}
+                <div class="footer-links flex gap-3 sm:gap-4 md:gap-5 justify-center">
+                    <a href="{{ route('tentang') }}" class="text-gray-300 text-xs hover:text-white font-medium transition-colors duration-300">Tentang Kami</a>
                     <a href="{{ route('artikel.index') }}" class="text-gray-300 text-xs hover:text-white font-medium transition-colors duration-300">Artikel</a>
                     <a href="{{ route('contact') }}" class="text-gray-300 text-xs hover:text-white font-medium transition-colors duration-300">Kontak</a>
                 </div>
@@ -163,11 +172,11 @@
     .footer-heading-underline::after {
         content: '';
         position: absolute;
-        bottom: -6px; /* Jarak dari teks dikurangi */
+        bottom: -6px;
         left: 0;
-        width: 30px; /* Lebar garis bawah dikurangi */
-        height: 2px; /* Tinggi garis bawah dikurangi */
-        background: linear-gradient(135deg, #3B82F6, #10B981); /* Warna gradien biru-hijau */
+        width: 30px;
+        height: 2px;
+        background: linear-gradient(135deg, #3B82F6, #10B981);
         border-radius: 2px;
     }
 
