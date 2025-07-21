@@ -55,13 +55,18 @@ class PublicController extends Controller
         return view('public.tentang');
     }
 
+    // Tambahkan metode ini untuk halaman daftar produk
     public function produkIndex(Request $request)
     {
-        $query = Product::query()->with(['umkm', 'status']);
+        $query = Product::query()->with(['umkm', 'category', 'status'])
+                        ->whereHas('status', function($q){ // Hanya tampilkan produk dengan status 'approved'
+                            $q->where('name', 'approved');
+                        });
 
         if ($request->filled('q')) {
             $q = $request->q;
             $query->where('name', 'like', "%$q%")
+                  ->orWhere('description', 'like', "%$q%")
                   ->orWhereHas('umkm', function($u) use ($q) {
                       $u->where('name', 'like', "%$q%");
                   });
@@ -73,6 +78,6 @@ class PublicController extends Controller
         $products = $query->latest()->paginate(12);
         $categories = Category::all();
 
-        return view('public.produk-index', compact('products', 'categories'));
+        return view('public.produk_index', compact('products', 'categories'));
     }
 }
