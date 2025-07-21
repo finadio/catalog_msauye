@@ -4,16 +4,38 @@ namespace App\Http\Controllers;
 
 use App\Models\Article;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 
 class AdminArticleController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $articles = Article::latest()->paginate(10);
-        return view('admin.artikel.index', compact('articles'));
+        $query = Article::query();
+
+        // Filter berdasarkan tipe artikel jika parameter 'tipe' ada
+        if ($request->filled('tipe')) {
+            $query->where('type', $request->tipe);
+        }
+
+        // Pencarian berdasarkan query 'q' (judul atau konten)
+        if ($request->filled('q')) {
+            $searchQuery = $request->q;
+            $query->where(function($q) use ($searchQuery) {
+                $q->where('title', 'like', '%'.$searchQuery.'%')
+                  ->orWhere('content', 'like', '%'.$searchQuery.'%');
+            });
+        }
+
+        $articles = $query->latest()->paginate(10);
+
+        // Ambil semua tipe artikel unik untuk dropdown filter
+        $articleTypes = Article::select('type')->distinct()->get()->pluck('type');
+
+        return view('admin.artikel.index', compact('articles', 'articleTypes'));
     }
 
     /**
@@ -30,63 +52,88 @@ class AdminArticleController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'title' => 'required',
-            'content' => 'required',
-            'type' => 'required|in:edukasi,berita',
-            'photo' => 'nullable|image|max:2048',
+            'title' => 'required|string|max:255',
+            'type' => 'required|string|max:255',
+            'content' => 'required|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-        $data = $request->only(['title','content','type']);
-        if ($request->hasFile('photo')) {
-            $data['photo'] = $request->file('photo')->store('artikel','public');
-        }
-        Article::create($data);
-        return redirect()->route('admin.artikel.index')->with('success','Artikel berhasil ditambahkan!');
-    }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        //
+        $imagePath = null;
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('article_images', 'public');
+        }
+
+        Article::create([
+            'title' => $request->title,
+            'slug' => Str::slug($request->title),
+            'type' => $request->type,
+            'content' => $request->content,
+            'image' => $imagePath,
+            'published_at' => now(), // Set published_at to current time
+        ]);
+
+        return redirect()->route('admin.artikel.index')->with('success', 'Artikel berhasil ditambahkan!');
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)
+    public function edit(Article $artikel)
     {
-        $article = Article::findOrFail($id);
-        return view('admin.artikel.edit', compact('article'));
+        return view('admin.artikel.edit', compact('artikel'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Article $artikel)
     {
-        $article = Article::findOrFail($id);
         $request->validate([
-            'title' => 'required',
-            'content' => 'required',
-            'type' => 'required|in:edukasi,berita',
-            'photo' => 'nullable|image|max:2048',
+            'title' => 'required|string|max:255',
+            'type' => 'required|string|max:255',
+            'content' => 'required|string',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
         ]);
-        $data = $request->only(['title','content','type']);
-        if ($request->hasFile('photo')) {
-            $data['photo'] = $request->file('photo')->store('artikel','public');
+
+        // Handle image update
+        if ($request->hasFile('image')) {
+            // Delete old image if exists
+            if ($artikel->image) {
+                Storage::disk('public')->delete($artikel->image);
+            }
+            $imagePath = $request->file('image')->store('article_images', 'public');
+            $artikel->image = $imagePath;
+        } elseif ($request->input('remove_image')) {
+            // Remove image if checkbox is checked
+            if ($artikel->image) {
+                Storage::disk('public')->delete($artikel->image);
+            }
+            $artikel->image = null;
         }
-        $article->update($data);
-        return redirect()->route('admin.artikel.index')->with('success','Artikel berhasil diupdate!');
+
+        $artikel->update([
+            'title' => $request->title,
+            'slug' => Str::slug($request->title),
+            'type' => $request->type,
+            'content' => $request->content,
+            // 'image' is updated above
+        ]);
+
+        return redirect()->route('admin.artikel.index')->with('success', 'Artikel berhasil diperbarui!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(Article $artikel)
     {
-        $article = Article::findOrFail($id);
-        $article->delete();
-        return redirect()->route('admin.artikel.index')->with('success','Artikel berhasil dihapus!');
+        // Delete image if exists
+        if ($artikel->image) {
+            Storage::disk('public')->delete($artikel->image);
+        }
+
+        $artikel->delete();
+
+        return redirect()->route('admin.artikel.index')->with('success', 'Artikel berhasil dihapus!');
     }
 }
