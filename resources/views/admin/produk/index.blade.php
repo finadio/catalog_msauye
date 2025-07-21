@@ -160,8 +160,8 @@
                 </table>
             </div>
 
-            <div class="mt-6">
-                {{ $products->links() }}
+            <div class="mt-6 flex justify-center">
+                {{ $products->onEachSide(1)->links('vendor.pagination.modern') }}
             </div>
         </div>
     </div>
