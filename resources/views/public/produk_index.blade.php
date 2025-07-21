@@ -64,7 +64,7 @@
                 </div>
                 {{-- Pagination Links (Styles from app.css will apply here) --}}
                 <div class="pagination">
-                    {{ $products->links() }}
+                    {{ $products->links('vendor.pagination.modern') }}
                 </div>
             </div>
         </div>
