@@ -9,18 +9,16 @@ use Illuminate\Support\Facades\Auth;
 
 class RoleMiddleware
 {
-    public function handle(Request $request, Closure $next, ...$roles)
+    public function handle($request, Closure $next, $role)
     {
-        // Periksa apakah user terautentikasi
         if (!Auth::check()) {
-            return redirect()->route('login');
+            return redirect('/login');
         }
 
         $user = Auth::user();
 
-        // Periksa role user
-        if (!in_array($user->role, $roles)) {
-            abort(403, 'Unauthorized. Your role: ' . $user->role);
+        if ($user->role !== $role) {
+            abort(403, 'Unauthorized');
         }
 
         return $next($request);

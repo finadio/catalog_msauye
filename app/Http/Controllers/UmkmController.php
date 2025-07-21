@@ -3,58 +3,46 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Product;
-use App\Models\Umkm;
+use Illuminate\Support\Facades\Auth;
 
 class UmkmController extends Controller
 {
+    /**
+     * Menampilkan dashboard UMKM dengan daftar produk milik user yang login.
+     */
     public function dashboard()
     {
-        $user = auth()->user();
-
-        // Pastikan user sudah punya data UMKM
-        $umkm = $user->umkm ?? null;
-
-        if (!$umkm) {
-            return redirect()->route('home')->withErrors([
-                'umkm' => 'Akun Anda belum terdaftar sebagai UMKM.'
-            ]);
-        }
-
-        $myProductCount = $umkm->products()->count();
-        $pendingCount = \App\Models\Product::join('product_statuses', 'products.status_id', '=', 'product_statuses.id')
-            ->where('products.umkm_id', $umkm->id)
-            ->where('product_statuses.name', 'pending')
-            ->count();
-
-        return view('umkm.dashboard', compact('myProductCount', 'pendingCount'));
+        // Pastikan relasi 'products' ada di model User
+        $products = Auth::user()->products()->with('status')->latest()->get();
+        return view('umkmdashboard', compact('products'));
     }
 
-    public function profile()
+    /**
+     * Menampilkan form edit profil UMKM.
+     */
+    public function editProfile()
     {
-        $user = auth()->user();
-        $umkm = $user->umkm;
-
-        return view('umkm.profile', compact('umkm'));
+        $user = Auth::user();
+        return view('umkmeditprofile', compact('user'));
     }
 
+    /**
+     * Menangani permintaan update profil UMKM.
+     */
     public function updateProfile(Request $request)
     {
-        $request->validate([
-            'nama_umkm' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'address'=> 'required|string|max:255',
-            'phone'      => 'nullable|string|max:20',
-            'whatsapp'   => 'nullable|string|max:20',
-            'instagram'  => 'nullable|string|max:255',
-            'photo'      => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
+        $user = Auth::user();
+
+        // Validasi input user
+        $validated = $request->validate([
+            'name'   => 'required|string|max:255',
+            'email'  => 'required|email|unique:users,email,' . $user->id, // hindari bentrok email
+            'alamat' => 'nullable|string|max:255',
+            'kontak' => 'nullable|string|max:20',
         ]);
 
-        $user = auth()->user();
-        $umkm = $user->umkm;
+        $user->update($validated);
 
-        $umkm->update($request->only('name', 'description','address','phone','whatsapp','istagram','photo'));
-
-        return redirect()->route('umkm.profile')->with('success', 'Profil UMKM berhasil diperbarui.');
+        return back()->with('success', 'Profil berhasil diperbarui.');
     }
 }

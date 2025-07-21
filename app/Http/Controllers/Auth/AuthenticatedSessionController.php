@@ -41,7 +41,7 @@ class AuthenticatedSessionController extends Controller
             return redirect()->route('umkm.dashboard');
         }
 
-        return redirect()->intended('/');
+        return redirect()->intended('dashboard');
     }
 
     return back()->withErrors([
