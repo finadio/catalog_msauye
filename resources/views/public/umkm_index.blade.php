@@ -8,10 +8,30 @@
             <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-10 md:mb-14 text-center leading-tight tracking-tight">Jelajahi UMKM Binaan Kami</h2>
 
             <form method="GET" action="{{ route('umkm.index') }}" class="mb-12 flex flex-col sm:flex-row flex-wrap justify-center items-center gap-4">
-                <input type="text" name="q" placeholder="Cari UMKM..."
-                       class="w-full sm:w-auto flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-sm text-gray-800 placeholder-gray-500"
+                {{-- Search Bar --}}
+                {{-- Menggunakan flex-1 agar mengambil ruang yang sama dengan dropdown pada layar sm ke atas --}}
+                <input type="text" name="q" placeholder="Cari UMKM (nama, deskripsi, alamat, kontak)..."
+                       class="w-full sm:flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-sm text-gray-800 placeholder-gray-500"
                        value="{{ request('q') }}">
-                <button type="submit" class="w-full sm:w-auto px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold text-lg transition duration-300 ease-in-out shadow-md transform hover:-translate-y-0.5">Cari</button>
+
+                {{-- Category Filter --}}
+                {{-- Menggunakan flex-1 agar mengambil ruang yang sama dengan input pencarian pada layar sm ke atas --}}
+                <select name="kategori" class="w-full sm:flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-sm text-gray-800">
+                    <option value="">Semua Kategori Produk</option>
+                    @foreach($categories as $category)
+                        <option value="{{ $category->id }}" {{ request('kategori') == $category->id ? 'selected' : '' }}>
+                            {{ $category->name }}
+                        </option>
+                    @endforeach
+                </select>
+
+                {{-- Submit Button --}}
+                <button type="submit" class="w-full sm:w-auto px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold text-lg transition duration-300 ease-in-out shadow-md transform hover:-translate-y-0.5">Filter</button>
+
+                {{-- Reset Button --}}
+                @if(request('q') || request('kategori'))
+                    <a href="{{ route('umkm.index') }}" class="w-full sm:w-auto px-8 py-3 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 font-semibold text-lg transition duration-300 ease-in-out shadow-md transform hover:-translate-y-0.5 text-center">Reset Filter</a>
+                @endif
             </form>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
