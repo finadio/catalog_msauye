@@ -54,7 +54,7 @@
                     @error('photo')<div class="text-red-600 text-sm mt-1">{{ $message }}</div>@enderror
                 </div>
                 <div class="flex justify-end gap-4 mt-6">
-                    <a href="{{ route('admin.produk.index') }}" class="px-6 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition ease-in-out duration-150 font-semibold shadow-sm">Batal</a>
+                    <a href="{{ route('admin.produk') }}" class="px-6 py-2 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 transition ease-in-out duration-150 font-semibold shadow-sm">Batal</a>
                     <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition ease-in-out duration-150 font-semibold shadow-md">Simpan Perubahan</button>
                 </div>
             </form>
