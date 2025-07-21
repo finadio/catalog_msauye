@@ -1,84 +1,71 @@
 <x-app-layout>
     <x-slot name="header">
-        <h1 class="font-semibold text-2xl text-gray-800 leading-tight">
-            {{ __('Tentang Kami') }}
-        </h1>
+        <h1 class="text-2xl font-bold text-gray-800">Daftar UMKM</h1>
     </x-slot>
 
-    {{-- Penambahan ruang di bawah header untuk pemisahan yang jelas --}}
-    <div class="pt-8 md:pt-12 bg-gray-50 min-h-screen">
-        <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8 md:p-10 lg:p-12">
-            <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-12 md:mb-16 text-center leading-tight">Mengenal Lebih Dekat <br class="hidden md:inline">PT BPR MSA</h2>
+    <div class="py-12 md:py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-10 md:mb-14 text-center leading-tight tracking-tight">Jelajahi UMKM Binaan Kami</h2>
 
-            {{-- Bagian Visi --}}
-            <section class="mb-12 md:mb-16 lg:mb-20">
-                <div class="flex flex-col md:flex-row items-center md:items-start space-y-8 md:space-y-0 md:space-x-12">
-                    <div class="w-full md:w-1/2 flex-shrink-0">
-                        <img src="{{ asset('img/msa1.jpeg') }}" alt="Gedung BPR MSA" class="w-full h-auto object-cover rounded-lg shadow-xl">
+            <form method="GET" action="{{ route('umkm.index') }}" class="mb-12 flex flex-col sm:flex-row flex-wrap justify-center items-center gap-4">
+                {{-- Search Bar --}}
+                {{-- Menggunakan flex-1 agar mengambil ruang yang sama dengan dropdown pada layar sm ke atas --}}
+                <input type="text" name="q" placeholder="Cari UMKM (nama, deskripsi, alamat, kontak)..."
+                       class="w-full sm:flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-sm text-gray-800 placeholder-gray-500"
+                       value="{{ request('q') }}">
+
+                {{-- Category Filter --}}
+                {{-- Menggunakan flex-1 agar mengambil ruang yang sama dengan input pencarian pada layar sm ke atas --}}
+                <select name="kategori" class="w-full sm:flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-sm text-gray-800">
+                    <option value="">Semua Kategori Produk</option>
+                    @foreach($categories as $category)
+                        <option value="{{ $category->id }}" {{ request('kategori') == $category->id ? 'selected' : '' }}>
+                            {{ $category->name }}
+                        </option>
+                    @endforeach
+                </select>
+
+                {{-- Submit Button --}}
+                <button type="submit" class="w-full sm:w-auto px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold text-lg transition duration-300 ease-in-out shadow-md transform hover:-translate-y-0.5">Filter</button>
+
+                {{-- Reset Button --}}
+                @if(request('q') || request('kategori'))
+                    <a href="{{ route('umkm.index') }}" class="w-full sm:w-auto px-8 py-3 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 font-semibold text-lg transition duration-300 ease-in-out shadow-md transform hover:-translate-y-0.5 text-center">Reset Filter</a>
+                @endif
+            </form>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                @forelse($umkms as $umkm)
+                    <div class="bg-white rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 overflow-hidden flex flex-col group transform hover:-translate-y-1">
+                        <div class="relative overflow-hidden w-full aspect-video">
+                            <img src="{{ $umkm->photo ? asset('storage/'.$umkm->photo) : asset('img/umkm-default.png') }}"
+                                 alt="{{ $umkm->name }}"
+                                 class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
+                        </div>
+                        <div class="p-6 flex-1 flex flex-col">
+                            <h3 class="font-bold text-xl text-gray-900 leading-tight mb-3 truncate">{{ $umkm->name }}</h3>
+                            <p class="text-gray-700 text-sm md:text-base mb-4 flex-1 leading-relaxed">{{ Str::limit($umkm->description, 100) }}</p>
+                            <div class="text-gray-600 text-sm mb-4">
+                                <p><span class="font-semibold">Alamat:</span> {{ Str::limit($umkm->address, 50) }}</p>
+                                <p><span class="font-semibold">Telepon:</span> {{ $umkm->phone }}</p>
+                            </div>
+                            <a href="{{ route('umkm.detail', $umkm->id) }}" class="inline-flex items-center text-blue-600 hover:text-blue-800 font-semibold text-base mt-auto justify-end transition-colors duration-200">
+                                Lihat Detail UMKM
+                                <svg class="ml-2 w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                            </a>
+                        </div>
                     </div>
-                    <div class="w-full md:w-1/2 text-center md:text-left">
-                        <h3 class="text-2xl lg:text-3xl font-bold text-blue-700 mb-4 md:mb-6">Visi Kami</h3>
-                        <p class="text-gray-700 leading-relaxed text-base lg:text-lg">
-                            Menjadi "Smart Banking" BPR terbaik di Indonesia.
-                        </p>
-                    </div>
-                </div>
-            </section>
-
-            <hr class="border-gray-200 my-12 md:my-16">
-
-            {{-- Bagian Misi --}}
-            <section class="mb-12 md:mb-16 lg:mb-20">
-                <div class="flex flex-col md:flex-row-reverse items-center md:items-start space-y-8 md:space-y-0 md:space-x-reverse md:space-x-12">
-                    <div class="w-full md:w-1/2 flex-shrink-0">
-                        <img src="{{ asset('img/timbpr.png') }}" alt="Tim BPR MSA" class="w-full h-auto object-cover rounded-lg shadow-xl">
-                    </div>
-                    <div class="w-full md:w-1/2 text-center md:text-right">
-                        <h3 class="text-2xl lg:text-3xl font-bold text-green-700 mb-4 md:mb-6">Misi Kami</h3>
-                        <ol class="list-decimal list-inside text-gray-700 leading-relaxed text-base lg:text-lg space-y-2 pl-4 md:pl-0">
-                            <li>Terciptanya Good Corporate Governance, berbasis pada Perbankan yang sehat.</li>
-                            <li>Menjalankan bisnis perbankan secara prudent (mengutamakan prinsip kehati-hatian) dengan tidak mengesampingkan pertumbuhan bisnis.</li>
-                            <li>Menjadi partner bisnis bagi usaha mikro, kecil dan menengah untuk menunjang peningkatan ekonomi regional.</li>
-                            <li>Memberikan pelayanan prima untuk memuaskan nasabah.</li>
-                            <li>Memberikan keuntungan dan manfaat yang optimal kepada stake holder.</li>
-                        </ol>
-                    </div>
-                </div>
-            </section>
-
-            <hr class="border-gray-200 my-12 md:my-16">
-
-            {{-- Bagian Logo Besar BPR --}}
-            <section class="mb-12 md:mb-16 lg:mb-20">
-                <div class="text-center">
-                    <h3 class="text-2xl lg:text-3xl font-bold text-gray-900 mb-8">Kami Adalah BPR MSA</h3>
-                    <img src="{{ asset('img/msa.png') }}" alt="Logo Besar BPR MSA" class="mx-auto w-4/5 sm:w-3/5 md:w-1/2 lg:w-2/5">
-                </div>
-            </section>
-
-            <hr class="border-gray-200 my-12 md:my-16">
-
-            {{-- Bagian Hubungi Kami --}}
-            <section class="pb-4">
-                <div class="text-center md:text-left">
-                    <h2 class="text-2xl lg:text-3xl font-bold mb-6 text-gray-900">Hubungi Kami</h2>
-                    <p class="text-gray-700 leading-relaxed mb-8 text-base lg:text-lg">
-                        Jika Anda memiliki pertanyaan lebih lanjut atau ingin menjadi bagian dari UMKM binaan kami, jangan ragu untuk menghubungi tim kami:
-                    </p>
-                    <div class="space-y-4">
-                        <p class="text-gray-800 font-semibold text-lg lg:text-xl flex items-center justify-center md:justify-start">
-                            <i class='bx bx-envelope mr-3 text-blue-600 text-2xl'></i> Email: <a href="mailto:bprmadani@gmail.com" class="text-blue-600 hover:underline ml-2">bprmadani@gmail.com</a>
-                        </p>
-                        <p class="text-gray-800 font-semibold text-lg lg:text-xl flex items-center justify-center md:justify-start">
-                            <i class='bx bx-phone mr-3 text-blue-600 text-2xl'></i> Telepon: <a href="tel:0274-549400" class="text-blue-600 hover:underline ml-2">0274-549400</a>
-                        </p>
-                    </div>
-                </div>
-            </section>
+                @empty
+                    <div class="col-span-full text-center text-gray-500 py-12 text-lg">Tidak ada UMKM ditemukan. Coba filter lain.</div>
+                @endforelse
+            </div>
+            <div class="mt-12 flex justify-center">
+                {{ $umkms->links('vendor.pagination.modern') }}
+            </div>
         </div>
     </div>
 
-    {{-- Footer Section --}}
+    {{-- Footer Section (copy from public/produk_index.blade.php or public/artikel.blade.php to maintain consistency) --}}
     <footer class="bg-gray-900 text-white py-10 md:py-12 mt-10">
         <div class="max-w-7xl mx-auto px-4">
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10 mb-8 md:mb-12">
@@ -99,10 +86,8 @@
                            class="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center text-white text-lg hover:bg-blue-700 transition-all duration-300 transform hover:-translate-y-1">
                             <i class='bx bxl-facebook'></i>
                         </a>
-                        <a href="https://www.tiktok.com/@bprmsa" target="_blank" aria-label="TikTok"
-                           class="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center text-white text-lg hover:bg-blue-700 transition-all duration-300 transform hover:-translate-y-1">
-                            <i class='bx bxl-tiktok'></i>
-                        </a>
+                        <a href="https://wa.me/6285172024202" class="w-10 h-10 flex items-center justify-center rounded-full text-white bg-white/10 text-lg hover:bg-blue-700 transition-all duration-300 transform hover:-translate-y-1" title="WhatsApp" target="_blank" rel="noopener noreferrer"><i class='bx bxl-whatsapp'></i></a>
+                        <a href="https://www.tiktok.com/@bprmsa" class="w-10 h-10 flex items-center justify-center rounded-full text-white bg-white/10 text-lg hover:bg-blue-700 transition-all duration-300 transform hover:-translate-y-1" title="TikTok" target="_blank" rel="noopener noreferrer"><i class='bx bxl-tiktok'></i></a>
                     </div>
                 </div>
 

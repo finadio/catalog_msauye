@@ -9,22 +9,21 @@
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+        {{-- Mengubah font dari Figtree ke Poppins --}}
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+        {{-- Boxicons for icons --}}
+        <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    <body class="font-sans text-gray-900 antialiased">
-        <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
-            <div>
-                <a href="/">
-                    <x-application-logo class="w-20 h-20 fill-current text-gray-500" />
-                </a>
-            </div>
-
-            <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
-                {{ $slot }}
-            </div>
+    {{-- Mengubah latar belakang body menjadi polos --}}
+    <body class="font-sans text-gray-900 antialiased bg-gray-100">
+        {{-- Kontainer utama yang akan menampung konten login/register --}}
+        {{-- Menambahkan min-h-screen untuk memastikan tinggi penuh viewport --}}
+        <div class="min-h-screen flex flex-col sm:justify-center items-center py-6 sm:py-0">
+            {{-- Slot untuk konten halaman autentikasi (login/register) --}}
+            {{ $slot }}
         </div>
     </body>
 </html>
