@@ -1,8 +1,7 @@
 <x-guest-layout>
     {{-- Kontainer utama untuk halaman register dengan desain split-panel yang lebih profesional --}}
-    <div class="flex flex-col md:flex-row w-full max-w-5xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden my-8 transform transition-all duration-300 hover:shadow-2xl">
-        <!-- Kiri: Form Register -->
-        <div class="w-full md:w-1/2 p-8 md:p-12 lg:p-16 flex flex-col justify-center">
+    <div class="flex flex-col md:flex-row w-full max-w-3xl mx-auto bg-white rounded-2xl shadow-xl overflow-hidden my-6 transform transition-all duration-300 hover:shadow-2xl">
+        <div class="w-full md:w-1/2 p-5 md:p-7 lg:p-9 flex flex-col justify-center rounded-l-2xl">
             <div class="mb-8 flex justify-center">
                 {{-- Menggunakan komponen logo aplikasi jika tersedia, atau gambar statis --}}
                 <a href="/">
@@ -11,6 +10,7 @@
             </div>
             <h2 class="text-3xl lg:text-4xl font-extrabold text-center mb-4 text-gray-800 leading-tight">Buat Akun Baru</h2>
             <p class="text-center text-gray-600 mb-8 text-base">Daftar sekarang untuk menjelajahi berbagai layanan kami.</p>
+
 
             {{-- Error validasi --}}
             @if ($errors->any())
@@ -23,8 +23,10 @@
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('register') }}" class="space-y-6">
+
+            <form method="POST" action="{{ route('register') }}" class="space-y-4">
                 @csrf
+
 
                 {{-- Name --}}
                 <div>
@@ -37,6 +39,7 @@
                     </div>
                 </div>
 
+
                 {{-- Email Address --}}
                 <div class="mt-4">
                     <x-input-label for="email" :value="__('Alamat Email')" class="mb-2 text-gray-700 font-medium" />
@@ -47,6 +50,7 @@
                         </span>
                     </div>
                 </div>
+
 
                 {{-- Password --}}
                 <div class="mt-4">
@@ -59,6 +63,7 @@
                     </div>
                 </div>
 
+
                 {{-- Confirm Password --}}
                 <div class="mt-4">
                     <x-input-label for="password_confirmation" :value="__('Konfirmasi Kata Sandi')" class="mb-2 text-gray-700 font-medium" />
@@ -70,10 +75,12 @@
                     </div>
                 </div>
 
+
                 <div class="flex items-center justify-end mt-6">
                     <a class="underline text-sm text-blue-600 hover:text-blue-800 font-medium rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-200" href="{{ route('login') }}">
                         {{ __('Sudah terdaftar?') }}
                     </a>
+
 
                     <x-primary-button class="ml-4 py-3 bg-blue-600 hover:bg-blue-700 active:bg-blue-800 focus:ring-blue-500 text-white font-semibold rounded-xl text-lg shadow-md hover:shadow-lg transform hover:-translate-y-0.5 transition duration-200">
                         {{ __('Daftar') }}
@@ -82,10 +89,8 @@
             </form>
         </div>
 
-        <!-- Kanan: Ilustrasi/Gambar Latar Belakang -->
-        {{-- Mengganti latar belakang gambar dengan warna polos --}}
-        <div class="hidden md:flex w-1/2 bg-blue-50 items-center justify-center p-8 relative">
-            <img src="{{ asset('img/shaka_utama.png') }}" alt="Ilustrasi Dukungan UMKM BPR MSA" class="w-full max-w-md h-auto object-contain rounded-lg shadow-lg transform scale-95 transition-transform duration-300 hover:scale-100">
+        <div class="hidden md:flex w-1/2 items-center justify-center p-8 bg-blue-50 rounded-r-2xl">
+            <img src="{{ asset('img/shaka_utama.png') }}" alt="Ilustrasi Dukungan UMKM BPR MSA" class="w-full max-w-md h-auto object-contain transform scale-95 transition-transform duration-300 hover:scale-100">
             <div class="absolute bottom-10 text-blue-900 text-center px-4"> {{-- Mengubah warna teks agar terlihat di background terang --}}
                 <h3 class="text-2xl font-bold mb-2">Bergabunglah dengan Komunitas UMKM Kami</h3>
                 <p class="text-sm opacity-90">Dapatkan akses ke berbagai fasilitas dan dukungan untuk mengembangkan usaha Anda.</p>
