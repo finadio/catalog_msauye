@@ -39,7 +39,7 @@
                 @endforelse
             </div>
             <div class="mt-12 flex justify-center">
-                {{ $articles->links() }}
+                {{ $articles->links('vendor.pagination.modern') }}
             </div>
         </div>
     </div>

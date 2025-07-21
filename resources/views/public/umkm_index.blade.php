@@ -40,7 +40,7 @@
                 @endforelse
             </div>
             <div class="mt-12 flex justify-center">
-                {{ $umkms->links() }}
+                {{ $umkms->links('vendor.pagination.modern') }}
             </div>
         </div>
     </div>
