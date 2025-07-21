@@ -29,6 +29,7 @@ use App\Http\Controllers\AdminContactController;
 // Routing halaman publik
 Route::get('/', [PublicController::class, 'home'])->name('home');
 Route::get('/produk', [PublicController::class, 'produkIndex'])->name('produk.index'); // Tambahkan baris ini
+Route::get('/produk/ajax', [PublicController::class, 'produkAjax'])->name('produk.ajax'); // Endpoint AJAX produk
 Route::get('/produk/{id}', [PublicController::class, 'produkDetail'])->name('produk.detail');
 Route::get('/umkm/{id}', [PublicController::class, 'umkmDetail'])->name('umkm.detail');
 Route::get('/artikel', [PublicController::class, 'artikel'])->name('artikel.index');

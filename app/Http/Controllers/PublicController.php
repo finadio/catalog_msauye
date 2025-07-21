@@ -80,4 +80,39 @@ class PublicController extends Controller
 
         return view('public.produk_index', compact('products', 'categories'));
     }
+
+    // Tambahkan metode ini untuk endpoint AJAX produk
+    public function produkAjax(Request $request)
+    {
+        $query = Product::query()->with(['umkm', 'category', 'status'])
+                        ->whereHas('status', function($q){
+                            $q->where('name', 'approved');
+                        });
+
+        if ($request->filled('q')) {
+            $q = $request->q;
+            $query->where('name', 'like', "%$q%")
+                  ->orWhere('description', 'like', "%$q%")
+                  ->orWhereHas('umkm', function($u) use ($q) {
+                      $u->where('name', 'like', "%$q%");
+                  });
+        }
+        if ($request->filled('kategori')) {
+            $query->where('category_id', $request->kategori);
+        }
+
+        $products = $query->latest()->paginate(12);
+
+        // Format data untuk JSON (bisa disesuaikan sesuai kebutuhan frontend)
+        $data = [
+            'products' => $products->items(),
+            'pagination' => [
+                'current_page' => $products->currentPage(),
+                'last_page' => $products->lastPage(),
+                'per_page' => $products->perPage(),
+                'total' => $products->total(),
+            ]
+        ];
+        return response()->json($data);
+    }
 }
