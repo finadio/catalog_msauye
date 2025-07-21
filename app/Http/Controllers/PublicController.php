@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Umkm;
 use App\Models\Category;
-use App\Models\Article; // Pastikan ini di-import
+use App\Models\Article;
 use App\Models\ProductStatus;
 
 class PublicController extends Controller
@@ -36,6 +36,23 @@ class PublicController extends Controller
     {
         $umkm = Umkm::with(['products.status'])->findOrFail($id);
         return view('public.umkm_detail', compact('umkm'));
+    }
+
+    // Add this new method to list all UMKM
+    public function umkmIndex(Request $request)
+    {
+        $umkms = Umkm::when($request->q, function($query) use ($request) {
+            $query->where('name', 'like', '%'.$request->q.'%')
+                  ->orWhere('description', 'like', '%'.$request->q.'%')
+                  ->orWhere('address', 'like', '%'.$request->q.'%')
+                  ->orWhere('phone', 'like', '%'.$request->q.'%')
+                  ->orWhere('whatsapp', 'like', '%'.$request->q.'%')
+                  ->orWhere('instagram', 'like', '%'.$request->q.'%')
+                  ->orWhere('tiktok', 'like', '%'.$request->q.'%')
+                  ->orWhere('website', 'like', '%'.$request->q.'%');
+        })->latest()->paginate(12);
+
+        return view('public.umkm_index', compact('umkms'));
     }
 
     public function artikel()

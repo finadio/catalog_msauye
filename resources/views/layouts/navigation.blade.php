@@ -3,8 +3,11 @@
     // Ini aktif jika kita berada di rute 'produk.index' atau 'produk.detail'
     $isProdukActive = request()->routeIs('produk.index') || request()->routeIs('produk.detail');
 
+    // Logika untuk menentukan apakah menu 'UMKM' harus aktif
+    $isUmkmActive = request()->routeIs('umkm.index') || request()->routeIs('umkm.detail'); // Add this line
+
     // Menu 'Home' aktif jika kita di rute home DAN BUKAN di konteks produk (yaitu halaman produk.index/produk.detail)
-    $isHomeActive = request()->routeIs('home') && !($isProdukActive); // Pastikan Home tidak aktif saat di halaman produk
+    $isHomeActive = request()->routeIs('home') && !($isProdukActive || $isUmkmActive); // Update this line
 
 @endphp
 
@@ -12,21 +15,24 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
         <div class="flex items-center flex-shrink-0">
             <a href="{{ route('home') }}" class="flex items-center group -ml-2 sm:-ml-4">
-                <img src="{{ asset('img/shaka_utama.png') }}" alt="Logo MSA Katalog UMKM" class="h-12 w-auto"> {{-- Logo lebih besar: h-16 --}}
-                <span class="font-black text-xl ml-0.5 text-blue-700 whitespace-nowrap">MSA Katalog UMKM</span> {{-- Ukuran teks diubah menjadi text-xl --}}
+                <img src="{{ asset('img/shaka_utama.png') }}" alt="Logo MSA Katalog UMKM" class="h-12 w-auto">
+                <span class="font-black text-xl ml-0.5 text-blue-700 whitespace-nowrap">MSA Katalog UMKM</span>
             </a>
         </div>
 
         <div class="hidden sm:flex items-center ml-auto space-x-6">
-            {{-- Gunakan $isHomeActive --}}
             <x-nav-link :href="route('home')" :active="$isHomeActive" class="flex items-center text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0h4"/></svg>
                 {{ __('Home') }}
             </x-nav-link>
-            {{-- Ubah href ke route('produk.index') dan perbarui :active --}}
             <x-nav-link href="{{ route('produk.index') }}" :active="$isProdukActive" class="flex items-center text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
                 {{ __('Produk') }}
+            </x-nav-link>
+            {{-- Add this new UMKM Catalog link --}}
+            <x-nav-link :href="route('umkm.index')" :active="$isUmkmActive" class="flex items-center text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h2a2 2 0 002-2V7a2 2 0 00-2-2h-3V3H8v2H5a2 2 0 00-2 2v11a2 2 0 002 2h2m-4-6h13.5M16 14V6m-1-1H9m10 4h.01M16 8h.01"></path></svg>
+                {{ __('UMKM') }}
             </x-nav-link>
             <x-nav-link :href="route('artikel.index')" :active="request()->routeIs('artikel.index') || request()->routeIs('artikel.detail')" class="flex items-center text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-3m-2 20l-4-2m-4-2h8m-4 2v2m-6 2H6m10 0h2m-6 0h2"></path></svg>
@@ -40,7 +46,6 @@
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.105A9.702 9.702 0 0112 4c4.97 0 9 3.582 9 8z"></path></svg>
                 {{ __('Contact Us') }}
             </x-nav-link>
-            {{-- Tautan dashboard admin/umkm jika user login (dalam dropdown) --}}
             @auth
                 @if(auth()->user()->role == 'admin' || auth()->user()->role == 'umkm')
                     <x-dropdown align="right" width="48">
@@ -96,9 +101,12 @@
             <x-responsive-nav-link :href="route('home')" :active="$isHomeActive" class="text-gray-700 hover:bg-gray-100">
                 {{ __('Home') }}
             </x-responsive-nav-link>
-            {{-- Perbarui href dan active untuk responsive nav --}}
             <x-responsive-nav-link href="{{ route('produk.index') }}" :active="$isProdukActive" class="text-gray-700 hover:bg-gray-100">
                 {{ __('Produk') }}
+            </x-responsive-nav-link>
+            {{-- Add this new UMKM Catalog responsive link --}}
+            <x-responsive-nav-link :href="route('umkm.index')" :active="$isUmkmActive" class="text-gray-700 hover:bg-gray-100">
+                {{ __('UMKM') }}
             </x-responsive-nav-link>
             <x-responsive-nav-link :href="route('artikel.index')" :active="request()->routeIs('artikel.index') || request()->routeIs('artikel.detail')" class="text-gray-700 hover:bg-gray-100">
                 {{ __('Artikel') }}

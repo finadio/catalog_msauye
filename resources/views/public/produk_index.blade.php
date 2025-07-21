@@ -57,9 +57,15 @@
                     <div class="col-span-full text-center text-gray-500 py-12 text-lg">Produk tidak ditemukan. Coba filter lain.</div>
                 @endforelse
             </div>
-            <div class="mt-12 flex justify-center">
+            <div class="mt-12 flex flex-col sm:flex-row justify-center sm:justify-between items-center text-center">
+                {{-- Text informasi paginasi --}}
+                <div class="pagination-info mb-4 sm:mb-0">
+                    Menampilkan {{ $products->firstItem() }} hingga {{ $products->lastItem() }} dari {{ $products->total() }} hasil.
+                </div>
                 {{-- Pagination Links (Styles from app.css will apply here) --}}
-                {{ $products->links() }}
+                <div class="pagination">
+                    {{ $products->links() }}
+                </div>
             </div>
         </div>
     </div>
