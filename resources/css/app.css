@@ -16,3 +16,27 @@ html, body, * {
   background: #fff;
 }
 
+/* Custom CSS untuk Animated Gradient Overlay pada Hero Section */
+.animated-gradient-overlay {
+  background: linear-gradient(
+    45deg, /* Arah gradien */
+    rgba(0, 0, 0, 0.7), /* Hitam agak gelap, transparan */
+    rgba(25, 25, 112, 0.6), /* Biru gelap transparan (warna custom) */
+    rgba(0, 0, 0, 0.7) /* Kembali ke hitam agak gelap */
+  );
+  background-size: 400% 400%; /* Buat ukuran gradien lebih besar dari container agar bisa digerakkan */
+  animation: gradientAnimation 15s ease infinite; /* Durasi 15 detik, percepatan halus, berulang tak terbatas */
+}
+
+/* Keyframes untuk animasi gradien */
+@keyframes gradientAnimation {
+  0% {
+    background-position: 0% 50%; /* Mulai dari sisi kiri tengah */
+  }
+  50% {
+    background-position: 100% 50%; /* Bergerak ke sisi kanan tengah */
+  }
+  100% {
+    background-position: 0% 50%; /* Kembali ke sisi kiri tengah */
+  }
+}
