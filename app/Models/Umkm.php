@@ -8,6 +8,6 @@ class Umkm extends Model
 {
     public function products()
     {
-        return $this->hasMany(Product::class);
+        return $this->hasMany(Product::class, 'umkm_id');
     }
 }

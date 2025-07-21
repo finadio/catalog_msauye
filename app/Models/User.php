@@ -53,7 +53,12 @@ class User extends Authenticatable
 
     public function produk()
     {
-        return $this->hasMany(\App\Models\Produk::class);
+        return $this->hasMany(\App\Models\Produk::class, 'user_id');
+    }
+
+    public function products()
+    {
+        return $this->hasMany(\App\Models\Product::class, 'umkm_id');
     }
 
 }

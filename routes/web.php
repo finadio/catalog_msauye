@@ -54,20 +54,20 @@ Route::middleware('auth')->group(function () {
 });
 
 //Route umkm
-Route::prefix('umkm')->group(function () {
-    Route::get('/dashboard', [UmkmController::class, 'dashboard'])->name('umkm.dashboard');
+Route::prefix('u')->middleware(['auth'])->group(function () {
+    Route::get('/dashboard', [UmkmController::class, 'dashboard'])->name('umkm_dashboard');
 
     // Profil UMKM
-    Route::get('/profil/edit', [UmkmProfileController::class, 'edit'])->name('umkm.profile.edit');
-    Route::put('/profil/update', [UmkmProfileController::class, 'update'])->name('umkm.profile.update');
+    Route::get('/profil/edit', [UmkmProfileController::class, 'edit'])->name('umkm_editprofile');
+    Route::post('/profil/update', [UmkmProfileController::class, 'update'])->name('umkm_updateprofile');
 
     // Produk UMKM
-    Route::get('/produk', [UmkmProductController::class, 'index'])->name('umkm.produk');
-    Route::get('/produk/create', [UmkmProductController::class, 'create'])->name('umkm.produk.create');
-    Route::post('/produk/store', [UmkmProductController::class, 'store'])->name('umkm.produk.store');
-    Route::get('/produk/{id}/edit', [UmkmProductController::class, 'edit'])->name('umkm.produk.edit');
-    Route::put('/produk/{id}', [UmkmProductController::class, 'update'])->name('umkm.produk.update');
-    Route::delete('/produk/{id}', [UmkmProductController::class, 'destroy'])->name('umkm.produk.destroy');
+    Route::get('/produk', [UmkmProductController::class, 'index'])->name('umkm_produk');
+    Route::get('/produk/create', [UmkmProductController::class, 'create'])->name('umkm_produk.create');
+    Route::post('/produk/store', [UmkmProductController::class, 'store'])->name('umkm_produk.store');
+    Route::get('/produk/{id}/edit', [UmkmProductController::class, 'edit'])->name('umkm_produk.edit');
+    Route::put('/produk/{id}', [UmkmProductController::class, 'update'])->name('umkm_produk.update');
+    Route::delete('/produk/{id}', [UmkmProductController::class, 'destroy'])->name('umkm_produk.destroy');
 }); 
 
 // Dashboard Admin (Memerlukan autentikasi SAJA, tanpa middleware 'role' sementara)
@@ -95,7 +95,7 @@ Route::get('/redirect-by-role', function () {
     if ($user->role === 'admin') {
         return redirect()->route('admin.dashboard');
     } elseif ($user->role === 'umkm') {
-        return redirect()->route('umkm.dashboard');
+        return redirect()->route('umkm_dashboard');
     } else {
         // Asumsi peran selain admin/umkm adalah pengunjung
         return redirect()->route('dashboard'); // Arahkan ke dashboard pengunjung
@@ -103,7 +103,10 @@ Route::get('/redirect-by-role', function () {
 })->middleware(['auth']);
 
 Route::get('/cek-auth', function () {
-    return auth()->check() ? 'Login sebagai user ID: ' . auth()->id() : 'Belum login';
+    return [
+        'is_logged_in' => Auth::check(),
+        'user_id' => Auth::id(),
+        'user' => Auth::user(),
+    ];
 });
-
 

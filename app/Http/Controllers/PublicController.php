@@ -186,7 +186,7 @@ class PublicController extends Controller
         $products = $query->latest()->paginate(12);
         $categories = Category::all();
 
-        return view('public.produk.index', compact('products', 'categories'));
+        return view('public.produk_index', compact('products', 'categories'));
     }
 
     /**

@@ -7,7 +7,7 @@
     $isHomeActive = request()->routeIs('home') && !($isProdukActive); // Pastikan Home tidak aktif saat di halaman produk
 
     // Cek apakah user adalah UMKM dan sedang di halaman dashboard UMKM
-    $isUmkmDashboard = request()->routeIs('umkm.*');
+    $isUmkm_Dashboard = request()->routeIs('umkm.*');
 @endphp
 
 <nav x-data="{ open: false }" class="bg-gray-50 text-gray-800 shadow-md fixed top-0 w-full z-50">
@@ -71,9 +71,9 @@
                                 <x-dropdown-link :href="route('admin.contact.index')" class="text-gray-700 hover:bg-gray-100">{{ __('Pesan Masuk') }}</x-dropdown-link>
                                 <x-dropdown-link :href="route('profile.edit')" class="text-gray-700 hover:bg-gray-100">{{ __('Edit Profile') }}</x-dropdown-link>
                             @elseif(auth()->user()->role == 'umkm')
-                                <x-dropdown-link :href="route('umkm.dashboard')" class="text-gray-700 hover:bg-gray-100">{{ __('Dashboard UMKM') }}</x-dropdown-link>
-                                <x-dropdown-link :href="route('umkm.produk')" class="text-gray-700 hover:bg-gray-100">{{ __('Kelola Produk') }}</x-dropdown-link>
-                                <x-dropdown-link :href="route('profile.edit')" class="text-gray-700 hover:bg-gray-100">{{ __('Edit Profile') }}</x-dropdown-link>
+                                <x-dropdown-link :href="route('umkm_dashboard')" class="text-gray-700 hover:bg-gray-100">{{ __('Dashboard UMKM') }}</x-dropdown-link>
+                                <x-dropdown-link :href="route('umkm_produk')" class="text-gray-700 hover:bg-gray-100">{{ __('Kelola Produk') }}</x-dropdown-link>
+                                <x-dropdown-link :href="route('umkm_editprofile')" class="text-gray-700 hover:bg-gray-100">{{ __('Edit Profile') }}</x-dropdown-link>
                             @endif
                             
                             <!-- Fixed Logout Form with Hidden Input for Redirect -->
@@ -137,8 +137,8 @@
                     <x-responsive-nav-link :href="route('admin.dashboard')" :active="request()->routeIs('admin.dashboard')" class="text-gray-700 hover:bg-gray-100">
                         {{ __('Dashboard Admin') }}
                     </x-responsive-nav-link>
-                @elseif(Auth::user()->role == 'umkm' && !$isUmkmDashboard)
-                    <x-responsive-nav-link :href="route('umkm.dashboard')" :active="request()->routeIs('umkm.dashboard')" class="text-gray-700 hover:bg-gray-100">
+                @elseif(Auth::user()->role == 'umkm' && !$isUmkm_Dashboard)
+                    <x-responsive-nav-link :href="route('umkm_dashboard')" :active="request()->routeIs('umkm_dashboard')" class="text-gray-700 hover:bg-gray-100">
                         {{ __('Dashboard UMKM') }}
                     </x-responsive-nav-link>
                 @endif
@@ -162,9 +162,9 @@
 
                 <div class="mt-3 space-y-1">
                     @if(Auth::user()->role == 'umkm')
-                        <x-responsive-nav-link :href="route('umkm.dashboard')" class="text-gray-700 hover:bg-gray-100">{{ __('Dashboard UMKM') }}</x-responsive-nav-link>
-                        <x-responsive-nav-link :href="route('umkm.produk')" class="text-gray-700 hover:bg-gray-100">{{ __('Kelola Produk') }}</x-responsive-nav-link>
-                        <x-responsive-nav-link :href="route('profile.edit')" class="text-gray-700 hover:bg-gray-100">{{ __('Edit Profile') }}</x-responsive-nav-link>
+                        <x-responsive-nav-link :href="route('umkm_dashboard')" class="text-gray-700 hover:bg-gray-100">{{ __('Dashboard UMKM') }}</x-responsive-nav-link>
+                        <x-responsive-nav-link :href="route('umkm_produk')" class="text-gray-700 hover:bg-gray-100">{{ __('Kelola Produk') }}</x-responsive-nav-link>
+                        <x-responsive-nav-link :href="route('umkm_editprofile')" class="text-gray-700 hover:bg-gray-100">{{ __('Edit Profile') }}</x-responsive-nav-link>
                     @elseif(Auth::user()->role == 'admin')
                         <x-responsive-nav-link :href="route('admin.umkm.index')" class="text-gray-700 hover:bg-gray-100">{{ __('Kelola UMKM') }}</x-responsive-nav-link>
                         <x-responsive-nav-link :href="route('admin.produk.index')" class="text-gray-700 hover:bg-gray-100">{{ __('Kelola Produk') }}</x-responsive-nav-link>
