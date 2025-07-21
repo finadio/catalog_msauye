@@ -18,7 +18,7 @@
                 @forelse($umkms as $umkm)
                     <div class="bg-white rounded-xl shadow-lg hover:shadow-2xl transition-shadow duration-300 overflow-hidden flex flex-col group transform hover:-translate-y-1">
                         <div class="relative overflow-hidden w-full aspect-video">
-                            <img src="{{ $umkm->photo ? asset('storage/'.$umkm->photo) : asset('img/umkm-default.jpg') }}"
+                            <img src="{{ $umkm->photo ? asset('storage/'.$umkm->photo) : asset('img/umkm-default.png') }}"
                                  alt="{{ $umkm->name }}"
                                  class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
                         </div>
