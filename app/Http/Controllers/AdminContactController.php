@@ -10,9 +10,27 @@ class AdminContactController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $contacts = Contact::latest()->paginate(15);
+        $query = \App\Models\Contact::query();
+
+        // Search
+        if ($request->filled('q')) {
+            $searchQuery = $request->q;
+            $query->where(function($q) use ($searchQuery) {
+                $q->where('name', 'like', '%'.$searchQuery.'%')
+                  ->orWhere('email', 'like', '%'.$searchQuery.'%')
+                  ->orWhere('subject', 'like', '%'.$searchQuery.'%')
+                  ->orWhere('message', 'like', '%'.$searchQuery.'%');
+            });
+        }
+
+        // Filter status terbaca
+        if ($request->filled('is_read')) {
+            $query->where('is_read', $request->is_read);
+        }
+
+        $contacts = $query->latest()->paginate(15)->appends($request->all());
         return view('admin.contact.index', compact('contacts'));
     }
 
@@ -65,5 +83,14 @@ class AdminContactController extends Controller
         $contact = Contact::findOrFail($id);
         $contact->delete();
         return redirect()->route('admin.contact.index')->with('success','Pesan berhasil dihapus!');
+    }
+
+    // Tambahkan method untuk menandai pesan sebagai terbaca
+    public function markAsRead($id)
+    {
+        $contact = \App\Models\Contact::findOrFail($id);
+        $contact->is_read = true;
+        $contact->save();
+        return redirect()->back()->with('success', 'Pesan ditandai sebagai sudah dibaca.');
     }
 }
