@@ -5,7 +5,8 @@
     <div class="py-12 bg-gray-50 min-h-screen">
         <div class="max-w-5xl mx-auto bg-white rounded-xl shadow-lg p-8 flex flex-col md:flex-row gap-8 md:gap-12">
             <div class="flex-shrink-0 w-full md:w-1/3 rounded-lg overflow-hidden shadow-md">
-                <img src="{{ $umkm->photo ? asset('storage/'.$umkm->photo) : asset('img/umkm-default.jpg') }}" alt="{{ $umkm->name }}" class="w-full h-56 md:h-72 object-cover">
+                {{-- PERBAIKAN: Ubah 'umkm-default.jpg' menjadi 'umkm-default.png' --}}
+                <img src="{{ $umkm->photo ? asset('storage/'.$umkm->photo) : asset('img/umkm-default.png') }}" alt="{{ $umkm->name }}" class="w-full h-56 md:h-72 object-cover">
             </div>
             <div class="flex-1 flex flex-col">
                 <h2 class="text-3xl font-bold mb-3 text-gray-900">{{ $umkm->name }}</h2>
@@ -30,7 +31,7 @@
                         @endif
                         @if($umkm->instagram)
                             <a href="https://instagram.com/{{ $umkm->instagram }}" target="_blank" class="flex items-center text-pink-600 hover:text-pink-700 font-medium">
-                                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M7.8 2c-2.6 0-4.8 2.2-4.8 4.8v10.4c0 2.6 2.2 4.8 4.8 4.8h10.4c2.6 0 4.8-2.2 4.8-4.8V7.8c0-2.6-2.2-4.8-4.8-4.8H7.8zm0 2.4h10.4c1.3 0 2.4 1.1 2.4 2.4v10.4c0 1.3-1.1 2.4-2.4 2.4H7.8c-1.3 0-2.4-1.1-2.4-2.4V7.8c0-1.3 1.1-2.4 2.4-2.4zM12 9.6c-2.4 0-4.4 2-4.4 4.4s2 4.4 4.4 4.4 4.4-2 4.4-4.4-2-4.4-4.4-4.4zm0 2.4c1.1 0 2 1 2 2s-.9 2-2 2-2-1-2-2 .9-2 2-2zm5.2-6.8c.7 0 1.2.5 1.2 1.2s-.5 1.2-1.2 1.2-1.2-.5-1.2-1.2.5-1.2 1.2-1.2z"/></svg>
+                                <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24"><path d="M7.8 2c-2.6 0-4.8 2-4.8 4.8v10.4c0 2.6 2.2 4.8 4.8 4.8h10.4c2.6 0 4.8-2.2 4.8-4.8V7.8c0-2.6-2.2-4.8-4.8-4.8H7.8zm0 2.4h10.4c1.3 0 2.4 1.1 2.4 2.4v10.4c0 1.3-1.1 2.4-2.4 2.4H7.8c-1.3 0-2.4-1.1-2.4-2.4V7.8c0-1.3 1.1-2.4 2.4-2.4zM12 9.6c-2.4 0-4.4 2-4.4 4.4s2 4.4 4.4 4.4 4.4-2 4.4-4.4-2-4.4-4.4-4.4zm0 2.4c1.1 0 2 1 2 2s-.9 2-2 2-2-1-2-2 .9-2 2-2zm5.2-6.8c.7 0 1.2.5 1.2 1.2s-.5 1.2-1.2 1.2-1.2-.5-1.2-1.2.5-1.2 1.2-1.2z"/></svg>
                                 Instagram: @{{ $umkm->instagram }}
                             </a>
                         @endif
