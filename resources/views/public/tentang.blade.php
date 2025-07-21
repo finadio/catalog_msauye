@@ -146,7 +146,7 @@
                     </div>
                     <div class="map-container w-full h-40 rounded-xl overflow-hidden shadow-lg">
                         <iframe
-                            src="http://googleusercontent.com/maps/embed?pb=!1m18!1m12!1m3!1d3953.250567083049!2d110.3752538147775!3d-7.75971939441113!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a59929d20c57f%3A0x86f345c26b52a514!2sPT.%20BPR%20MSA%20Yogyakarta!5e0!3m2!1sen!2sid!4v1678250000000!5m2!1sen!2sid"
+                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3953.103333946491!2d110.37076757439262!3d-7.778867192240737!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a5769f94c5885%3A0xeeffcc651da7e6d6!2sPT%20BPR%20Madani%20Sejahtera%20Abadi!5e0!3m2!1sen!2sid!4v1753067076562!5m2!1sen!2sid"
                             width="100%"
                             height="100%"
                             style="border:0;"
