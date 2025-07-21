@@ -5,6 +5,34 @@
     <div class="py-12 bg-gray-50 min-h-screen">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-10 md:mb-14 text-center leading-tight tracking-tight">Wawasan dan Inspirasi untuk UMKM</h2>
+
+            <form method="GET" action="{{ route('artikel.index') }}" class="mb-12 flex flex-col sm:flex-row flex-wrap justify-center items-center gap-4">
+                {{-- Search Bar --}}
+                {{-- Menggunakan flex-1 agar mengambil ruang yang sama dengan dropdown pada layar sm ke atas --}}
+                <input type="text" name="q" placeholder="Cari artikel (judul atau isi)..."
+                       class="w-full sm:flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-sm text-gray-800 placeholder-gray-500"
+                       value="{{ request('q') }}">
+
+                {{-- Category Filter (using 'type' for articles) --}}
+                {{-- Menggunakan flex-1 agar mengambil ruang yang sama dengan input pencarian pada layar sm ke atas --}}
+                <select name="tipe" class="w-full sm:flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-sm text-gray-800">
+                    <option value="">Semua Tipe Artikel</option>
+                    @foreach($articleTypes as $type)
+                        <option value="{{ $type }}" {{ request('tipe') == $type ? 'selected' : '' }}>
+                            {{ ucfirst($type) }}
+                        </option>
+                    @endforeach
+                </select>
+
+                {{-- Submit Button --}}
+                <button type="submit" class="w-full sm:w-auto px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold text-lg transition duration-300 ease-in-out shadow-md transform hover:-translate-y-0.5">Filter</button>
+
+                {{-- Reset Button --}}
+                @if(request('q') || request('tipe'))
+                    <a href="{{ route('artikel.index') }}" class="w-full sm:w-auto px-8 py-3 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 font-semibold text-lg transition duration-300 ease-in-out shadow-md transform hover:-translate-y-0.5 text-center">Reset Filter</a>
+                @endif
+            </form>
+
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10">
                 @forelse($articles ?? [] as $article)
                     <div class="bg-white rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 overflow-hidden flex flex-col group transform hover:-translate-y-1">
@@ -18,8 +46,8 @@
                             $localImagePath = $articleImageMap[$article->type] ?? $articleImageMap['default'];
                         @endphp
                         <div class="relative overflow-hidden w-full aspect-video md:aspect-w-16 md:aspect-h-9">
-                           <img src="{{ $article->photo ? asset('storage/'.$article->photo) : asset('img/' . $localImagePath) }}" 
-                                alt="{{ $article->title }}" 
+                           <img src="{{ $article->photo ? asset('storage/'.$article->photo) : asset('img/' . $localImagePath) }}"
+                                alt="{{ $article->title }}"
                                 class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110">
                            <span class="absolute top-3 left-3 bg-blue-600 text-white text-xs font-semibold px-3 py-1 rounded-full capitalize">
                                 {{ $article->type }}
@@ -29,7 +57,7 @@
                             <h3 class="font-bold text-xl lg:text-2xl text-gray-900 leading-tight mb-3">{{ Str::limit($article->title, 70) }}</h3>
                             <p class="text-gray-700 text-sm md:text-base mb-4 flex-1 leading-relaxed">{{ Str::limit(strip_tags($article->content), 120) }}</p>
                             <a href="{{ route('artikel.detail', $article->id) }}" class="inline-flex items-center text-blue-600 hover:text-blue-800 font-semibold text-base mt-auto justify-end transition-colors duration-200">
-                                Baca Selengkapnya 
+                                Baca Selengkapnya
                                 <svg class="ml-2 w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
                             </a>
                         </div>
