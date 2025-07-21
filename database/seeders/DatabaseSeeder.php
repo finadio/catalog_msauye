@@ -19,6 +19,8 @@ public function run(): void
         ProductStatusSeeder::class,
         AdminUserSeeder::class,
         UmkmSeeder::class, // Tambahkan ini
+        ArticleSeeder::class,
+        ProductSeeder::class,
     ]);
 }
     

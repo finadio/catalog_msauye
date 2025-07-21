@@ -13,7 +13,7 @@
                 Jelajahi koleksi produk dan layanan berkualitas tinggi dari para pelaku UMKM lokal terkemuka.
                 Dukung pertumbuhan ekonomi daerah dengan setiap klik dan eksplorasi Anda!
             </p>
-            <a href="#produk-terbaru" class="inline-block px-12 py-4 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 font-bold text-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105">
+            <a href="{{ route('produk.index') }}" class="inline-block px-12 py-4 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 font-bold text-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105">
                 Jelajahi Produk UMKM
             </a>
         </div>
@@ -53,7 +53,7 @@
             <div class="overflow-x-auto pb-6 custom-scrollbar-hide">
                 <div class="flex space-x-4 sm:space-x-6 md:space-x-8 px-4 sm:px-6 lg:px-8 -ml-4 sm:-ml-6 lg:-ml-8 min-w-max"> {{-- Penyesuaian margin/padding untuk konsistensi --}}
                     @forelse($categories as $cat)
-                        <a href="{{ route('home', ['kategori' => $cat->id]) }}" class="flex-none w-44 sm:w-52 md:w-60 flex flex-col bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 group overflow-hidden">
+                        <a href="{{ route('produk.index', ['kategori' => $cat->id]) }}" class="flex-none w-44 sm:w-52 md:w-60 flex flex-col bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 group overflow-hidden">
                             @php
                                 $categoryImageMap = [
                                     'Makanan' => 'makanan.jpg',
@@ -116,22 +116,16 @@
     </section>
 
     {{-- Product Cards Section --}}
+    {{-- Bagian ini akan dihapus dari home.blade.php karena sudah ada di produk_index.blade.php --}}
+    {{-- Saya akan mengosongkan bagian ini di sini untuk menghindarinya muncul ganda --}}
     <div class="py-12 md:py-16 bg-gray-50" id="produk-terbaru">
         <div class="max-w-7xl mx-auto px-4">
             <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-10 text-center">Temukan Produk UMKM Unggulan</h2>
-            <form method="GET" action="{{ route('home') }}" class="mb-12 flex flex-col sm:flex-row flex-wrap justify-center items-center gap-4">
-                <input type="text" name="q" placeholder="Cari produk..." class="w-full sm:w-auto flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-sm text-gray-800 placeholder-gray-500">
-                <select name="kategori" class="w-full sm:w-auto flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 shadow-sm text-gray-800">
-                    <option value="">Semua Kategori</option>
-                    @foreach($categories ?? [] as $cat)
-                        <option value="{{ $cat->id }}" @selected(request('kategori') == $cat->id)>{{ $cat->name }}</option>
-                    @endforeach
-                </select>
-                <button type="submit" class="w-full sm:w-auto px-8 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-semibold text-lg transition duration-300 ease-in-out shadow-md">Cari</button>
-            </form>
-
+            <p class="text-center text-gray-600 mb-8">Untuk melihat daftar lengkap produk, silakan kunjungi halaman <a href="{{ route('produk.index') }}" class="text-blue-600 hover:underline font-semibold">Produk Kami</a>.</p>
+            {{-- Konten produk yang sebelumnya ada di sini akan dipindahkan sepenuhnya ke produk_index.blade.php --}}
             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4 md:gap-6">
-                @forelse($products ?? [] as $product)
+                {{-- Artikel terbaru akan ditampilkan, bukan produk lengkap --}}
+                @forelse($products->take(6) as $product)
                     <div class="bg-white rounded-lg shadow-md hover:shadow-xl transition-shadow duration-300 overflow-hidden flex flex-col group">
                         <div class="relative overflow-hidden w-full aspect-square">
                             @php
@@ -145,7 +139,7 @@
                                 ];
                                 $localDummyImagePath = $productDummyImages[$loop->index % count($productDummyImages)];
                             @endphp
-                            <img src="{{ $product->photo ? asset('storage/'.$product->photo) : asset('img/' . $localDummyImagePath) }}" alt="{{ $product->name }}" class="absolute inset-0 w-full h-full object-cover transform transition-transform duration-300 group-hover:scale-105">
+                            <img src="{{ Str::startsWith($product->photo, 'produk-dummy') ? asset('img/' . $product->photo) : asset('storage/' . $product->photo) }}" alt="{{ $product->name }}" class="absolute inset-0 w-full h-full object-cover transform transition-transform duration-300 group-hover:scale-105">
                             @if($product->status->name != 'approved')
                                 <span class="absolute top-2 left-2 bg-red-500 text-white text-xs font-semibold px-2 py-1 rounded-md z-10">
                                     {{ ucfirst($product->status->name) }}
@@ -160,14 +154,15 @@
                         </div>
                     </div>
                 @empty
-                    <div class="col-span-full text-center text-gray-500 py-12 text-lg">Produk tidak ditemukan. Coba filter lain.</div>
+                    <div class="col-span-full text-center text-gray-500 py-12 text-lg">Belum ada produk unggulan untuk ditampilkan.</div>
                 @endforelse
             </div>
-            <div class="mt-12 flex justify-center">
-                {{ $products->links() }}
+            <div class="mt-8 text-center">
+                <a href="{{ route('produk.index') }}" class="inline-block px-6 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 font-semibold transition duration-300 shadow-md">Lihat Semua Produk</a>
             </div>
         </div>
     </div>
+
 
     {{-- Footer Section --}}
     <footer class="bg-gray-900 text-white py-10 md:py-12 mt-10"> {{-- **Padding dan margin atas dikurangi** --}}
@@ -237,7 +232,7 @@
                     </div>
                     <div class="map-container w-full h-40 rounded-xl overflow-hidden shadow-lg"> {{-- **Tinggi iframe peta dikurangi** --}}
                         <iframe
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3953.111860293233!2d110.37525381477797!3d-7.777080694086657!2m3!1f0!2m3!1f0!2m3!1f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a57700e3f28f5%3A0xc48c03e3a4e9b921!2sPT%20BPR%20MSA%20Yogyakarta!5e0!3m2!1sen!2sid!4v1678891234567!5m2!1sen!2sid"
+                            src="http://googleusercontent.com/maps/embed?pb=!1m18!1m12!1m3!1d3953.250567083049!2d110.3752538147775!3d-7.75971939441113!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a59929d20c57f%3A0x86f345c26b52a514!2sPT.%20BPR%20MSA%20Yogyakarta!5e0!3m2!1sen!2sid!4v1678250000000!5m2!1sen!2sid"
                             width="100%"
                             height="100%"
                             style="border:0;"
@@ -251,7 +246,7 @@
 
             </div>
 
-            <div class="border-t border-gray-700 py-5 mt-8 flex flex-col md:flex-row items-center justify-between gap-2"> {{-- **Padding vertikal dan margin atas pembatas dikurangi** --}}
+            <div class="border-t border-gray-700 py-5 mt-8 flex flex-col md:flex-row items-center justify-between gap-4 px-4"> {{-- **Padding vertikal dan margin atas pembatas dikurangi** --}}
                 <p class="copyright text-gray-400 text-xs text-center md:text-left mb-0"> {{-- **Ukuran font hak cipta dikurangi** --}}
                     © {{ date('Y') }} PT BPR MSA Yogyakarta. All rights reserved.
                 </p>
