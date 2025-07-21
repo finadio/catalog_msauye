@@ -83,6 +83,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('/admin/kategori', AdminCategoryController::class, [ 'as' => 'admin' ]);
     Route::resource('/admin/artikel', AdminArticleController::class, [ 'as' => 'admin' ]);
     Route::resource('/admin/contact', AdminContactController::class, [ 'as' => 'admin' ]);
+    Route::post('/admin/contact/{id}/mark-as-read', [AdminContactController::class, 'markAsRead'])->name('admin.contact.markAsRead');
 });
 
 // Ini adalah rute-rute autentikasi bawaan Laravel Breeze
