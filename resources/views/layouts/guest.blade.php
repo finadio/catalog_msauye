@@ -9,16 +9,16 @@
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
-        <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+        {{-- Mengubah font dari Figtree ke Poppins --}}
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
         {{-- Boxicons for icons --}}
         <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
     </head>
-    {{-- Mengubah latar belakang body agar lebih selaras dengan tema utama --}}
-    {{-- Menggunakan gradien yang lebih halus dan warna yang lebih cerah --}}
-    <body class="font-sans text-gray-900 antialiased bg-gradient-to-br from-blue-50 to-indigo-50">
+    {{-- Mengubah latar belakang body menjadi polos --}}
+    <body class="font-sans text-gray-900 antialiased bg-gray-100">
         {{-- Kontainer utama yang akan menampung konten login/register --}}
         {{-- Menambahkan min-h-screen untuk memastikan tinggi penuh viewport --}}
         <div class="min-h-screen flex flex-col sm:justify-center items-center py-6 sm:py-0">

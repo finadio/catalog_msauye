@@ -6,7 +6,7 @@
             <div class="mb-8 flex justify-center">
                 {{-- Menggunakan komponen logo aplikasi jika tersedia, atau gambar statis --}}
                 <a href="/">
-                    <img src="{{ asset('img/logo3.png') }}" alt="Logo BPR MSA" class="h-20 w-auto">
+                    <img src="{{ asset('img/logo3.png') }}" alt="Logo BPR MSA" class="h-24 w-auto"> {{-- Ukuran logo sedikit diperbesar --}}
                 </a>
             </div>
             <h2 class="text-3xl lg:text-4xl font-extrabold text-center mb-4 text-gray-800 leading-tight">Selamat Datang Kembali</h2>
@@ -80,10 +80,10 @@
         </div>
 
         <!-- Kanan: Ilustrasi/Gambar Latar Belakang -->
-        {{-- Mengganti gambar placeholder dengan shaka_utamaa.png --}}
-        <div class="hidden md:flex w-1/2 bg-gradient-to-br from-blue-600 to-purple-600 items-center justify-center p-8 relative">
+        {{-- Mengganti latar belakang gambar dengan warna polos --}}
+        <div class="hidden md:flex w-1/2 bg-blue-50 items-center justify-center p-8 relative">
             <img src="{{ asset('img/shaka_utama.png') }}" alt="Ilustrasi Dukungan UMKM BPR MSA" class="w-full max-w-md h-auto object-contain rounded-lg shadow-lg transform scale-95 transition-transform duration-300 hover:scale-100">
-            <div class="absolute bottom-10 text-white text-center px-4">
+            <div class="absolute bottom-10 text-blue-900 text-center px-4"> {{-- Mengubah warna teks agar terlihat di background terang --}}
                 <h3 class="text-2xl font-bold mb-2">Mendukung Pertumbuhan UMKM Indonesia</h3>
                 <p class="text-sm opacity-90">Solusi finansial terpercaya untuk usaha mikro, kecil, dan menengah.</p>
             </div>
