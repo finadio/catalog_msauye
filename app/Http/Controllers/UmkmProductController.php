@@ -12,13 +12,14 @@ class UmkmProductController extends Controller
     public function index()
     {
         $products = Auth::user()->products()->with('status')->get();
-        return view('umkmproduk', compact('products'));
+        $categories = Category::all();
+        return view('umkm_produk', compact('products', 'categories'));
     }
 
     public function create()
     {
         $categories = Category::all();
-        return view('umkmproduk', ['createMode' => true, 'categories' => $categories]);
+        return view('umkm_produk', ['createMode' => true, 'categories' => $categories]);
     }
 
     public function store(Request $request)
@@ -39,7 +40,7 @@ class UmkmProductController extends Controller
         $data['status_id'] = 1; // default pending
         Product::create($data);
 
-        return redirect()->route('umkm.produk')->with('success', 'Produk ditambahkan.');
+        return redirect()->route('umkm_produk')->with('success', 'Produk ditambahkan.');
     }
 
     public function edit($id)
@@ -47,7 +48,7 @@ class UmkmProductController extends Controller
         $product = Product::findOrFail($id);
         $this->authorize('update', $product);
         $categories = Category::all();
-        return view('umkmproduk', compact('product', 'categories'));
+        return view('umkm_produk', compact('product', 'categories'));
     }
 
     public function update(Request $request, $id)
@@ -68,7 +69,7 @@ class UmkmProductController extends Controller
         }
 
         $product->update($data);
-        return redirect()->route('umkm.produk')->with('success', 'Produk diperbarui.');
+        return redirect()->route('umkm_produk')->with('success', 'Produk diperbarui.');
     }
 
     public function destroy($id)

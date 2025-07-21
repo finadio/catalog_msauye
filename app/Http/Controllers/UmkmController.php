@@ -12,9 +12,10 @@ class UmkmController extends Controller
      */
     public function dashboard()
     {
+        \Log::info('Dashboard UMKM dipanggil oleh user ID: ' . auth()->id());
         // Pastikan relasi 'products' ada di model User
         $products = Auth::user()->products()->with('status')->latest()->get();
-        return view('umkmdashboard', compact('products'));
+        return view('umkm_dashboard', compact('products'));
     }
 
     /**

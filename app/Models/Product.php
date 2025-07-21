@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Models;
-
+use App\Models\Category;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -37,6 +37,15 @@ class Product extends Model
     public function status()
     {
         return $this->belongsTo(ProductStatus::class);
+    }
+    // App\Models\Product.php
+    public function umkm()
+    {
+        return $this->belongsTo(Umkm::class, 'umkm_id'); // pastikan kolom foreign key di tabel produk bernama umkm_id
+    }
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
     }
     
     public function getStatusBadgeAttribute()
