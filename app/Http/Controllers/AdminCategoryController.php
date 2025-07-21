@@ -10,9 +10,18 @@ class AdminCategoryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $categories = Category::latest()->paginate(10);
+        $query = Category::query();
+
+        // Pencarian berdasarkan nama kategori
+        if ($request->filled('q')) {
+            $searchQuery = $request->q;
+            $query->where('name', 'like', '%'.$searchQuery.'%');
+        }
+
+        $categories = $query->latest()->paginate(10);
+
         return view('admin.kategori.index', compact('categories'));
     }
 
@@ -29,46 +38,57 @@ class AdminCategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate(['name' => 'required|unique:categories,name']);
-        Category::create(['name' => $request->name]);
-        return redirect()->route('admin.kategori.index')->with('success','Kategori berhasil ditambahkan!');
+        $request->validate([
+            'name' => 'required|string|max:255|unique:categories',
+        ]);
+
+        Category::create($request->all());
+
+        return redirect()->route('admin.kategori.index')->with('success', 'Kategori berhasil ditambahkan!');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Category $kategori)
     {
-        //
+        // Not typically used for categories, but can be implemented if needed
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($id)
+    public function edit(Category $kategori)
     {
-        $category = Category::findOrFail($id);
-        return view('admin.kategori.edit', compact('category'));
+        return view('admin.kategori.edit', compact('kategori'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Category $kategori)
     {
-        $category = Category::findOrFail($id);
-        $request->validate(['name' => 'required|unique:categories,name,'.$id]);
-        $category->update(['name' => $request->name]);
-        return redirect()->route('admin.kategori.index')->with('success','Kategori berhasil diupdate!');
+        $request->validate([
+            'name' => 'required|string|max:255|unique:categories,name,'.$kategori->id,
+        ]);
+
+        $kategori->update($request->all());
+
+        return redirect()->route('admin.kategori.index')->with('success', 'Kategori berhasil diperbarui!');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(Category $kategori)
     {
-        $category = Category::findOrFail($id);
-        $category->delete();
-        return redirect()->route('admin.kategori.index')->with('success','Kategori berhasil dihapus!');
+        // Cek apakah ada produk yang terkait dengan kategori ini sebelum menghapus
+        if ($kategori->products()->count() > 0) {
+            return redirect()->route('admin.kategori.index')->with('error', 'Tidak dapat menghapus kategori karena masih ada produk yang terkait!');
+        }
+
+        $kategori->delete();
+
+        return redirect()->route('admin.kategori.index')->with('success', 'Kategori berhasil dihapus!');
     }
 }
