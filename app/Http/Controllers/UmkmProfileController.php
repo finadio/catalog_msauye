@@ -20,20 +20,33 @@ class UmkmProfileController extends Controller
 
 
     public function update(Request $request)
-    {
-        $user = auth()->user();
+{
+    $user = auth()->user(); // atau Auth::user();
+    $umkm = $user->umkm; // pastikan ada relasi User -> UMKM
 
     $validated = $request->validate([
-        'nama_usaha' => 'required|string|max:255',
-        'deskripsi' => 'nullable|string',
-        'lokasi' => 'nullable|string',
-        'kontak_wa' => 'nullable|string',
-        'kontak_ig' => 'nullable|string',
-        'kontak_tiktok' => 'nullable|string',
+        'name' => 'required|string|max:255',
+        'description' => 'nullable|string',
+        'address' => 'nullable|string',
+        'phone' => 'nullable|string|max:20',
+        'whatsapp' => 'nullable|string|max:20',
+        'instagram' => 'nullable|string|max:100',
+        'tiktok' => 'nullable|string|max:100',
+        'website' => 'nullable|url|max:255',
+        'photo' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
     ]);
 
-    $user->update($validated);
+    if ($request->hasFile('photo')) {
+        // Hapus foto lama jika ada
+        if ($umkm->photo) {
+            Storage::delete('public/' . $umkm->photo);
+        }
 
-    return redirect()->route('umkm_editprofile')->with('success', 'Profil berhasil diperbarui.');
+        $validated['photo'] = $request->file('photo')->store('umkm_photos', 'public');
+    }
+
+    $umkm->update($validated);
+
+    return redirect()->route('umkm_editprofile')->with('success', 'Profil berhasil diperbarui!');
     }
 }
