@@ -82,6 +82,7 @@ Route::middleware(['auth'])->group(function () {
     Route::post('/admin/produk/{id}/reject', [AdminProductController::class, 'reject'])->name('admin.produk.reject');
     Route::resource('/admin/kategori', AdminCategoryController::class, [ 'as' => 'admin' ]);
     Route::resource('/admin/artikel', AdminArticleController::class, [ 'as' => 'admin' ]);
+    Route::post('/admin/contact/{id}/mark-as-read', [AdminContactController::class, 'markAsRead'])->name('admin.contact.markAsRead');
     Route::resource('/admin/contact', AdminContactController::class, [ 'as' => 'admin' ]);
 });
 

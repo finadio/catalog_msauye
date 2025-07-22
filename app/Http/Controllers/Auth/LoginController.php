@@ -18,7 +18,7 @@ class LoginController extends Controller
         }
 
         if ($user->role === 'umkm') {
-            return redirect()->route('/umkm/dashboard'); 
+            return redirect()->route('/u/dashboard'); 
         } else {
         return redirect()->route('dashboard'); // fallback untuk role lain
         }
