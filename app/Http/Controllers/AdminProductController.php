@@ -80,7 +80,7 @@ class AdminProductController extends Controller
         $product = Product::with('umkm')->findOrFail($id);
         $categories = Category::all();
         $statuses = ProductStatus::all();
-        return view('admin.produk.edit', compact('product','categories','statuses'));
+        return view('admin_produk.edit', compact('product','categories','statuses'));
     }
 
     /**
