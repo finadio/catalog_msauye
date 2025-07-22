@@ -2,6 +2,23 @@
     <!-- Main Content with proper spacing from navbar -->
     <div class="pt-20 pb-8 min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
         <div class="max-w-7xl mx-auto px-6">
+            {{-- Success Message untuk produk baru --}}
+            @if(session('success'))
+                <div class="mb-8 bg-gradient-to-r from-green-500 to-emerald-600 rounded-2xl shadow-xl p-6 border-2 border-green-400/20 transform animate-pulse">
+                    <div class="flex items-center">
+                        <div class="bg-white/20 backdrop-blur-sm rounded-xl p-3 shadow-lg mr-4">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                            </svg>
+                        </div>
+                        <div>
+                            <h3 class="text-white font-bold text-lg">Berhasil!</h3>
+                            <p class="text-green-100 font-medium">{{ session('success') }}</p>
+                        </div>
+                    </div>
+                </div>
+            @endif
+
             {{-- Header Section --}}
             <div class="mb-8">
                 <div class="bg-white rounded-2xl shadow-lg p-8 border border-gray-100">
@@ -9,6 +26,21 @@
                         Dashboard UMKM
                     </h1>
                     <p class="text-gray-600 text-lg">Kelola produk Anda dengan mudah dan efisien</p>
+                    {{-- Tampilkan info produk terbaru jika ada --}}
+                    @if($products->isNotEmpty() && $products->first()->created_at->diffInMinutes(now()) < 10)
+                        <div class="mt-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-4 border-2 border-blue-200">
+                            <div class="flex items-center">
+                                <div class="bg-blue-500 rounded-lg p-2 mr-3">
+                                    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                    </svg>
+                                </div>
+                                <p class="text-blue-800 font-semibold">
+                                    Produk baru "{{ $products->first()->nama }}" telah ditambahkan dan sedang menunggu review.
+                                </p>
+                            </div>
+                        </div>
+                    @endif
                 </div>
             </div>
 
@@ -19,6 +51,13 @@
                         <div>
                             <p class="text-blue-100 text-sm font-semibold tracking-wide">TOTAL PRODUK</p>
                             <p class="text-3xl font-bold mt-2">{{ $products->count() }}</p>
+                            {{-- Indikator produk baru --}}
+                            @if($products->where('created_at', '>=', now()->subDay())->count() > 0)
+                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-bold bg-white/20 text-blue-100 mt-2">
+                                    <span class="w-2 h-2 bg-green-400 rounded-full mr-1 animate-pulse"></span>
+                                    +{{ $products->where('created_at', '>=', now()->subDay())->count() }} baru
+                                </span>
+                            @endif
                         </div>
                         <div class="bg-white/20 backdrop-blur-sm rounded-xl p-4 shadow-lg">
                             <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
@@ -47,6 +86,13 @@
                         <div>
                             <p class="text-yellow-100 text-sm font-semibold tracking-wide">MENUNGGU REVIEW</p>
                             <p class="text-3xl font-bold mt-2">{{ $products->where('status.name', 'pending')->count() }}</p>
+                            {{-- Highlight jika ada produk pending baru --}}
+                            @if($products->where('status.name', 'pending')->where('created_at', '>=', now()->subHour())->count() > 0)
+                                <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-bold bg-white/20 text-yellow-100 mt-2">
+                                    <span class="w-2 h-2 bg-red-400 rounded-full mr-1 animate-pulse"></span>
+                                    Baru ditambahkan
+                                </span>
+                            @endif
                         </div>
                         <div class="bg-white/20 backdrop-blur-sm rounded-xl p-4 shadow-lg">
                             <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
@@ -79,6 +125,11 @@
                         <div>
                             <h2 class="text-2xl font-bold text-gray-900 mb-1">Daftar Produk</h2>
                             <p class="text-gray-600 font-medium">Kelola dan pantau status produk Anda</p>
+                            @if($products->isNotEmpty())
+                                <p class="text-sm text-blue-600 font-semibold mt-2">
+                                    Terakhir diperbarui: {{ $products->max('updated_at')->diffForHumans() }}
+                                </p>
+                            @endif
                         </div>
                         <a href="{{ route('umkm_produk.create') }}"
                            class="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-blue-600 via-blue-700 to-purple-700 hover:from-blue-700 hover:via-blue-800 hover:to-purple-800 text-white font-bold rounded-xl shadow-lg transition-all duration-300 transform hover:scale-105 hover:shadow-xl border-2 border-blue-500/20">
@@ -128,11 +179,18 @@
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y-2 divide-gray-200">
-                            @forelse ($products as $p)
-                                <tr class="hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-300 border-b-2 border-gray-100">
+                            @forelse ($products->sortByDesc('created_at') as $p)
+                                <tr class="hover:bg-gradient-to-r hover:from-blue-50 hover:to-indigo-50 transition-all duration-300 border-b-2 border-gray-100 
+                                    {{ $p->created_at->diffInMinutes(now()) < 10 ? 'bg-gradient-to-r from-green-50 to-emerald-50 border-green-200' : '' }}">
                                     <td class="px-8 py-6 border-r-2 border-gray-200">
                                         <div class="flex items-center">
-                                            <div class="flex-shrink-0 h-16 w-16 bg-gradient-to-br from-blue-500 via-purple-600 to-indigo-700 rounded-2xl flex items-center justify-center shadow-lg border-2 border-white">
+                                            <div class="flex-shrink-0 h-16 w-16 bg-gradient-to-br from-blue-500 via-purple-600 to-indigo-700 rounded-2xl flex items-center justify-center shadow-lg border-2 border-white relative">
+                                                {{-- Badge untuk produk baru --}}
+                                                @if($p->created_at->diffInMinutes(now()) < 30)
+                                                    <div class="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full animate-bounce">
+                                                        BARU
+                                                    </div>
+                                                @endif
                                                 <span class="text-white font-black text-2xl">
                                                     {{ strtoupper(substr($p->nama, 0, 1)) }}
                                                 </span>
@@ -140,9 +198,19 @@
                                             <div class="ml-6">
                                                 <div class="text-lg font-bold text-gray-900 mb-1">
                                                     {{ $p->nama }}
+                                                    {{-- Tag untuk produk baru --}}
+                                                    @if($p->created_at->diffInMinutes(now()) < 10)
+                                                        <span class="ml-2 inline-flex items-center px-2 py-1 rounded-full text-xs font-bold bg-green-500 text-white">
+                                                            <span class="w-2 h-2 bg-white rounded-full mr-1 animate-pulse"></span>
+                                                            Baru Ditambahkan
+                                                        </span>
+                                                    @endif
                                                 </div>
                                                 <div class="text-sm font-semibold text-gray-500 bg-gray-100 px-3 py-1 rounded-full inline-block">
                                                     ID: #{{ str_pad($p->id, 4, '0', STR_PAD_LEFT) }}
+                                                </div>
+                                                <div class="text-xs text-gray-500 mt-1">
+                                                    Dibuat: {{ $p->created_at->diffForHumans() }}
                                                 </div>
                                             </div>
                                         </div>
@@ -204,7 +272,8 @@
                                             <h3 class="text-2xl font-black text-gray-800 mb-3">Belum Ada Produk</h3>
                                             <p class="text-gray-600 mb-8 max-w-sm text-lg font-medium">
                                                 Anda belum menambahkan produk apapun. Mulai dengan menambahkan produk pertama Anda.
-                                            </p>                             </div>
+                                            </p>
+                                        </div>
                                     </td>
                                 </tr>
                             @endforelse
@@ -214,4 +283,19 @@
             </div>
         </div>
     </div>
+
+    {{-- Auto-refresh untuk produk baru (opsional) --}}
+    <script>
+        // Auto-hide success message after 5 seconds
+        @if(session('success'))
+            setTimeout(function() {
+                const successMessage = document.querySelector('.animate-pulse');
+                if (successMessage) {
+                    successMessage.style.transition = 'opacity 0.5s ease-out';
+                    successMessage.style.opacity = '0';
+                    setTimeout(() => successMessage.remove(), 500);
+                }
+            }, 5000);
+        @endif
+    </script>
 </x-app-layout>
