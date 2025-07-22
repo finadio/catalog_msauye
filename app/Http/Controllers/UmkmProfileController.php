@@ -4,17 +4,20 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Umkm;
+use App\Models\Product;
 class UmkmProfileController extends Controller
 {
     public function edit()
     {
-        $umkm = \App\Models\Umkm::where('user_id', auth()->id())->firstOrFail();
+        $umkm = Umkm::where('user_id', auth()->id())->first();
 
         // Ambil semua produk milik UMKM ini
-        $products = $umkm->products ?? collect(); // jika relasi belum ada, fallback ke collection kosong
+        $products = Product::where('umkm_id', $umkm->id)->with('status')->get();
 
         return view('umkm_editprofile', compact('umkm', 'products'));
+
     }
+
 
     public function update(Request $request)
     {

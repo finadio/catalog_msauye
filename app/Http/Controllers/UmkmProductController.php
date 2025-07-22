@@ -28,15 +28,24 @@ class UmkmProductController extends Controller
             'nama' => 'required',
             'deskripsi' => 'required',
             'harga' => 'nullable|numeric',
-            'kategori_id' => 'required|exists:categories,id',
+            'category_id' => 'required|exists:categories,id',
             'foto' => 'nullable|image|max:2048',
         ]);
+
+        $data = [
+        'name' => $request->nama,
+        'description' => $request->deskripsi,
+        'price' => $request->harga,
+        'category_id' => $request->category_id,
+        'umkm_id' => Auth::id(),
+        'status_id' => 1, // default pending
+    ];
 
         if ($request->hasFile('foto')) {
             $data['foto'] = $request->file('foto')->store('produk');
         }
 
-        $data['user_id'] = Auth::id();
+        $data['umkm_id'] = Auth::id();
         $data['status_id'] = 1; // default pending
         Product::create($data);
 
@@ -60,7 +69,7 @@ class UmkmProductController extends Controller
             'nama' => 'required',
             'deskripsi' => 'required',
             'harga' => 'nullable|numeric',
-            'kategori_id' => 'required|exists:categories,id',
+            'category_id' => 'required|exists:categories,id',
             'foto' => 'nullable|image|max:2048',
         ]);
 

@@ -3,8 +3,12 @@
     // Ini aktif jika kita berada di rute 'produk.index' atau 'produk.detail'
     $isProdukActive = request()->routeIs('produk.index') || request()->routeIs('produk.detail');
 
-    // Menu 'Home' aktif jika kita di rute home DAN BUKAN di konteks produk (yaitu halaman produk.index/produk.detail)
-    $isHomeActive = request()->routeIs('home') && !($isProdukActive); // Pastikan Home tidak aktif saat di halaman produk
+    // Logika untuk menentukan apakah menu 'UMKM' harus aktif
+    // Aktif jika kita berada di rute UMKM publik (misalnya daftar UMKM atau detail UMKM)
+    $isUmkmActive = request()->routeIs('public.umkm_index') || request()->routeIs('public.umkm_detail') || request()->is('umkm/*');
+
+    // Menu 'Home' aktif jika kita di rute home DAN BUKAN di konteks produk atau UMKM
+    $isHomeActive = request()->routeIs('home') && !($isProdukActive || $isUmkmActive);
 
     // Cek apakah user adalah UMKM dan sedang di halaman dashboard UMKM
     $isUmkm_Dashboard = request()->routeIs('umkm.*');
@@ -25,6 +29,13 @@
             <x-nav-link :href="route('home')" :active="$isHomeActive" class="flex items-center text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
                 <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-4 0h4"/></svg>
                 {{ __('Home') }}
+            </x-nav-link>
+            {{-- Menu UMKM - Tambahan Baru --}}
+            <x-nav-link :href="route('public.umkm_index')" :active="$isUmkmActive" class="flex items-center text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
+                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                </svg>
+                {{ __('UMKM') }}
             </x-nav-link>
             {{-- Ubah href ke route('produk.index') dan perbarui :active --}}
             <x-nav-link href="{{ route('produk.index') }}" :active="$isProdukActive" class="flex items-center text-gray-700 hover:text-blue-600 font-medium transition-colors duration-200">
@@ -119,6 +130,10 @@
             <x-responsive-nav-link :href="route('home')" :active="$isHomeActive" class="text-gray-700 hover:bg-gray-100">
                 {{ __('Home') }}
             </x-responsive-nav-link>
+            {{-- Menu UMKM Mobile --}}
+            <x-responsive-nav-link :href="route('public.umkm_index')" :active="$isUmkmActive" class="text-gray-700 hover:bg-gray-100">
+                {{ __('UMKM') }}
+            </x-responsive-nav-link>
             {{-- Perbarui href dan active untuk responsive nav --}}
             <x-responsive-nav-link href="{{ route('produk.index') }}" :active="$isProdukActive" class="text-gray-700 hover:bg-gray-100">
                 {{ __('Produk') }}
@@ -171,7 +186,7 @@
                         <x-responsive-nav-link :href="route('admin.kategori.index')" class="text-gray-700 hover:bg-gray-100">{{ __('Kelola Kategori') }}</x-responsive-nav-link>
                         <x-responsive-nav-link :href="route('admin.artikel.index')" class="text-gray-700 hover:bg-gray-100">{{ __('Kelola Artikel') }}</x-responsive-nav-link>
                         <x-responsive-nav-link :href="route('admin.contact.index')" class="text-gray-700 hover:bg-gray-100">{{ __('Pesan Masuk') }}</x-responsive-nav-link>
-                        <x-responsive-nav-link :href="route('profile.edit')" class="text-gray-700 hover:bg-gray-100">{{ __('Edit Profile') }}</x-responsive-nav-link>
+                        <x-responsive-nav-link :href="route('umkm_editprofile')" class="text-gray-700 hover:bg-gray-100">{{ __('Edit Profile') }}</x-responsive-nav-link>
                     @endif
                     
                     <!-- Fixed Mobile Logout Form -->
