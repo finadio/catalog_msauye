@@ -24,7 +24,7 @@ class UmkmController extends Controller
     public function editProfile()
     {
         $user = Auth::user();
-        return view('umkmeditprofile', compact('user'));
+        return view('umkm_editprofile', compact('user'));
     }
 
     /**

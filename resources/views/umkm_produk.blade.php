@@ -1,199 +1,46 @@
 <x-app-layout>
-    <x-slot name="header">
-        <div class="bg-gradient-to-r from-blue-600 to-indigo-700 -m-6 px-6 py-8">
-            <h2 class="text-2xl font-bold text-white">
-                <svg class="inline-block w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                </svg>
-                Tambah Produk / Jasa
-            </h2>
-            <p class="text-blue-100 mt-1">Daftarkan produk atau jasa UMKM Anda</p>
-        </div>
-    </x-slot>
-
-    <div class="pt-8 pb-12">
-        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden">
-                <!-- Header Form -->
-                <div class="px-8 py-6 bg-gray-50 border-b border-gray-200">
-                    <h3 class="text-lg font-semibold text-gray-800">Informasi Produk</h3>
-                    <p class="text-sm text-gray-600 mt-1">Lengkapi data produk atau jasa yang ingin didaftarkan</p>
-                </div>
-
-                <!-- Form Content -->
-                <form action="{{ route('umkm_produk.store') }}" method="POST" enctype="multipart/form-data" class="p-8 space-y-6">
-                    @csrf
-
-                    <!-- Upload Foto Section -->
-                    <div class="space-y-2">
-                        <label class="flex items-center text-sm font-semibold text-gray-700">
-                            <svg class="w-4 h-4 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
-                            </svg>
-                            Foto Produk *
-                        </label>
-                        <div class="mt-2 flex justify-center px-6 pt-5 pb-6 border-2 border-dashed border-gray-300 rounded-xl hover:border-blue-400 transition-colors">
-                            <div class="space-y-2 text-center">
-                                <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48">
-                                    <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                </svg>
-                                <div class="text-sm text-gray-600">
-                                    <label class="relative cursor-pointer bg-white rounded-md font-medium text-blue-600 hover:text-blue-500">
-                                        <span>Upload foto produk</span>
-                                        <input type="file" name="photo" accept="image/*" class="sr-only" required>
-                                    </label>
-                                    <p class="pl-1">atau drag and drop</p>
-                                </div>
-                                <p class="text-xs text-gray-500">PNG, JPG, JPEG hingga 2MB</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Form Grid -->
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                        <!-- Nama Produk -->
-                        <div class="lg:col-span-2">
-                            <label class="flex items-center text-sm font-semibold text-gray-700 mb-2">
-                                <svg class="w-4 h-4 mr-2 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A1.994 1.994 0 013 12V7a4 4 0 014-4z"></path>
-                                </svg>
-                                Nama Produk *
-                            </label>
-                            <input type="text" name="name" 
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all" 
-                                   placeholder="Masukkan nama produk atau jasa"
-                                   required>
-                        </div>
-
-                        <!-- Kategori -->
-                        <div>
-                            <label class="flex items-center text-sm font-semibold text-gray-700 mb-2">
-                                <svg class="w-4 h-4 mr-2 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
-                                </svg>
-                                Kategori Produk *
-                            </label>
-                            <select name="category_id" 
-                                    class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all" 
-                                    required>
-                                <option value="">-- Pilih Kategori --</option>
-                                @foreach($categories as $category)
-                                    <option value="{{ $category->id }}">{{ $category->name }}</option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <!-- Harga -->
-                        <div>
-                            <label class="flex items-center text-sm font-semibold text-gray-700 mb-2">
-                                <svg class="w-4 h-4 mr-2 text-yellow-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
-                                </svg>
-                                Harga (Opsional)
-                            </label>
-                            <div class="relative">
-                                <span class="absolute left-3 top-3 text-gray-500">Rp</span>
-                                <input type="text" name="price" 
-                                       class="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all" 
-                                       placeholder="50000 atau kosongkan">
-                            </div>
-                        </div>
-
-                        <!-- Lokasi -->
-                        <div class="lg:col-span-2">
-                            <label class="flex items-center text-sm font-semibold text-gray-700 mb-2">
-                                <svg class="w-4 h-4 mr-2 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
-                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
-                                </svg>
-                                Lokasi *
-                            </label>
-                            <input type="text" name="location" 
-                                   class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all" 
-                                   placeholder="Contoh: Jl. Malioboro No. 123, Yogyakarta"
-                                   required>
-                        </div>
-                    </div>
-
-                    <!-- Deskripsi -->
-                    <div>
-                        <label class="flex items-center text-sm font-semibold text-gray-700 mb-2">
-                            <svg class="w-4 h-4 mr-2 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
-                            </svg>
-                            Deskripsi Produk *
-                        </label>
-                        <textarea name="description" rows="4" 
-                                  class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all resize-none" 
-                                  placeholder="Jelaskan detail produk atau jasa Anda, keunggulan, dan informasi penting lainnya..."
-                                  required></textarea>
-                    </div>
-
-                    <!-- Contact Section -->
-                    <div class="border-t border-gray-200 pt-6">
-                        <h4 class="text-md font-semibold text-gray-800 mb-4 flex items-center">
-                            <svg class="w-5 h-5 mr-2 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
-                            </svg>
-                            Informasi Kontak
-                        </h4>
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <!-- WhatsApp -->
-                            <div>
-                                <label class="flex items-center text-sm font-medium text-gray-700 mb-2">
-                                    <svg class="w-4 h-4 mr-2 text-green-500" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.890-5.335 11.893-11.893A11.821 11.821 0 0020.465 3.63z"/>
-                                    </svg>
-                                    WhatsApp
-                                </label>
-                                <input type="text" name="wa_contact" 
-                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all" 
-                                       placeholder="08123456789">
-                            </div>
-
-                            <!-- Instagram -->
-                            <div>
-                                <label class="flex items-center text-sm font-medium text-gray-700 mb-2">
-                                    <svg class="w-4 h-4 mr-2 text-pink-500" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 6.621 5.367 11.988 11.988 11.988c6.62 0 11.987-5.367 11.987-11.988C24.014 5.367 18.648.001 12.017.001zM8.449 16.988c-1.297 0-2.448-.73-3.016-1.789L4.659 9.73c-.297-1.297.135-2.448.892-3.016L9.07 5.94c1.297-.297 2.448.135 3.016.892l4.479 1.573c1.297.297 2.448-.135 3.016-.892l.773 4.479c.297 1.297-.135 2.448-.892 3.016l-4.479 1.574c-1.297.297-2.448-.136-3.016-.893l-4.518-1.573z"/>
-                                    </svg>
-                                    Instagram
-                                </label>
-                                <div class="relative">
-                                    <span class="absolute left-3 top-3 text-gray-500">@</span>
-                                    <input type="text" name="ig_contact" 
-                                           class="w-full pl-8 pr-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition-all" 
-                                           placeholder="username">
-                                </div>
-                            </div>
-
-                            <!-- TikTok Shop -->
-                            <div>
-                                <label class="flex items-center text-sm font-medium text-gray-700 mb-2">
-                                    <svg class="w-4 h-4 mr-2 text-black" fill="currentColor" viewBox="0 0 24 24">
-                                        <path d="M19.589 6.686a4.793 4.793 0 01-3.77-4.245V2h-3.445v13.672a2.896 2.896 0 01-5.201 1.743l-.002-.001.002.001a2.895 2.895 0 013.183-4.51v-3.5a6.329 6.329 0 00-5.394 10.692 6.33 6.33 0 10.613-3.329V2.809H8.19v3.776c.002.043.002.085.002.126a6.83 6.83 0 016.626 6.85V2.809h2.77V6.79c.001.014.001.027.001.041a4.831 4.831 0 003.394 3.945v-3.09z"/>
-                                    </svg>
-                                    TikTok Shop
-                                </label>
-                                <input type="text" name="tiktok_contact" 
-                                       class="w-full px-4 py-3 border border-gray-300 rounded-lg shadow-sm focus:ring-2 focus:ring-gray-500 focus:border-gray-500 transition-all" 
-                                       placeholder="Link TikTok Shop">
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Submit Button -->
-                    <div class="flex justify-end pt-6 border-t border-gray-200">
-                        <button type="submit" 
-                                class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-lg shadow-lg hover:from-blue-700 hover:to-indigo-700 focus:ring-4 focus:ring-blue-300 transform transition-all hover:scale-105">
-                            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-                            </svg>
-                            Simpan Produk
-                        </button>
-                    </div>
-                </form>
+    <div class="py-12 bg-gradient-to-br from-gray-50 to-blue-50 min-h-screen">
+        <div class="max-w-7xl mx-auto px-6">
+            <div class="mb-8 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <h2 class="text-3xl font-bold text-gray-800">Daftar Produk UMKM</h2>
+                <a href="{{ route('admin.produk.create', $umkm->id) }}" class="inline-block px-5 py-2.5 bg-blue-600 text-white text-sm font-semibold rounded-xl shadow hover:bg-blue-700 transition duration-300">
+                    + Tambah Produk Baru
+                </a>
             </div>
+
+            @if(session('success'))
+                <div class="mb-6 p-4 bg-green-100 text-green-700 rounded-lg shadow-sm border border-green-200">
+                    {{ session('success') }}
+                </div>
+            @endif
+
+            @if($produk->isEmpty())
+                <div class="text-gray-500 text-center py-12 text-lg">Belum ada produk untuk UMKM ini.</div>
+            @else
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                    @foreach($produk as $item)
+                        <div class="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-shadow duration-300 overflow-hidden border border-gray-100">
+                            <div class="p-6">
+                                <h3 class="text-xl font-semibold text-gray-800 mb-2">{{ $item->nama }}</h3>
+                                <p class="text-gray-600 text-sm mb-1">Harga: <span class="font-medium text-blue-700">Rp {{ number_format($item->harga, 0, ',', '.') }}</span></p>
+                                <p class="text-gray-600 text-sm mb-4">Deskripsi: {{ Str::limit($item->deskripsi, 100) }}</p>
+                                <div class="flex justify-start gap-3">
+                                    <a href="{{ route('admin.produk.edit', [$umkm->id, $item->id]) }}" class="px-4 py-1.5 text-sm bg-yellow-500 text-white rounded-lg hover:bg-yellow-600 transition">
+                                        ✏️ Edit
+                                    </a>
+                                    <form action="{{ route('admin.produk.destroy', [$umkm->id, $item->id]) }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus produk ini?')">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="px-4 py-1.5 text-sm bg-red-600 text-white rounded-lg hover:bg-red-700 transition">
+                                            🗑️ Hapus
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
         </div>
     </div>
 </x-app-layout>
