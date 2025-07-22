@@ -7,7 +7,7 @@
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-10 md:mb-14 text-center leading-tight tracking-tight">Jelajahi UMKM Binaan Kami</h2>
 
-            <form method="GET" action="{{ route('umkm.index') }}" class="mb-12 flex flex-col sm:flex-row flex-wrap justify-center items-center gap-4">
+            <form method="GET" action="{{ route('public.umkm_index') }}" class="mb-12 flex flex-col sm:flex-row flex-wrap justify-center items-center gap-4">
                 {{-- Search Bar --}}
                 {{-- Menggunakan flex-1 agar mengambil ruang yang sama dengan dropdown pada layar sm ke atas --}}
                 <input type="text" name="q" placeholder="Cari UMKM (nama, deskripsi, alamat, kontak)..."
@@ -30,7 +30,7 @@
 
                 {{-- Reset Button --}}
                 @if(request('q') || request('kategori'))
-                    <a href="{{ route('umkm.index') }}" class="w-full sm:w-auto px-8 py-3 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 font-semibold text-lg transition duration-300 ease-in-out shadow-md transform hover:-translate-y-0.5 text-center">Reset Filter</a>
+                    <a href="{{ route('public.umkm_index') }}" class="w-full sm:w-auto px-8 py-3 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 font-semibold text-lg transition duration-300 ease-in-out shadow-md transform hover:-translate-y-0.5 text-center">Reset Filter</a>
                 @endif
             </form>
 
@@ -49,7 +49,7 @@
                                 <p><span class="font-semibold">Alamat:</span> {{ Str::limit($umkm->address, 50) }}</p>
                                 <p><span class="font-semibold">Telepon:</span> {{ $umkm->phone }}</p>
                             </div>
-                            <a href="{{ route('umkm.detail', $umkm->id) }}" class="inline-flex items-center text-blue-600 hover:text-blue-800 font-semibold text-base mt-auto justify-end transition-colors duration-200">
+                            <a href="{{ route('public.umkm_detail', $umkm->id) }}" class="inline-flex items-center text-blue-600 hover:text-blue-800 font-semibold text-base mt-auto justify-end transition-colors duration-200">
                                 Lihat Detail UMKM
                                 <svg class="ml-2 w-4 h-4 transform group-hover:translate-x-1 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
                             </a>

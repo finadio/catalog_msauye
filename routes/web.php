@@ -32,8 +32,8 @@ use App\Http\Controllers\AdminContactController;
 Route::get('/', [PublicController::class, 'home'])->name('home');
 Route::get('/produk', [PublicController::class, 'produkIndex'])->name('produk.index'); // Tambahkan baris ini
 Route::get('/produk/{id}', [PublicController::class, 'produkDetail'])->name('produk.detail');
-Route::get('/umkm', [PublicController::class, 'umkmIndex'])->name('umkm.index'); // Add this line
-Route::get('/umkm/{id}', [PublicController::class, 'umkmDetail'])->name('umkm.detail');
+Route::get('/umkm', [PublicController::class, 'umkmIndex'])->name('public.umkm_index');
+Route::get('/umkm/{id}', [PublicController::class, 'umkmDetail'])->name('public.umkm_detail');
 Route::get('/artikel', [PublicController::class, 'artikel'])->name('artikel.index');
 Route::get('/artikel/{id}', [PublicController::class, 'artikelDetail'])->name('artikel.detail');
 Route::get('/tentang', [PublicController::class, 'tentang'])->name('tentang');
@@ -58,8 +58,8 @@ Route::prefix('u')->middleware(['auth'])->group(function () {
     Route::get('/dashboard', [UmkmController::class, 'dashboard'])->name('umkm_dashboard');
 
     // Profil UMKM
-    Route::get('/profil/edit', [UmkmProfileController::class, 'edit'])->name('umkm_editprofile');
-    Route::post('/profil/update', [UmkmProfileController::class, 'update'])->name('umkm_updateprofile');
+    Route::get('/editprofile', [UmkmProfileController::class, 'edit'])->name('umkm_editprofile');
+    Route::put('/profil/update', [UmkmProfileController::class, 'update'])->name('umkm_updateprofile');
 
     // Produk UMKM
     Route::get('/produk', [UmkmProductController::class, 'index'])->name('umkm_produk');

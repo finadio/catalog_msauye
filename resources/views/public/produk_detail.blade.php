@@ -35,7 +35,7 @@
 
                 <div>
                     <div class="mb-4 text-gray-800 text-lg lg:text-xl font-bold">
-                        UMKM: <a href="{{ route('umkm.detail', $product->umkm->id) }}" class="text-blue-600 hover:underline transition-colors duration-200">{{ $product->umkm->name ?? '-' }}</a>
+                        UMKM: <a href="{{ route('public.umkm_detail', $product->umkm->id) }}" class="text-blue-600 hover:underline transition-colors duration-200">{{ $product->umkm->name ?? '-' }}</a>
                     </div>
                     <div class="mb-6">
                         <p class="text-gray-700 font-semibold text-base mb-3">Kontak Penjual:</p>
