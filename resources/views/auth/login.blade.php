@@ -46,10 +46,13 @@
                 <div class="mt-4">
                     <x-input-label for="password" :value="__('Kata Sandi')" class="mb-2 text-gray-700 font-medium" />
                     <div class="relative">
-                        <x-text-input id="password" class="block w-full pl-12 pr-4 py-3 border-gray-300 rounded-xl focus:border-blue-500 focus:ring-blue-500 transition duration-200" type="password" name="password" required autocomplete="current-password" placeholder="Minimal 8 karakter" />
+                        <x-text-input id="password" class="block w-full pl-12 pr-12 py-3 border-gray-300 rounded-xl focus:border-blue-500 focus:ring-blue-500 transition duration-200" type="password" name="password" required autocomplete="current-password" placeholder="Minimal 8 karakter" />
                         <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
                             <i class='bx bx-lock-alt text-xl'></i>
                         </span>
+                        <button type="button" onclick="togglePassword('password', this)" class="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-400 focus:outline-none">
+                            <i class='bx bx-show text-xl'></i>
+                        </button>
                     </div>
                 </div>
 
@@ -87,3 +90,16 @@
         </div>
     </div>
 </x-guest-layout>
+
+<script>
+function togglePassword(id, btn) {
+    const input = document.getElementById(id);
+    if (input.type === 'password') {
+        input.type = 'text';
+        btn.innerHTML = "<i class='bx bx-hide text-xl'></i>";
+    } else {
+        input.type = 'password';
+        btn.innerHTML = "<i class='bx bx-show text-xl'></i>";
+    }
+}
+</script>

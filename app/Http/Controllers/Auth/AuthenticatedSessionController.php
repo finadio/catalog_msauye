@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
-use App\Providers\RouteServiceProvider;
 use App\Http\Requests\Auth\LoginRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -13,7 +12,7 @@ use Illuminate\View\View;
 class AuthenticatedSessionController extends Controller
 {
     /**
-     * Display the login view.
+     * Tampilkan tampilan login.
      */
     public function create(): View
     {
@@ -21,37 +20,32 @@ class AuthenticatedSessionController extends Controller
     }
 
     /**
-     * Handle an incoming authentication request.
+     * Tangani permintaan autentikasi yang masuk.
+     *
+     * @throws \Illuminate\Validation\ValidationException
      */
-    public function store(Request $request): RedirectResponse
-{
-    $request->validate([
-        'email' => 'required|email',
-        'password' => 'required',
-    ]);
+    public function store(LoginRequest $request): RedirectResponse
+    {
+        $request->authenticate();
 
-    if (Auth::attempt($request->only('email', 'password'), $request->boolean('remember'))) {
         $request->session()->regenerate();
 
         $user = Auth::user();
 
+        // Mengarahkan pengguna berdasarkan peran mereka
         if ($user->role === 'admin') {
-            return redirect()->route('admin_dashboard');
+            // Perbaikan: Menggunakan 'admin.dashboard' sesuai dengan definisi rute di web.php
+            return redirect()->intended(route('admin.dashboard', absolute: false));
         } elseif ($user->role === 'umkm') {
-            return redirect()->route('umkm_dashboard');
+            return redirect()->intended(route('umkm_dashboard', absolute: false));
+        } else {
+            // Jika ada peran lain atau tidak terdefinisi, arahkan ke dashboard umum
+            return redirect()->intended(route('dashboard', absolute: false));
         }
-
-        return redirect()->intended('dashboard');
     }
 
-    return back()->withErrors([
-        'email' => 'Email atau password salah.',
-    ]);
-}
-
-
     /**
-     * Destroy an authenticated session.
+     * Hancurkan sesi autentikasi pengguna.
      */
     public function destroy(Request $request): RedirectResponse
     {
@@ -60,9 +54,8 @@ class AuthenticatedSessionController extends Controller
         $request->session()->invalidate();
 
         $request->session()->regenerateToken();
-        $redirectTo = $request->input('redirect', route('home'));
 
-        return redirect()->intended(RouteServiceProvider::HOME); // yang akan diarahkan ke '/dashboard'
-
+        return redirect('/');
     }
 }
+
