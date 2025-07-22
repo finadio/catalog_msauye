@@ -11,9 +11,10 @@ class UmkmProductController extends Controller
 {
     public function index()
     {
+        $umkm = Auth::user();
         $products = Auth::user()->products()->with('status')->get();
         $categories = Category::all();
-        return view('umkm_produk', compact('products', 'categories'));
+        return view('umkm_produk', compact('products', 'categories', 'umkm'));
     }
 
     public function create()

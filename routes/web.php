@@ -63,7 +63,7 @@ Route::prefix('u')->middleware(['auth'])->group(function () {
 
     // Produk UMKM
     Route::get('/produk', [UmkmProductController::class, 'index'])->name('umkm_produk');
-    Route::get('/produk/create', [UmkmProductController::class, 'create'])->name('umkm_produk.create');
+    Route::get('/produk/create', [UmkmProductController::class, 'create'])->name('umkm_produkcreate');
     Route::post('/produk/store', [UmkmProductController::class, 'store'])->name('umkm_produk.store');
     Route::get('/produk/{id}/edit', [UmkmProductController::class, 'edit'])->name('umkm_produk.edit');
     Route::put('/produk/{id}', [UmkmProductController::class, 'update'])->name('umkm_produk.update');
