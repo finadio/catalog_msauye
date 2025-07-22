@@ -98,18 +98,6 @@
                         </x-slot>
                     </x-dropdown>
                 @endif
-            @else
-                <!-- Guest Navigation (Login/Register Buttons) -->
-                <div class="flex items-center space-x-4">
-                    <x-nav-link :href="route('login')" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors duration-200">
-                        {{ __('Login') }}
-                    </x-nav-link>
-                    @if (Route::has('register'))
-                        <x-nav-link :href="route('register')" class="border border-blue-600 text-blue-600 px-4 py-2 rounded-lg hover:bg-blue-50 transition-colors duration-200">
-                            {{ __('Register') }}
-                        </x-nav-link>
-                    @endif
-                </div>
             @endauth
         </div>
 
@@ -197,13 +185,6 @@
                             {{ __('Logout') }}
                         </x-responsive-nav-link>
                     </form>
-                </div>
-            @else
-                <div class="px-4 space-y-2">
-                    <x-responsive-nav-link :href="route('login')" class="text-gray-700 hover:bg-gray-100">{{ __('Login') }}</x-responsive-nav-link>
-                    @if (Route::has('register'))
-                        <x-responsive-nav-link :href="route('register')" class="text-gray-700 hover:bg-gray-100">{{ __('Register') }}</x-responsive-nav-link>
-                    @endif
                 </div>
             @endauth
         </div>
