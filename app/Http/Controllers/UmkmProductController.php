@@ -12,7 +12,8 @@ class UmkmProductController extends Controller
     public function index()
     {
         $umkm = Auth::user();
-        $products = Auth::user()->products()->with('status')->get();
+        $products = Auth::user()->products()->get();
+        $products = Auth::user()->products()->with('status')->paginate(10);
         $categories = Category::all();
         return view('umkm_produk', compact('products', 'categories', 'umkm'));
     }
@@ -20,8 +21,9 @@ class UmkmProductController extends Controller
     public function create()
     {
         $categories = Category::all();
-        return view('umkm_produk', ['createMode' => true, 'categories' => $categories]);
+        return view('umkm_produkcreate', compact('categories'));
     }
+
 
     public function store(Request $request)
     {
@@ -55,10 +57,9 @@ class UmkmProductController extends Controller
 
     public function edit($id)
     {
-        $product = Product::findOrFail($id);
-        $this->authorize('update', $product);
+        $product = Product::with('umkm')->findOrFail($id);
         $categories = Category::all();
-        return view('umkm_produk', compact('product', 'categories'));
+        return view('umkm_produkedit', compact('product', 'categories'));
     }
 
     public function update(Request $request, $id)
@@ -80,6 +81,23 @@ class UmkmProductController extends Controller
 
         $product->update($data);
         return redirect()->route('umkm_produk')->with('success', 'Produk diperbarui.');
+    }
+
+    public function search(Request $request)
+    {
+        $query = $request->input('search');
+
+        $products = Product::with('status')
+            ->where('umkm_id', auth()->user()->id)
+            ->when(request('search'), function ($query) {
+                $query->where('name', 'like', '%' . request('search') . '%');
+            })
+            ->orderBy('updated_at', 'desc')
+            ->paginate(5);
+
+            return response()->json([
+            'html' => view('partials.umkm_produk_table', compact('products'))->render()
+        ]);
     }
 
     public function destroy($id)

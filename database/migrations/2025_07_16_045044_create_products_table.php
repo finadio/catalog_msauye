@@ -24,6 +24,8 @@ return new class extends Migration
             $table->string('instagram')->nullable();
             $table->string('tiktok_shop')->nullable();
             $table->json('images')->nullable();
+            $table->string('website')->nullable();
+            $table->string('telepon')->nullable();
             $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
             $table->timestamps();
         });

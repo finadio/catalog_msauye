@@ -123,7 +123,7 @@
                 <div class="bg-gradient-to-r from-slate-50 to-blue-50 px-8 py-6 border-b-2 border-gray-200">
                     <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                         <div>
-                            <h2 class="text-2xl font-bold text-gray-900 mb-1">Daftar Produk</h2>
+                            <h2 class="text-2xl font-bold text-gray-900 mb-1">Daftar Produk Terbaru</h2>
                             <p class="text-gray-600 font-medium">Kelola dan pantau status produk Anda</p>
                             @if($products->isNotEmpty())
                                 <p class="text-sm text-blue-600 font-semibold mt-2">
@@ -131,13 +131,6 @@
                                 </p>
                             @endif
                         </div>
-                        <a href="{{ route('umkm_produk.create') }}"
-                           class="inline-flex items-center justify-center px-8 py-4 bg-gradient-to-r from-blue-600 via-blue-700 to-purple-700 hover:from-blue-700 hover:via-blue-800 hover:to-purple-800 text-white font-bold rounded-xl shadow-lg transition-all duration-300 transform hover:scale-105 hover:shadow-xl border-2 border-blue-500/20">
-                            <svg class="w-6 h-6 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
-                            </svg>
-                            Tambah Produk Baru
-                        </a>
                     </div>
                 </div>
 
@@ -166,16 +159,6 @@
                                         <span class="text-lg">Status</span>
                                     </div>
                                 </th>
-                                <th class="px-8 py-6 text-center text-sm font-black text-gray-800 uppercase tracking-wider">
-                                    <div class="flex items-center justify-center space-x-3">
-                                        <div class="p-2 bg-purple-500 rounded-lg">
-                                            <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-                                                <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path>
-                                            </svg>
-                                        </div>
-                                        <span class="text-lg">Aksi</span>
-                                    </div>
-                                </th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y-2 divide-gray-200">
@@ -184,17 +167,16 @@
                                     {{ $p->created_at->diffInMinutes(now()) < 10 ? 'bg-gradient-to-r from-green-50 to-emerald-50 border-green-200' : '' }}">
                                     <td class="px-8 py-6 border-r-2 border-gray-200">
                                         <div class="flex items-center">
-                                            <div class="flex-shrink-0 h-16 w-16 bg-gradient-to-br from-blue-500 via-purple-600 to-indigo-700 rounded-2xl flex items-center justify-center shadow-lg border-2 border-white relative">
-                                                {{-- Badge untuk produk baru --}}
-                                                @if($p->created_at->diffInMinutes(now()) < 30)
-                                                    <div class="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full animate-bounce">
-                                                        BARU
-                                                    </div>
-                                                @endif
-                                                <span class="text-white font-black text-2xl">
-                                                    {{ strtoupper(substr($p->nama, 0, 1)) }}
-                                                </span>
-                                            </div>
+                                            <div class="flex-shrink-0 h-16 w-16 rounded-2xl overflow-hidden shadow-lg border-2 border-white relative">
+    {{-- Badge untuk produk baru --}}
+    @if($p->created_at->diffInMinutes(now()) < 30)
+        <div class="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full animate-bounce">
+            BARU
+        </div>
+    @endif
+    <img src="{{ asset('img/' . $p->photo) }}" alt="{{ $p->nama }}" class="object-cover w-full h-full">
+</div>
+
                                             <div class="ml-6">
                                                 <div class="text-lg font-bold text-gray-900 mb-1">
                                                     {{ $p->nama }}
@@ -235,27 +217,6 @@
                                                 </svg>
                                             @endif
                                             {{ strtoupper($p->status->name ?? 'TIDAK DIKETAHUI') }}
-                                        </span>
-                                    </td>
-                                    <td class="px-8 py-6 text-center">
-                                        <div class="flex items-center justify-center space-x-4">
-                                            <a href="{{ route('umkm_produk.edit', $p->id) }}"
-                                               class="inline-flex items-center px-5 py-3 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white text-sm font-bold rounded-xl transition-all duration-300 transform hover:scale-110 shadow-lg border-2 border-blue-400/30">
-                                                <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-                                                    <path stroke-linecap="round" stroke-linejoin="round" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                                                </svg>
-                                                EDIT
-                                            </a>
-                                            <form action="{{ route('umkm_produk.destroy', $p->id) }}" method="POST" class="inline-block"
-                                                  onsubmit="return confirm('Yakin ingin menghapus produk ini?')">
-                                                @csrf @method('DELETE')
-                                                <button type="submit" 
-                                                        class="inline-flex items-center px-5 py-3 bg-gradient-to-r from-red-500 to-rose-600 hover:from-red-600 hover:to-rose-700 text-white text-sm font-bold rounded-xl transition-all duration-300 transform hover:scale-110 shadow-lg border-2 border-red-400/30">
-                                                    <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
-                                                        <path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                                                    </svg>
-                                                    HAPUS
-                                                </button>
                                             </form>
                                         </div>
                                     </td>
