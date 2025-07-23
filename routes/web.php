@@ -64,10 +64,10 @@ Route::prefix('u')->middleware(['auth'])->group(function () {
     // Produk UMKM
     Route::get('/produk', [UmkmProductController::class, 'index'])->name('umkm_produk');
     Route::get('/produk/create', [UmkmProductController::class, 'create'])->name('umkm_produkcreate');
-    Route::post('/produk/store', [UmkmProductController::class, 'store'])->name('umkm_produk.store');
-    Route::get('/produk/{id}/edit', [UmkmProductController::class, 'edit'])->name('umkm_produk.edit');
-    Route::put('/produk/{id}', [UmkmProductController::class, 'update'])->name('umkm_produk.update');
-    Route::delete('/produk/{id}', [UmkmProductController::class, 'destroy'])->name('umkm_produk.destroy');
+    Route::post('/produk/store', [UmkmProductController::class, 'store'])->name('umkm_produkstore');
+    Route::get('/produk/{id}/edit', [UmkmProductController::class, 'edit'])->name('umkm_produkedit');
+    Route::put('/produk/{id}', [UmkmProductController::class, 'update'])->name('umkm_produkupdate');
+    Route::delete('/produk/{id}', [UmkmProductController::class, 'destroy'])->name('umkm_produkdestroy');
 }); 
 
 // Dashboard Admin (Memerlukan autentikasi SAJA, tanpa middleware 'role' sementara)
@@ -84,6 +84,7 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('/admin/artikel', AdminArticleController::class, [ 'as' => 'admin' ]);
     Route::post('/admin/contact/{id}/mark-as-read', [AdminContactController::class, 'markAsRead'])->name('admin.contact.markAsRead');
     Route::resource('/admin/contact', AdminContactController::class, [ 'as' => 'admin' ]);
+    Route::get('/produk/{id}/edit', [AdminProductController::class, 'edit'])->name('admin_produk.edit');
 });
 
 // Ini adalah rute-rute autentikasi bawaan Laravel Breeze

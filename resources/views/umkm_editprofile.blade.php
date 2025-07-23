@@ -205,7 +205,10 @@
                         @if($umkm->photo)
                             <div class="mt-4">
                                 <p class="text-sm text-gray-600 mb-2">Foto saat ini:</p>
-                                <img src="{{ asset('storage/' . $umkm->photo) }}" alt="Current photo" class="w-32 h-32 object-cover rounded-lg border-2 border-gray-200">
+                                <img sr<img src="{{ asset('img/' . $product->image) }}"
+     alt="{{ $product->name }}"
+     class="h-48 w-full object-cover">
+
                             </div>
                         @endif
                     </div>
