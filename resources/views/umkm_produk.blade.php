@@ -2,9 +2,8 @@
     <div class="pt-20 pb-12 min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             
-            {{-- Header dan Search --}}
+            {{-- Header dan Search/Sort --}}
             <div class="bg-white/80 backdrop-blur-sm px-8 py-8 rounded-3xl border border-white/20 shadow-xl mb-8 relative overflow-hidden">
-                <!-- Decorative Background Elements -->
                 <div class="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-blue-400/10 to-purple-400/10 rounded-full -mr-16 -mt-16"></div>
                 <div class="absolute bottom-0 left-0 w-24 h-24 bg-gradient-to-tr from-emerald-400/10 to-blue-400/10 rounded-full -ml-12 -mb-12"></div>
                 
@@ -30,19 +29,47 @@
                     </div>
 
                     <div class="flex flex-col sm:flex-row gap-4 w-full md:w-auto">
-                        {{-- Search Form --}}
-                        <form method="GET" action="{{ route('umkm_produk') }}" class="flex w-full sm:w-auto">
+                        {{-- Search and Sort Form --}}
+                        {{-- Menggabungkan Search dan Sort dalam satu form untuk pengiriman parameter yang mudah --}}
+                        <form method="GET" action="{{ route('umkm_produk') }}" class="flex flex-col sm:flex-row gap-4 w-full">
                             <div class="relative flex-1 sm:w-72">
                                 <input type="text" name="search" value="{{ request('search') }}"
-                                    class="w-full pl-12 pr-4 py-3 rounded-l-2xl border-2 border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white/70 backdrop-blur-sm transition-all duration-200"
+                                    class="w-full pl-12 pr-4 py-3 rounded-2xl border-2 border-gray-200 focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white/70 backdrop-blur-sm transition-all duration-200"
                                     placeholder="Cari nama produk...">
                                 <svg class="absolute left-4 top-1/2 transform -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                                 </svg>
                             </div>
+
+                            {{-- Dropdown Urut Berdasarkan --}}
+                            <div class="relative w-full sm:w-auto">
+                                <select id="sort_by" name="sort_by" 
+                                        onchange="this.form.submit()"
+                                        {{-- Tambahkan 'pr-10' untuk padding kanan --}}
+                                        class="block w-full px-4 py-3 border border-gray-300 rounded-2xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-700 bg-white/70 backdrop-blur-sm transition-all duration-200 pr-10">
+                                    <option value="updated_at" {{ request('sort_by', 'updated_at') == 'updated_at' ? 'selected' : '' }}>Urut: Terbaru</option>
+                                    <option value="name" {{ request('sort_by') == 'name' ? 'selected' : '' }}>Urut: Nama Produk</option>
+                                    <option value="price" {{ request('sort_by') == 'price' ? 'selected' : '' }}>Urut: Harga</option>
+                                </select>
+                                {{-- Pastikan tidak ada div ikon kustom di sini --}}
+                            </div>
+
+                            {{-- Dropdown Urutan Menaik/Menurun --}}
+                            <div class="relative w-full sm:w-auto">
+                                <select id="sort_order" name="sort_order" 
+                                        onchange="this.form.submit()"
+                                        {{-- Tambahkan 'pr-10' untuk padding kanan --}}
+                                        class="block w-full px-4 py-3 border border-gray-300 rounded-2xl shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-gray-700 bg-white/70 backdrop-blur-sm transition-all duration-200 pr-10">
+                                    <option value="desc" {{ request('sort_order', 'desc') == 'desc' ? 'selected' : '' }}>Urutan: Menurun</option>
+                                    <option value="asc" {{ request('sort_order') == 'asc' ? 'selected' : '' }}>Urutan: Menaik</option>
+                                </select>
+                                {{-- Pastikan tidak ada div ikon kustom di sini --}}
+                            </div>
+                            
+                            {{-- Button Terapkan - kini satu tombol submit untuk seluruh form --}}
                             <button type="submit"
-                                class="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-6 py-3 rounded-r-2xl shadow-lg hover:shadow-xl transition-all duration-200 font-semibold">
-                                Cari
+                                class="bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-6 py-3 rounded-2xl shadow-lg hover:shadow-xl transition-all duration-200 font-semibold">
+                                Terapkan
                             </button>
                         </form>
 
@@ -84,7 +111,7 @@
                                 <tr class="hover:bg-gradient-to-r hover:from-blue-50/50 hover:to-indigo-50/50 transition-all duration-200 group">
                                     <td class="px-8 py-6">
                                         <div class="relative">
-                                            <img src="{{ asset('img/' . $product->photo) }}"
+                                            <img src="{{ Str::startsWith($product->photo, 'produk-dummy') ? asset('img/' . $product->photo) : asset('storage/' . $product->photo) }}"
                                                 alt="{{ $product->name }}"
                                                 class="h-20 w-28 object-cover rounded-xl border-2 border-gray-200 shadow-md group-hover:shadow-lg transition-all duration-200">
                                             <div class="absolute inset-0 rounded-xl bg-gradient-to-t from-black/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200"></div>
@@ -107,19 +134,19 @@
                                     </td>
                                     <td class="px-8 py-6">
                                         <span class="inline-flex items-center gap-2 text-sm font-bold px-4 py-2 rounded-full border-2 transition-all duration-200
-                                            @if ($product->status->name === 'aktif') 
+                                            @if ($product->status->name === 'approved') 
                                                 bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100
                                             @elseif ($product->status->name === 'pending') 
                                                 bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100
-                                            @elseif ($product->status->name === 'ditolak') 
+                                            @elseif ($product->status->name === 'rejected') 
                                                 bg-red-50 text-red-700 border-red-200 hover:bg-red-100
                                             @else 
                                                 bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100
                                             @endif">
                                             <div class="w-2 h-2 rounded-full
-                                                @if ($product->status->name === 'aktif') bg-emerald-500
+                                                @if ($product->status->name === 'approved') bg-emerald-500
                                                 @elseif ($product->status->name === 'pending') bg-amber-500
-                                                @elseif ($product->status->name === 'ditolak') bg-red-500
+                                                @elseif ($product->status->name === 'rejected') bg-red-500
                                                 @else bg-gray-500
                                                 @endif"></div>
                                             {{ ucfirst($product->status->name) }}
@@ -137,7 +164,7 @@
                                             
                                             {{-- Enhanced Delete Button --}}
                                             <button type="button"
-                                                onclick="showDeleteModal('{{ $product->id }}', '{{ $product->name }}', '{{ asset('img/' . $product->photo) }}')"
+                                                onclick="showDeleteModal('{{ $product->id }}', '{{ $product->name }}', '{{ Str::startsWith($product->photo, 'produk-dummy') ? asset('img/' . $product->photo) : asset('storage/' . $product->photo) }}')"
                                                 class="inline-flex items-center gap-2 bg-gradient-to-r from-red-500 to-pink-600 hover:from-red-600 hover:to-pink-700 text-white text-sm font-semibold px-5 py-2.5 rounded-xl shadow-md hover:shadow-lg transition-all duration-200 group">
                                                 <svg class="w-4 h-4 group-hover:scale-110 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
