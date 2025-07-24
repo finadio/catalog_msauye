@@ -10,6 +10,7 @@ use App\Models\Category;
 use App\Models\ProductStatus;
 use App\Models\Umkm;
 use App\Models\User; // Tambahkan ini untuk model User
+use Carbon\Carbon; // Pastikan ini ada jika menggunakan Carbon
 
 class ProductSeeder extends Seeder
 {
@@ -29,10 +30,17 @@ class ProductSeeder extends Seeder
         $statusRejected = ProductStatus::where('name', 'rejected')->first();
 
         // Pastikan semua UMKM yang dibutuhkan sudah ada atau dibuat terlebih dahulu
+        // Menggunakan findOrCreate untuk menghindari duplikasi user/umkm jika seeder dijalankan berkali-kali
+        $umkmTestUser = User::firstOrCreate(['email' => 'umkm@example.com'], [
+            'name' => 'Seller UMKM Test',
+            'password' => bcrypt('password'),
+            'role' => 'umkm',
+            'email_verified_at' => now()
+        ]);
         $umkmTest = Umkm::firstOrCreate(
             ['name' => 'Toko UMKM Test'],
             [
-                'user_id' => User::firstOrCreate(['email' => 'umkm@example.com'], ['name' => 'Seller UMKM Test', 'password' => bcrypt('password'), 'role' => 'umkm', 'email_verified_at' => now()])->id,
+                'user_id' => $umkmTestUser->id,
                 'description' => 'Menyediakan produk kerajinan tangan lokal.',
                 'address' => 'Jl. Contoh UMKM No. 1, Yogyakarta',
                 'phone' => '08123456789',
@@ -43,10 +51,16 @@ class ProductSeeder extends Seeder
             ]
         );
 
+        $umkmKerajinanJayaUser = User::firstOrCreate(['email' => 'umkm2@example.com'], [
+            'name' => 'Seller Kerajinan Jaya',
+            'password' => bcrypt('password'),
+            'role' => 'umkm',
+            'email_verified_at' => now()
+        ]);
         $umkmKerajinanJaya = Umkm::firstOrCreate(
             ['name' => 'Kerajinan Jaya'],
             [
-                'user_id' => User::firstOrCreate(['email' => 'umkm2@example.com'], ['name' => 'Seller Kerajinan Jaya', 'password' => bcrypt('password'), 'role' => 'umkm', 'email_verified_at' => now()])->id,
+                'user_id' => $umkmKerajinanJayaUser->id,
                 'description' => 'Menyediakan aneka kerajinan tangan khas lokal.',
                 'address' => 'Jl. Seni No. 10, Yogyakarta',
                 'phone' => '087811223344',
@@ -57,10 +71,16 @@ class ProductSeeder extends Seeder
             ]
         );
 
+        $umkmKulinerNusantaraUser = User::firstOrCreate(['email' => 'umkm3@example.com'], [
+            'name' => 'Seller Kuliner Nusantara',
+            'password' => bcrypt('password'),
+            'role' => 'umkm',
+            'email_verified_at' => now()
+        ]);
         $umkmKulinerNusantara = Umkm::firstOrCreate(
             ['name' => 'Kuliner Nusantara'],
             [
-                'user_id' => User::firstOrCreate(['email' => 'umkm3@example.com'], ['name' => 'Seller Kuliner Nusantara', 'password' => bcrypt('password'), 'role' => 'umkm', 'email_verified_at' => now()])->id,
+                'user_id' => $umkmKulinerNusantaraUser->id,
                 'description' => 'Menyediakan masakan tradisional Indonesia.',
                 'address' => 'Jl. Rasa No. 5, Jakarta',
                 'phone' => '081122334455',
@@ -71,10 +91,16 @@ class ProductSeeder extends Seeder
             ]
         );
 
+        $umkmBatikIndahUser = User::firstOrCreate(['email' => 'umkm4@example.com'], [
+            'name' => 'Seller Batik Indah',
+            'password' => bcrypt('password'),
+            'role' => 'umkm',
+            'email_verified_at' => now()
+        ]);
         $umkmBatikIndah = Umkm::firstOrCreate(
             ['name' => 'Batik Indah Ceria'],
             [
-                'user_id' => User::firstOrCreate(['email' => 'umkm4@example.com'], ['name' => 'Seller Batik Indah', 'password' => bcrypt('password'), 'role' => 'umkm', 'email_verified_at' => now()])->id,
+                'user_id' => $umkmBatikIndahUser->id,
                 'description' => 'Pakaian batik modern dan tradisional berkualitas tinggi.',
                 'address' => 'Jl. Mode No. 8, Solo',
                 'phone' => '089988776655',
@@ -85,10 +111,16 @@ class ProductSeeder extends Seeder
             ]
         );
 
+        $umkmDigitalSolusiUser = User::firstOrCreate(['email' => 'umkm5@example.com'], [
+            'name' => 'Seller Digital Solusi',
+            'password' => bcrypt('password'),
+            'role' => 'umkm',
+            'email_verified_at' => now()
+        ]);
         $umkmDigitalSolusi = Umkm::firstOrCreate(
             ['name' => 'Digital Solusi Kreasi'],
             [
-                'user_id' => User::firstOrCreate(['email' => 'umkm5@example.com'], ['name' => 'Seller Digital Solusi', 'password' => bcrypt('password'), 'role' => 'umkm', 'email_verified_at' => now()])->id,
+                'user_id' => $umkmDigitalSolusiUser->id,
                 'description' => 'Jasa pembuatan website dan desain grafis untuk UMKM.',
                 'address' => 'Jl. Kreatif No. 12, Bandung',
                 'phone' => '081211223344',
@@ -99,7 +131,6 @@ class ProductSeeder extends Seeder
             ]
         );
 
-
         DB::table('products')->insert([
             [
                 'umkm_id' => $umkmTest->id,
@@ -107,10 +138,10 @@ class ProductSeeder extends Seeder
                 'name' => 'Keripik Tempe Aneka Rasa',
                 'description' => 'Keripik tempe renyah dengan bumbu spesial. Tersedia rasa original, pedas, dan balado. Cocok untuk cemilan keluarga.',
                 'price' => 15000.00,
-                'photo' => 'produk-dummy-1.jpg',
+                'images' => json_encode(['produk-dummy-1.jpg']), // Mengubah 'photo' menjadi 'images' dan dienkode sebagai JSON
                 'status_id' => $statusApproved->id,
-                'created_at' => now(),
-                'updated_at' => now(),
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
             ],
             [
                 'umkm_id' => $umkmTest->id,
@@ -118,10 +149,10 @@ class ProductSeeder extends Seeder
                 'name' => 'Kopi Robusta Khas Gunungkidul',
                 'description' => 'Biji kopi robusta pilihan dari perkebunan lokal Gunungkidul. Aroma kuat dan rasa pahit yang khas, cocok untuk pecinta kopi sejati.',
                 'price' => 45000.00,
-                'photo' => 'produk-dummy-2.jpg',
+                'images' => json_encode(['produk-dummy-2.jpg']), // Mengubah 'photo' menjadi 'images' dan dienkode sebagai JSON
                 'status_id' => $statusApproved->id,
-                'created_at' => now()->subDays(2),
-                'updated_at' => now()->subDays(2),
+                'created_at' => Carbon::now()->subDays(2),
+                'updated_at' => Carbon::now()->subDays(2),
             ],
             [
                 'umkm_id' => $umkmKerajinanJaya->id,
@@ -129,10 +160,10 @@ class ProductSeeder extends Seeder
                 'name' => 'Miniatur Becak Batik',
                 'description' => 'Miniatur becak kayu dengan hiasan batik tulis, dibuat secara handmade oleh pengrajin lokal. Cocok untuk souvenir atau hiasan rumah.',
                 'price' => 85000.00,
-                'photo' => 'produk-dummy-3.jpg',
+                'images' => json_encode(['produk-dummy-3.jpg']), // Mengubah 'photo' menjadi 'images' dan dienkode sebagai JSON
                 'status_id' => $statusApproved->id,
-                'created_at' => now()->subDays(5),
-                'updated_at' => now()->subDays(5),
+                'created_at' => Carbon::now()->subDays(5),
+                'updated_at' => Carbon::now()->subDays(5),
             ],
             [
                 'umkm_id' => $umkmTest->id,
@@ -140,10 +171,10 @@ class ProductSeeder extends Seeder
                 'name' => 'Kaos Batik Modern Pria',
                 'description' => 'Kaos casual dengan motif batik modern, bahan katun combed 30s yang nyaman dan tidak panas. Tersedia berbagai ukuran.',
                 'price' => 99000.00,
-                'photo' => 'produk-dummy-4.jpg',
+                'images' => json_encode(['produk-dummy-4.jpg']), // Mengubah 'photo' menjadi 'images' dan dienkode sebagai JSON
                 'status_id' => $statusApproved->id,
-                'created_at' => now()->subDays(7),
-                'updated_at' => now()->subDays(7),
+                'created_at' => Carbon::now()->subDays(7),
+                'updated_at' => Carbon::now()->subDays(7),
             ],
             [
                 'umkm_id' => $umkmKerajinanJaya->id,
@@ -151,10 +182,10 @@ class ProductSeeder extends Seeder
                 'name' => 'Topeng Kayu Ukir',
                 'description' => 'Topeng kayu ukir tradisional khas Jawa, detail ukiran halus dan finishing premium. Cocok untuk koleksi atau dekorasi.',
                 'price' => 120000.00,
-                'photo' => 'produk-dummy-5.jpg',
+                'images' => json_encode(['produk-dummy-5.jpg']), // Mengubah 'photo' menjadi 'images' dan dienkode sebagai JSON
                 'status_id' => $statusApproved->id,
-                'created_at' => now()->subDays(10),
-                'updated_at' => now()->subDays(10),
+                'created_at' => Carbon::now()->subDays(10),
+                'updated_at' => Carbon::now()->subDays(10),
             ],
             [
                 'umkm_id' => $umkmTest->id,
@@ -162,10 +193,10 @@ class ProductSeeder extends Seeder
                 'name' => 'Gudeg Kaleng Khas Jogja',
                 'description' => 'Gudeg asli Jogja dalam kemasan kaleng, praktis dibawa dan awet. Rasa manis gurih yang otentik. Tersedia varian original dan pedas.',
                 'price' => 35000.00,
-                'photo' => 'produk-dummy-6.jpg',
+                'images' => json_encode(['produk-dummy-6.jpg']), // Mengubah 'photo' menjadi 'images' dan dienkode sebagai JSON
                 'status_id' => $statusPending->id,
-                'created_at' => now()->subDays(12),
-                'updated_at' => now()->subDays(12),
+                'created_at' => Carbon::now()->subDays(12),
+                'updated_at' => Carbon::now()->subDays(12),
             ],
             [
                 'umkm_id' => $umkmKerajinanJaya->id,
@@ -173,10 +204,10 @@ class ProductSeeder extends Seeder
                 'name' => 'Wedang Uwuh Instan',
                 'description' => 'Minuman rempah tradisional Wedang Uwuh dalam bentuk instan. Hangat di badan, cocok untuk menjaga kesehatan. Tanpa pengawet.',
                 'price' => 25000.00,
-                'photo' => 'produk-dummy-1.jpg',
+                'images' => json_encode(['produk-dummy-1.jpg']), // Mengubah 'photo' menjadi 'images' dan dienkode sebagai JSON
                 'status_id' => $statusApproved->id,
-                'created_at' => now()->subDays(15),
-                'updated_at' => now()->subDays(15),
+                'created_at' => Carbon::now()->subDays(15),
+                'updated_at' => Carbon::now()->subDays(15),
             ],
             [
                 'umkm_id' => $umkmTest->id,
@@ -184,10 +215,10 @@ class ProductSeeder extends Seeder
                 'name' => 'Batik Tulis Premium',
                 'description' => 'Kain batik tulis asli, motif klasik elegan, pewarnaan alami. Cocok untuk acara formal maupun koleksi. Limited edition.',
                 'price' => 500000.00,
-                'photo' => 'produk-dummy-2.jpg',
+                'images' => json_encode(['produk-dummy-2.jpg']), // Mengubah 'photo' menjadi 'images' dan dienkode sebagai JSON
                 'status_id' => $statusApproved->id,
-                'created_at' => now()->subDays(20),
-                'updated_at' => now()->subDays(20),
+                'created_at' => Carbon::now()->subDays(20),
+                'updated_at' => Carbon::now()->subDays(20),
             ],
             // New dummy products
             [
@@ -196,10 +227,10 @@ class ProductSeeder extends Seeder
                 'name' => 'Rendang Daging Sapi Premium',
                 'description' => 'Rendang daging sapi khas Minang, dimasak dengan bumbu rempah pilihan, cita rasa otentik dan tahan lama.',
                 'price' => 75000.00,
-                'photo' => 'produk-dummy-3.jpg',
+                'images' => json_encode(['produk-dummy-3.jpg']), // Mengubah 'photo' menjadi 'images' dan dienkode sebagai JSON
                 'status_id' => $statusApproved->id,
-                'created_at' => now()->subDays(1),
-                'updated_at' => now()->subDays(1),
+                'created_at' => Carbon::now()->subDays(1),
+                'updated_at' => Carbon::now()->subDays(1),
             ],
             [
                 'umkm_id' => $umkmKulinerNusantara->id,
@@ -207,10 +238,10 @@ class ProductSeeder extends Seeder
                 'name' => 'Pempek Palembang Asli',
                 'description' => 'Pempek ikan tenggiri asli dengan cuko pedas manis, disajikan beku, siap goreng. Rasa dan tekstur otentik Palembang.',
                 'price' => 40000.00,
-                'photo' => 'produk-dummy-4.jpg',
+                'images' => json_encode(['produk-dummy-4.jpg']), // Mengubah 'photo' menjadi 'images' dan dienkode sebagai JSON
                 'status_id' => $statusApproved->id,
-                'created_at' => now()->subDays(3),
-                'updated_at' => now()->subDays(3),
+                'created_at' => Carbon::now()->subDays(3),
+                'updated_at' => Carbon::now()->subDays(3),
             ],
             [
                 'umkm_id' => $umkmBatikIndah->id,
@@ -218,10 +249,10 @@ class ProductSeeder extends Seeder
                 'name' => 'Blouse Batik Modern Wanita',
                 'description' => 'Blouse batik dengan desain modern, cocok untuk gaya kasual maupun formal. Bahan adem dan nyaman.',
                 'price' => 150000.00,
-                'photo' => 'produk-dummy-5.jpg',
+                'images' => json_encode(['produk-dummy-5.jpg']), // Mengubah 'photo' menjadi 'images' dan dienkode sebagai JSON
                 'status_id' => $statusApproved->id,
-                'created_at' => now()->subDays(8),
-                'updated_at' => now()->subDays(8),
+                'created_at' => Carbon::now()->subDays(8),
+                'updated_at' => Carbon::now()->subDays(8),
             ],
             [
                 'umkm_id' => $umkmDigitalSolusi->id,
@@ -229,10 +260,10 @@ class ProductSeeder extends Seeder
                 'name' => 'Jasa Pembuatan Website Toko Online',
                 'description' => 'Layanan pembuatan website toko online profesional, responsif, dan mudah dikelola. Bonus domain dan hosting 1 tahun.',
                 'price' => 3500000.00,
-                'photo' => 'produk-dummy-6.jpg',
+                'images' => json_encode(['produk-dummy-6.jpg']), // Mengubah 'photo' menjadi 'images' dan dienkode sebagai JSON
                 'status_id' => $statusApproved->id,
-                'created_at' => now()->subDays(25),
-                'updated_at' => now()->subDays(25),
+                'created_at' => Carbon::now()->subDays(25),
+                'updated_at' => Carbon::now()->subDays(25),
             ],
             [
                 'umkm_id' => $umkmKulinerNusantara->id,
@@ -240,10 +271,10 @@ class ProductSeeder extends Seeder
                 'name' => 'Jamu Kunyit Asam Segar',
                 'description' => 'Minuman jamu tradisional kunyit asam, dibuat dari bahan alami pilihan, tanpa pengawet. Menyegarkan dan menyehatkan.',
                 'price' => 18000.00,
-                'photo' => 'produk-dummy-1.jpg',
+                'images' => json_encode(['produk-dummy-1.jpg']), // Mengubah 'photo' menjadi 'images' dan dienkode sebagai JSON
                 'status_id' => $statusApproved->id,
-                'created_at' => now()->subDays(6),
-                'updated_at' => now()->subDays(6),
+                'created_at' => Carbon::now()->subDays(6),
+                'updated_at' => Carbon::now()->subDays(6),
             ],
             [
                 'umkm_id' => $umkmBatikIndah->id,
@@ -251,10 +282,10 @@ class ProductSeeder extends Seeder
                 'name' => 'Kemeja Batik Pria Lengan Panjang',
                 'description' => 'Kemeja batik formal dengan motif klasik, cocok untuk acara kantor atau pesta. Bahan katun primisima nyaman dipakai.',
                 'price' => 180000.00,
-                'photo' => 'produk-dummy-2.jpg',
+                'images' => json_encode(['produk-dummy-2.jpg']), // Mengubah 'photo' menjadi 'images' dan dienkode sebagai JSON
                 'status_id' => $statusPending->id,
-                'created_at' => now()->subDays(11),
-                'updated_at' => now()->subDays(11),
+                'created_at' => Carbon::now()->subDays(11),
+                'updated_at' => Carbon::now()->subDays(11),
             ],
             [
                 'umkm_id' => $umkmKerajinanJaya->id,
@@ -262,10 +293,10 @@ class ProductSeeder extends Seeder
                 'name' => 'Anyaman Bambu Hias Dinding',
                 'description' => 'Hiasan dinding anyaman bambu artistik, cocok untuk dekorasi interior bergaya etnik modern.',
                 'price' => 60000.00,
-                'photo' => 'produk-dummy-3.jpg',
+                'images' => json_encode(['produk-dummy-3.jpg']), // Mengubah 'photo' menjadi 'images' dan dienkode sebagai JSON
                 'status_id' => $statusApproved->id,
-                'created_at' => now()->subDays(14),
-                'updated_at' => now()->subDays(14),
+                'created_at' => Carbon::now()->subDays(14),
+                'updated_at' => Carbon::now()->subDays(14),
             ],
             [
                 'umkm_id' => $umkmDigitalSolusi->id,
@@ -273,10 +304,10 @@ class ProductSeeder extends Seeder
                 'name' => 'Jasa Desain Logo UMKM',
                 'description' => 'Buat logo profesional dan menarik untuk usaha Anda. Desain unik dan representatif sesuai branding bisnis.',
                 'price' => 750000.00,
-                'photo' => 'produk-dummy-4.jpg',
+                'images' => json_encode(['produk-dummy-4.jpg']), // Mengubah 'photo' menjadi 'images' dan dienkode sebagai JSON
                 'status_id' => $statusApproved->id,
-                'created_at' => now()->subDays(18),
-                'updated_at' => now()->subDays(18),
+                'created_at' => Carbon::now()->subDays(18),
+                'updated_at' => Carbon::now()->subDays(18),
             ],
             [
                 'umkm_id' => $umkmTest->id,
@@ -284,10 +315,10 @@ class ProductSeeder extends Seeder
                 'name' => 'Dodol Garut Asli',
                 'description' => 'Dodol khas Garut dengan tekstur lembut dan rasa manis legit. Terbuat dari bahan-bahan alami pilihan.',
                 'price' => 20000.00,
-                'photo' => 'produk-dummy-5.jpg',
+                'images' => json_encode(['produk-dummy-5.jpg']), // Mengubah 'photo' menjadi 'images' dan dienkode sebagai JSON
                 'status_id' => $statusApproved->id,
-                'created_at' => now()->subDays(9),
-                'updated_at' => now()->subDays(9),
+                'created_at' => Carbon::now()->subDays(9),
+                'updated_at' => Carbon::now()->subDays(9),
             ],
         ]);
     }

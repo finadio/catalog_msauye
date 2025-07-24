@@ -18,7 +18,7 @@
 
                 <div class="p-8">
                     <form action="{{ route('umkm_produkstore') }}" method="POST" enctype="multipart/form-data" class="space-y-8">
-                        @csrf
+                        @csrf {{-- Ini adalah directive CSRF yang penting --}}
 
                         {{-- Informasi Produk dengan Card Style --}}
                         <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-6 border border-blue-100">
@@ -34,8 +34,8 @@
                                         Nama Produk
                                     </label>
                                     <input type="text" name="nama" value="{{ old('nama') }}" 
-                                           class="w-full rounded-xl border-2 border-gray-200 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 px-4 py-3 text-gray-700 hover:border-blue-300" 
-                                           placeholder="Masukkan nama produk Anda" required>
+                                            class="w-full rounded-xl border-2 border-gray-200 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 px-4 py-3 text-gray-700 hover:border-blue-300" 
+                                            placeholder="Masukkan nama produk Anda" required>
                                 </div>
 
                                 <div class="lg:col-span-2">
@@ -44,8 +44,8 @@
                                         Deskripsi Produk
                                     </label>
                                     <textarea name="deskripsi" rows="4" 
-                                              class="w-full rounded-xl border-2 border-gray-200 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 px-4 py-3 text-gray-700 hover:border-blue-300" 
-                                              placeholder="Ceritakan tentang produk Anda...">{{ old('deskripsi') }}</textarea>
+                                             class="w-full rounded-xl border-2 border-gray-200 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 px-4 py-3 text-gray-700 hover:border-blue-300" 
+                                             placeholder="Ceritakan tentang produk Anda...">{{ old('deskripsi') }}</textarea>
                                 </div>
 
                                 <div>
@@ -56,8 +56,8 @@
                                     <div class="relative">
                                         <span class="absolute left-4 top-1/2 -translate-y-1/2 text-gray-500 font-medium">Rp</span>
                                         <input type="number" name="harga" value="{{ old('harga') }}" 
-                                               class="w-full rounded-xl border-2 border-gray-200 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 pl-12 pr-4 py-3 text-gray-700 hover:border-blue-300" 
-                                               placeholder="0">
+                                                class="w-full rounded-xl border-2 border-gray-200 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 pl-12 pr-4 py-3 text-gray-700 hover:border-blue-300" 
+                                                placeholder="0">
                                     </div>
                                 </div>
 
@@ -67,7 +67,7 @@
                                         Kategori Produk
                                     </label>
                                     <select name="category_id" 
-                                            class="w-full rounded-xl border-2 border-gray-200 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 px-4 py-3 text-gray-700 hover:border-blue-300" required>
+                                             class="w-full rounded-xl border-2 border-gray-200 shadow-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300 px-4 py-3 text-gray-700 hover:border-blue-300" required>
                                         <option value="" disabled selected>🏷️ Pilih Kategori Produk</option>
                                         @foreach($categories as $cat)
                                             <option value="{{ $cat->id }}" {{ old('category_id') == $cat->id ? 'selected' : '' }}>{{ $cat->name }}</option>
@@ -82,7 +82,7 @@
                                     </label>
                                     <div class="relative">
                                         <input type="file" name="foto" accept="image/*" 
-                                               class="w-full rounded-xl border-2 border-dashed border-gray-300 hover:border-blue-400 transition-all duration-300 px-4 py-6 text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
+                                                class="w-full rounded-xl border-2 border-dashed border-gray-300 hover:border-blue-400 transition-all duration-300 px-4 py-6 text-gray-700 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100">
                                         <div class="absolute top-2 right-4 text-gray-400 text-sm">
                                             📸 JPG, PNG, atau JPEG
                                         </div>
@@ -105,8 +105,8 @@
                                         Nomor WhatsApp
                                     </label>
                                     <input type="text" name="wa" value="{{ old('wa') }}" 
-                                           placeholder="08xxxxxxxxxx" 
-                                           class="w-full rounded-xl border-2 border-gray-200 shadow-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-300 px-4 py-3 text-gray-700 hover:border-emerald-300">
+                                            placeholder="08xxxxxxxxxx" 
+                                            class="w-full rounded-xl border-2 border-gray-200 shadow-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-300 px-4 py-3 text-gray-700 hover:border-emerald-300">
                                 </div>
                                 
                                 <div>
@@ -115,8 +115,8 @@
                                         Instagram
                                     </label>
                                     <input type="text" name="instagram" value="{{ old('instagram') }}" 
-                                           placeholder="@username" 
-                                           class="w-full rounded-xl border-2 border-gray-200 shadow-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-300 px-4 py-3 text-gray-700 hover:border-emerald-300">
+                                            placeholder="@username" 
+                                            class="w-full rounded-xl border-2 border-gray-200 shadow-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-300 px-4 py-3 text-gray-700 hover:border-emerald-300">
                                 </div>
                                 
                                 <div>
@@ -125,8 +125,8 @@
                                         TikTok
                                     </label>
                                     <input type="text" name="tiktok" value="{{ old('tiktok') }}" 
-                                           placeholder="@tiktokshop" 
-                                           class="w-full rounded-xl border-2 border-gray-200 shadow-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-300 px-4 py-3 text-gray-700 hover:border-emerald-300">
+                                            placeholder="@tiktokshop" 
+                                            class="w-full rounded-xl border-2 border-gray-200 shadow-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-300 px-4 py-3 text-gray-700 hover:border-emerald-300">
                                 </div>
                                 
                                 <div>
@@ -135,8 +135,8 @@
                                         Website
                                     </label>
                                     <input type="text" name="website" value="{{ old('website') }}" 
-                                           placeholder="https://example.com" 
-                                           class="w-full rounded-xl border-2 border-gray-200 shadow-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-300 px-4 py-3 text-gray-700 hover:border-emerald-300">
+                                            placeholder="https://example.com" 
+                                            class="w-full rounded-xl border-2 border-gray-200 shadow-sm focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 transition-all duration-300 px-4 py-3 text-gray-700 hover:border-emerald-300">
                                 </div>
                             </div>
                         </div>

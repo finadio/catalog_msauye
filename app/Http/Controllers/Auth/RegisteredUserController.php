@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Umkm; // Tambahkan ini untuk model Umkm
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -33,17 +34,43 @@ class RegisteredUserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'role' => ['required', 'string', 'in:admin,umkm,user'], // Pastikan role divalidasi
         ]);
 
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => $request->role, // Simpan role yang dipilih
         ]);
+
+        // Jika role adalah 'umkm', buat entri di tabel umkms
+        if ($user->role === 'umkm') {
+            Umkm::create([
+                'user_id' => $user->id,
+                'name' => $user->name . ' UMKM', // Nama UMKM default
+                'description' => 'Deskripsi UMKM default',
+                'address' => 'Alamat UMKM default',
+                'phone' => '08xxxxxxxxxx',
+                'whatsapp' => null,
+                'instagram' => null,
+                'tiktok' => null,
+                'website' => null,
+            ]);
+        }
 
         event(new Registered($user));
 
-        // Jangan login otomatis, langsung redirect ke login
-        return redirect()->route('login')->with('status', 'Registration successful! Please login.');
+        Auth::login($user); // Login otomatis setelah registrasi
+
+        // Redirect berdasarkan role
+        if ($user->role === 'admin') {
+            return redirect()->route('admin_dashboard');
+        } elseif ($user->role === 'umkm') {
+            return redirect()->route('umkm_dashboard');
+        } else {
+            return redirect(route('dashboard', absolute: false));
+        }
     }
 }
+
