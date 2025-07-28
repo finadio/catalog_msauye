@@ -209,7 +209,7 @@
                 </div>
 
                 {{-- Custom Pagination --}}
-                @if($products->total() > 0)
+                @if($products->count() > 0)
                     <div class="bg-gradient-to-r from-gray-50/80 to-slate-100/80 backdrop-blur-sm px-8 py-6 border-t border-gray-200/50">
                         <div class="flex flex-col sm:flex-row items-center justify-between gap-6">
                             
@@ -220,7 +220,7 @@
                                         Menampilkan {{ $products->firstItem() ?? 0 }} - {{ $products->lastItem() ?? 0 }}
                                     </span>
                                     dari 
-                                    <span class="font-bold text-blue-600">{{ $products->total() }}</span> 
+                                    <span class="font-bold text-blue-600">{{ $products->count() }}</span> 
                                     produk
                                 </div>
                             </div>
