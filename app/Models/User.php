@@ -6,11 +6,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens; // Pastikan ini ada jika menggunakan Sanctum
+use App\Models\Umkm; // Penting: Pastikan model Umkm diimpor
 
 class User extends Authenticatable
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    use HasApiTokens, HasFactory, Notifiable; // Tambahkan HasApiTokens jika menggunakan Sanctum
 
     /**
      * The attributes that are mass assignable.
@@ -21,6 +23,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role', // Pastikan 'role' ada di sini jika Anda menggunakannya
+        // 'umkm_id', // Hapus ini dari fillable jika Anda menghapus kolom tersebut dari tabel users
     ];
 
     /**
@@ -46,19 +50,23 @@ class User extends Authenticatable
         ];
     }
 
+    // RELASI UNTUK UMKM: User memiliki satu UMKM
+    // Ini adalah definisi relasi hasOne yang benar.
+    // Laravel akan mencari 'user_id' di tabel 'umkms'.
     public function umkm()
     {
         return $this->hasOne(Umkm::class);
     }
 
+    // Relasi 'produk()' yang Anda miliki (tidak diubah)
     public function produk()
     {
         return $this->hasMany(\App\Models\Produk::class, 'user_id');
     }
 
+    // Relasi 'products()' yang Anda miliki (tidak diubah)
     public function products()
     {
         return $this->hasMany(\App\Models\Product::class, 'umkm_id');
     }
-
 }
