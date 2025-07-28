@@ -2,161 +2,189 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Product;
 use App\Models\Category;
-use Illuminate\Support\Facades\Auth; //
+use App\Models\ProductStatus;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class UmkmProductController extends Controller
 {
-    public function index(Request $request) //
+    /**
+     * Display a listing of the resource.
+     */
+    public function index()
     {
-        $umkm = Auth::user(); //
-        $query = $umkm->products()->with('status'); //
+        // Mendapatkan UMKM dari user yang sedang login
+        $umkm = Auth::user()->umkm;
 
-        // Terapkan filter pencarian jika parameter 'search' ada
-        if ($request->filled('search')) { //
-            $searchQuery = $request->input('search'); //
-            $query->where('name', 'like', '%' . $searchQuery . '%'); //
-        }
+        // Mendapatkan produk berdasarkan umkm_id yang terkait DENGAN PAGINASI
+        $products = Product::where('umkm_id', $umkm->id)->paginate(10); // Menggunakan paginate(10)
 
-        // Terapkan pengurutan (sorting)
-        $sortBy = $request->input('sort_by', 'updated_at'); // Default: diurutkan berdasarkan 'updated_at'
-        $sortOrder = $request->input('sort_order', 'desc'); // Default: urutan menurun (descending)
-
-        // Validasi kolom 'sort_by' yang diizinkan untuk mencegah injeksi kolom
-        $allowedSortBy = ['name', 'price', 'updated_at'];
-        if (!in_array($sortBy, $allowedSortBy)) {
-            $sortBy = 'updated_at'; // Kembali ke default jika tidak valid
-        }
-
-        // Validasi urutan 'sort_order'
-        if (!in_array($sortOrder, ['asc', 'desc'])) {
-            $sortOrder = 'desc'; // Kembali ke default jika tidak valid
-        }
-
-        $products = $query->orderBy($sortBy, $sortOrder)
-                          ->paginate(10)
-                          ->appends($request->query()); // Pertahankan parameter pencarian dan pengurutan saat paginasi
-        
-        $categories = Category::all(); //
-        return view('umkm_produk', compact('products', 'categories', 'umkm')); //
+        return view('umkm_produk', compact('products'));
     }
 
-    public function create() //
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create()
     {
-        $categories = Category::all(); //
-        return view('umkm_produkcreate', compact('categories')); //
+        $categories = Category::all();
+        return view('umkm_produkcreate', compact('categories'));
     }
 
-    public function store(Request $request) //
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
     {
-        $data = $request->validate([
-            'nama' => 'required',
-            'deskripsi' => 'required',
-            'harga' => 'nullable|numeric',
-            'category_id' => 'required|exists:categories,id',
-            'foto' => 'nullable|image|max:2048',
-        ]); //
+        // Validasi data input, termasuk foto
+        $validatedData = $request->validate([
+            'nama' => 'required|string|max:255',
+            'deskripsi' => 'required|string',
+            'harga' => 'nullable|numeric|min:0',
+            'category_id' => 'required|exists:categories,id', // Pastikan category_id valid
+            'wa' => 'nullable|string|max:255',
+            'instagram' => 'nullable|string|max:255',
+            'tiktok' => 'nullable|string|max:255',
+            'website' => 'nullable|url|max:255',
+            'telepon' => 'nullable|string|max:255',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Aturan untuk unggahan foto
+        ]);
 
-        $data = [
-            'name' => $request->nama,
-            'description' => $request->deskripsi,
-            'price' => $request->harga,
-            'category_id' => $request->category_id,
-            'umkm_id' => Auth::id(), //
-            'status_id' => 1, // default pending
-        ]; //
+        $user = Auth::user();
+        $umkm = $user->umkm; // Dapatkan UMKM yang terkait dengan user yang sedang login
 
-        if ($request->hasFile('foto')) { //
-            $data['photo'] = $request->file('foto')->store('produk', 'public'); // Simpan di 'public' disk
-        } else {
-            // Jika tidak ada foto diunggah, gunakan dummy. Pastikan foto dummy tersedia di public/img/
-            $dummyImages = [
-                'produk-dummy-1.jpg', 'produk-dummy-2.jpg', 'produk-dummy-3.jpg',
-                'produk-dummy-4.jpg', 'produk-dummy-5.jpg', 'produk-dummy-6.jpg',
-            ];
-            $data['photo'] = $dummyImages[array_rand($dummyImages)]; // Pilih acak dari dummy
-        }
-
-        Product::create($data); //
-
-        return redirect()->route('umkm_produk')->with('success', 'Produk ditambahkan.'); //
-    }
-
-    public function edit($id) //
-    {
-        $product = Product::with('umkm')->findOrFail($id); //
-        $categories = Category::all(); //
-        return view('umkm_produkedit', compact('product', 'categories')); //
-    }
-
-    public function update(Request $request, $id) //
-    {
-        $product = Product::findOrFail($id); //
-        $this->authorize('update', $product); //
-
-        $data = $request->validate([
-            'nama' => 'required',
-            'deskripsi' => 'required',
-            'harga' => 'nullable|numeric',
-            'category_id' => 'required|exists:categories,id',
-            'foto' => 'nullable|image|max:2048',
-        ]); //
-
-        $updateData = [
-            'name' => $request->nama,
-            'description' => $request->deskripsi,
-            'price' => $request->harga,
-            'category_id' => $request->category_id,
+        // Siapkan data untuk produk
+        $productData = [
+            'umkm_id' => $umkm->id, // Gunakan ID UMKM yang terkait
+            'name' => $validatedData['nama'],
+            'description' => $validatedData['deskripsi'],
+            'price' => $validatedData['harga'],
+            'category_id' => $validatedData['category_id'],
+            'location' => $umkm->address, // Menggunakan alamat UMKM sebagai lokasi produk
+            'show_price' => true, // Default atau bisa dari input jika ada checkbox
+            'whatsapp' => $validatedData['wa'],
+            'instagram' => $validatedData['instagram'],
+            'tiktok_shop' => $validatedData['tiktok'],
+            'website' => $validatedData['website'],
+            'telepon' => $validatedData['telepon'],
+            // Dapatkan status_id untuk 'pending' dari tabel product_statuses
+            'status_id' => ProductStatus::where('name', 'pending')->first()->id,
         ];
 
-        if ($request->hasFile('foto')) { //
-            // Hapus foto lama jika ada dan bukan dummy
-            if ($product->photo && !Str::startsWith($product->photo, 'produk-dummy')) {
-                \Storage::disk('public')->delete($product->photo);
-            }
-            $updateData['photo'] = $request->file('foto')->store('produk', 'public'); // Simpan di 'public' disk
+        // LOGIKA UNTUK MENANGANI UNGGAHAN FOTO
+        if ($request->hasFile('photo')) {
+            $image = $request->file('photo');
+            // Pastikan nama file unik untuk menghindari tabrakan
+            $fileName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+            // Simpan file di direktori 'products' di dalam public storage disk
+            $path = $image->storeAs('products', $fileName, 'public');
+
+            // Simpan path relatif ke database (misal: products/namafileunik.jpg)
+            $productData['photo'] = $path;
+        } else {
+            // Jika tidak ada foto diunggah, atur kolom 'photo' menjadi null atau path default
+            $productData['photo'] = null; // Atur ke null jika foto opsional
         }
 
-        $product->update($updateData); //
-        return redirect()->route('umkm_produk')->with('success', 'Produk diperbarui.'); //
+        // Buat produk baru
+        Product::create($productData);
+
+        return redirect()->route('umkm_produk')->with('success', 'Produk berhasil ditambahkan!');
     }
 
-    public function search(Request $request) //
+    /**
+     * Display the specified resource.
+     */
+    public function show(Product $product)
     {
-        // Metode ini sekarang menjadi redundan untuk daftar produk utama,
-        // karena logika pencarian sudah ditangani di metode index.
-        // Jika ada penggunaan AJAX spesifik untuk search yang terpisah,
-        // metode ini bisa dipertahankan. Untuk konteks ini, asumsikan index
-        // sudah menangani pencarian utama.
-        $query = $request->input('search'); //
-
-        $products = Product::with('status') //
-            ->where('umkm_id', auth()->user()->id) //
-            ->when(request('search'), function ($query) { //
-                $query->where('name', 'like', '%' . request('search') . '%'); //
-            })
-            ->orderBy('updated_at', 'desc') //
-            ->paginate(5); //
-
-        return response()->json([
-            'html' => view('partials.umkm_produk_table', compact('products'))->render()
-        ]); //
+        //
     }
 
-    public function destroy($id) //
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Product $product)
     {
-        $product = Product::findOrFail($id); //
-        $this->authorize('delete', $product); //
+        // Pastikan produk ini milik UMKM yang sedang login
+        if (Auth::user()->umkm->id !== $product->umkm_id) {
+            abort(403); // Akses ditolak jika bukan produk UMKMnya
+        }
 
-        // Hapus foto produk jika ada dan bukan dummy
-        if ($product->photo && !Str::startsWith($product->photo, 'produk-dummy')) {
-            \Storage::disk('public')->delete($product->photo);
+        $categories = Category::all();
+        $statuses = ProductStatus::all(); // Jika Anda ingin mengedit status dari form UMKM
+        return view('umkm_produkedit', compact('product', 'categories', 'statuses'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, Product $product)
+    {
+        // Pastikan produk ini milik UMKM yang sedang login
+        if (Auth::user()->umkm->id !== $product->umkm_id) {
+            abort(403); // Akses ditolak jika bukan produk UMKMnya
+        }
+
+        // Validasi data input, termasuk foto (name input di form edit adalah 'name', 'description', dll)
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'description' => 'required|string',
+            'price' => 'nullable|numeric|min:0',
+            'category_id' => 'required|exists:categories,id',
+            'wa' => 'nullable|string|max:255',
+            'instagram' => 'nullable|string|max:255',
+            'tiktok' => 'nullable|string|max:255',
+            'website' => 'nullable|url|max:255',
+            'telepon' => 'nullable|string|max:255',
+            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Aturan untuk unggahan foto
+            'status_id' => 'required|exists:product_statuses,id', // Jika status bisa diubah di form edit
+        ]);
+
+        $productData = $validatedData;
+
+        // LOGIKA UNTUK MENANGANI UNGGAHAN FOTO SAAT EDIT
+        if ($request->hasFile('photo')) {
+            // Hapus foto lama jika ada dan file tersebut ada di storage
+            if ($product->photo && Storage::disk('public')->exists($product->photo)) {
+                Storage::disk('public')->delete($product->photo);
+            }
+
+            $image = $request->file('photo');
+            $fileName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
+            $path = $image->storeAs('products', $fileName, 'public');
+            $productData['photo'] = $path; // Simpan path relatif foto baru
+        } else {
+            // Jika tidak ada foto baru diunggah, pertahankan foto yang sudah ada di database
+            // Jika Anda ingin opsi untuk menghapus foto dengan tidak mengganti, Anda perlu menambahkan
+            // checkbox "Hapus Foto" di form.
+            $productData['photo'] = $product->photo;
+        }
+
+        // Perbarui produk
+        $product->update($productData);
+
+        return redirect()->route('umkm_produk')->with('success', 'Produk berhasil diperbarui!');
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(Product $product)
+    {
+        // Pastikan produk ini milik UMKM yang sedang login
+        if (Auth::user()->umkm->id !== $product->umkm_id) {
+            abort(403); // Akses ditolak
         }
         
-        $product->delete(); //
+        // Hapus foto terkait dari penyimpanan sebelum menghapus produk dari database
+        if ($product->photo && Storage::disk('public')->exists($product->photo)) {
+            Storage::disk('public')->delete($product->photo);
+        }
 
-        return back()->with('success', 'Produk dihapus.'); //
+        $product->delete();
+        return redirect()->route('umkm_produk')->with('success', 'Produk berhasil dihapus!');
     }
 }

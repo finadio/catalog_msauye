@@ -13,7 +13,8 @@ class ProductPolicy
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        // Umumnya, semua user UMKM bisa melihat daftar produk mereka sendiri
+        return $user->role === 'umkm';
     }
 
     /**
@@ -21,7 +22,9 @@ class ProductPolicy
      */
     public function view(User $user, Product $product): bool
     {
-        return false;
+        // User admin bisa melihat semua produk.
+        // User UMKM bisa melihat produk miliknya.
+        return $user->role === 'admin' || ($user->umkm && $user->umkm->id === $product->umkm_id);
     }
 
     /**
@@ -29,23 +32,44 @@ class ProductPolicy
      */
     public function create(User $user): bool
     {
-        return false;
+        // Hanya user dengan role 'umkm' dan sudah memiliki entri UMKM yang bisa membuat produk
+        return $user->role === 'umkm' && $user->umkm()->exists();
     }
 
     /**
      * Determine whether the user can update the model.
      */
-    public function update(User $user, Product $product): bool
+    public function update(User $user, Product $product): Response
     {
-        return $user->id === $product->umkm_id;
+        // User admin selalu bisa update.
+        if ($user->role === 'admin') {
+            return Response::allow();
+        }
+
+        // User UMKM hanya bisa update produk miliknya.
+        // Pastikan user memiliki UMKM terlebih dahulu ($user->umkm)
+        // Kemudian bandingkan ID UMKM user dengan umkm_id produk.
+        return ($user->umkm && $user->umkm->id === $product->umkm_id)
+            ? Response::allow()
+            : Response::deny('Anda tidak memiliki izin untuk memperbarui produk ini.');
     }
 
     /**
      * Determine whether the user can delete the model.
      */
-    public function delete(User $user, Product $product): bool
+    public function delete(User $user, Product $product): Response
     {
-        return $user->id === $product->umkm_id;
+        // User admin selalu bisa menghapus.
+        if ($user->role === 'admin') {
+            return Response::allow();
+        }
+
+        // User UMKM hanya bisa menghapus produk miliknya.
+        // Pastikan user memiliki UMKM terlebih dahulu ($user->umkm)
+        // Kemudian bandingkan ID UMKM user dengan umkm_id produk.
+        return ($user->umkm && $user->umkm->id === $product->umkm_id)
+            ? Response::allow()
+            : Response::deny('Anda tidak memiliki izin untuk menghapus produk ini.');
     }
 
     /**
@@ -53,7 +77,7 @@ class ProductPolicy
      */
     public function restore(User $user, Product $product): bool
     {
-        return false;
+        return false; // Umumnya tidak diizinkan untuk UMKM
     }
 
     /**
@@ -61,6 +85,6 @@ class ProductPolicy
      */
     public function forceDelete(User $user, Product $product): bool
     {
-        return false;
+        return false; // Umumnya tidak diizinkan untuk UMKM
     }
 }
