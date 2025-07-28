@@ -34,7 +34,7 @@ class AuthenticatedSessionController extends Controller
 
         // Mengarahkan pengguna berdasarkan peran mereka
         if ($user->role === 'admin') {
-            return redirect()->route('admin_dashboard');
+            return redirect()->route('admin.dashboard');
         } elseif ($user->role === 'umkm') {
             return redirect()->intended(route('umkm_dashboard', absolute: false));
         } else {

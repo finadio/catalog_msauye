@@ -12,21 +12,37 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('products', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->id(); // Ini sudah benar untuk auto-incrementing primary key
+            
+            // Perbaikan: Ubah foreignId('user_id') menjadi foreignId('umkm_id')
+            // untuk mereferensikan tabel 'umkms' dan cocok dengan logika controller
+            $table->foreignId('umkm_id')->constrained('umkms')->onDelete('cascade');
+            
             $table->string('name');
             $table->text('description');
             $table->decimal('price', 15, 2)->nullable();
-            $table->string('category');
-            $table->string('location');
+            
+            // Perbaikan: Ubah 'category' (string) menjadi foreignId('category_id')
+            // untuk mereferensikan tabel 'categories'
+            $table->foreignId('category_id')->constrained('categories')->onDelete('cascade');
+            
+            $table->string('location')->nullable(); // Ditambahkan nullable karena di form create tidak ada.
             $table->boolean('show_price')->default(true);
             $table->string('whatsapp')->nullable();
             $table->string('instagram')->nullable();
             $table->string('tiktok_shop')->nullable();
-            $table->json('images')->nullable();
+            
+            // Perbaikan: Ubah 'images' (json) menjadi 'photo' (string) dan nullable
+            // Ini agar sesuai dengan cara Anda menyimpan foto di controller
+            $table->string('photo')->nullable(); 
+            
             $table->string('website')->nullable();
             $table->string('telepon')->nullable();
-            $table->enum('status', ['pending', 'approved', 'rejected'])->default('pending');
+            
+            // Perbaikan: Ubah 'status' (enum) menjadi foreignId('status_id')
+            // untuk mereferensikan tabel 'product_statuses'
+            $table->foreignId('status_id')->constrained('product_statuses')->onDelete('cascade');
+            
             $table->timestamps();
         });
     }
