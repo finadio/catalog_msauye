@@ -2,13 +2,15 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Umkm extends Model
 {
-    // Daftar kolom yang bisa diisi (mass assignment)
+    use HasFactory;
+
     protected $fillable = [
-        'user_id',
+        'user_id', // Pastikan ini ada di fillable
         'name',
         'description',
         'address',
@@ -20,7 +22,6 @@ class Umkm extends Model
         'photo',
     ];
 
-    // Relasi ke produk
     public function products()
     {
         return $this->hasMany(Product::class, 'umkm_id');
@@ -30,5 +31,4 @@ class Umkm extends Model
     {
         return $this->belongsTo(User::class);
     }
-
 }
