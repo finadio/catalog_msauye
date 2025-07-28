@@ -1,7 +1,6 @@
 <x-app-layout>
     <div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-purple-50 pt-20 pb-12">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-            <!-- Header Section -->
             <div class="text-center mb-8">
                 <h1 class="text-3xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
                     Edit Profil UMKM
@@ -24,7 +23,6 @@
                 </div>
             @endif
 
-            <!-- Main Form -->
             <div class="bg-white shadow-2xl rounded-2xl overflow-hidden">
                 <div class="bg-gradient-to-r from-blue-600 to-purple-600 px-8 py-6">
                     <h2 class="text-xl font-semibold text-white flex items-center">
@@ -39,7 +37,6 @@
                     @csrf
                     @method('PUT')
 
-                    <!-- Business Name -->
                     <div class="group">
                         <label class="block text-sm font-semibold text-gray-700 mb-2 flex items-center">
                             <svg class="w-4 h-4 mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -55,7 +52,6 @@
                         @enderror
                     </div>
 
-                    <!-- Description -->
                     <div class="group">
                         <label class="block text-sm font-semibold text-gray-700 mb-2 flex items-center">
                             <svg class="w-4 h-4 mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -71,7 +67,6 @@
                         @enderror
                     </div>
 
-                    <!-- Address -->
                     <div class="group">
                         <label class="block text-sm font-semibold text-gray-700 mb-2 flex items-center">
                             <svg class="w-4 h-4 mr-2 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -88,7 +83,6 @@
                         @enderror
                     </div>
 
-                    <!-- Contact Information Section -->
                     <div class="bg-gray-50 rounded-xl p-6 space-y-6">
                         <h3 class="text-lg font-semibold text-gray-800 flex items-center">
                             <svg class="w-5 h-5 mr-2 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -98,7 +92,6 @@
                         </h3>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <!-- Phone -->
                             <div class="group">
                                 <label class="block text-sm font-semibold text-gray-700 mb-2">Nomor Telepon</label>
                                 <input type="text" name="phone" value="{{ old('phone', $umkm->phone) }}" 
@@ -109,7 +102,6 @@
                                 @enderror
                             </div>
 
-                            <!-- WhatsApp -->
                             <div class="group">
                                 <label class="block text-sm font-semibold text-gray-700 mb-2 flex items-center">
                                     <svg class="w-4 h-4 mr-1 text-green-500" fill="currentColor" viewBox="0 0 24 24">
@@ -127,7 +119,6 @@
                         </div>
                     </div>
 
-                    <!-- Social Media Section -->
                     <div class="bg-gradient-to-r from-pink-50 to-purple-50 rounded-xl p-6 space-y-6">
                         <h3 class="text-lg font-semibold text-gray-800 flex items-center">
                             <svg class="w-5 h-5 mr-2 text-pink-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -137,7 +128,6 @@
                         </h3>
 
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <!-- Instagram -->
                             <div class="group">
                                 <label class="block text-sm font-semibold text-gray-700 mb-2 flex items-center">
                                     <svg class="w-4 h-4 mr-1 text-pink-500" fill="currentColor" viewBox="0 0 24 24">
@@ -153,7 +143,6 @@
                                 @enderror
                             </div>
 
-                            <!-- TikTok -->
                             <div class="group">
                                 <label class="block text-sm font-semibold text-gray-700 mb-2 flex items-center">
                                     <svg class="w-4 h-4 mr-1 text-black" fill="currentColor" viewBox="0 0 24 24">
@@ -169,11 +158,10 @@
                                 @enderror
                             </div>
 
-                            <!-- Website -->
                             <div class="group md:col-span-2">
                                 <label class="block text-sm font-semibold text-gray-700 mb-2 flex items-center">
                                     <svg class="w-4 h-4 mr-1 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 01-9-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/>
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 01-9 9m9-9a9 9 0 00-9-9m9 9H3m9 9a9 9 0 019-9m9 9c1.657 0 3-4.03 3-9s-1.343-9-3-9m0 18c-1.657 0-3-4.03-3-9s1.343-9 3-9m-9 9a9 9 0 019-9"/>
                                     </svg>
                                     Website
                                 </label>
@@ -187,7 +175,6 @@
                         </div>
                     </div>
 
-                    <!-- Photo Upload Section -->
                     <div class="bg-yellow-50 rounded-xl p-6">
                         <label class="block text-sm font-semibold text-gray-700 mb-2 flex items-center">
                             <svg class="w-4 h-4 mr-2 text-yellow-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -202,18 +189,21 @@
                             <p class="text-red-500 text-sm mt-1">{{ $message }}</p>
                         @enderror
                         
+                        {{-- Bagian yang diperbaiki: Menampilkan foto UMKM yang ada --}}
                         @if($umkm->photo)
                             <div class="mt-4">
                                 <p class="text-sm text-gray-600 mb-2">Foto saat ini:</p>
-                                <img sr<img src="{{ asset('img/' . $product->image) }}"
-     alt="{{ $product->name }}"
-     class="h-48 w-full object-cover">
-
+                                <img src="{{ asset('storage/' . $umkm->photo) }}"
+                                     alt="Foto UMKM {{ $umkm->name }}"
+                                     class="h-48 w-full object-cover rounded-lg shadow-sm">
+                            </div>
+                        @else
+                            <div class="mt-4 text-center text-gray-500 text-sm">
+                                Belum ada foto profil UMKM.
                             </div>
                         @endif
                     </div>
 
-                    <!-- Submit Button -->
                     <div class="flex justify-end pt-6">
                         <button type="submit" 
                                 class="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold px-8 py-4 rounded-xl transition duration-200 transform hover:scale-105 hover:shadow-lg flex items-center">
