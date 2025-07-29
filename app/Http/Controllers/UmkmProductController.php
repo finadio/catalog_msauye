@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\ProductStatus;
+use App\Models\User;
+use App\Notifications\NewProductSubmittedNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Log; // Pastikan ini diimpor untuk logging
 
@@ -122,7 +125,11 @@ class UmkmProductController extends Controller
             $productData['photo'] = null;
         }
 
-        Product::create($productData);
+        $product = Product::create($productData);
+
+        // Kirim notifikasi ke semua admin
+        $admins = User::where('role', 'admin')->get();
+        Notification::send($admins, new NewProductSubmittedNotification($product));
 
         return redirect()->route('umkm_produk')->with('success', 'Produk berhasil ditambahkan!');
     }

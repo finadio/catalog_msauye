@@ -6,6 +6,7 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Models\ProductStatus;
 use App\Models\Umkm;
+use App\Notifications\ProductStatusChangedNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -126,17 +127,31 @@ class AdminProductController extends Controller
 
     public function approve($id)
     {
-        $product = Product::findOrFail($id);
+        $product = Product::with('umkm.user')->findOrFail($id);
         $status = ProductStatus::where('name','approved')->first();
-        if($status) $product->update(['status_id' => $status->id]);
+        if($status) {
+            $product->update(['status_id' => $status->id]);
+            
+            // Kirim notifikasi ke user UMKM
+            if($product->umkm && $product->umkm->user) {
+                $product->umkm->user->notify(new ProductStatusChangedNotification($product, 'approved'));
+            }
+        }
         return redirect()->route('admin.produk.index')->with('success','Produk berhasil di-approve!');
     }
 
     public function reject($id)
     {
-        $product = Product::findOrFail($id);
+        $product = Product::with('umkm.user')->findOrFail($id);
         $status = ProductStatus::where('name','rejected')->first();
-        if($status) $product->update(['status_id' => $status->id]);
+        if($status) {
+            $product->update(['status_id' => $status->id]);
+            
+            // Kirim notifikasi ke user UMKM
+            if($product->umkm && $product->umkm->user) {
+                $product->umkm->user->notify(new ProductStatusChangedNotification($product, 'rejected'));
+            }
+        }
         return redirect()->route('admin.produk.index')->with('success','Produk berhasil di-reject!');
     }
 }
