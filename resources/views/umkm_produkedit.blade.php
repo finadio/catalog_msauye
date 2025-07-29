@@ -30,6 +30,7 @@
 
                 <form action="{{ route('umkm_produkupdate', $product->id) }}" method="POST" enctype="multipart/form-data" class="space-y-8 relative z-10">
                     @csrf
+                    @method('POST')
 
                     {{-- Basic Information Section --}}
                     <div class="bg-gradient-to-r from-gray-50/50 to-blue-50/50 rounded-2xl p-8 border border-gray-100">
