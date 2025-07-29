@@ -202,14 +202,35 @@ class UmkmProductController extends Controller
      */
     public function destroy(Product $product)
     {
-        // Panggil otorisasi di sini juga
-        $this->authorize('delete', $product);
+        Log::info('UmkmProductController@destroy called', [
+            'product_id' => $product->id,
+            'user_id' => auth()->id(),
+            'umkm_id' => auth()->user()->umkm ? auth()->user()->umkm->id : null
+        ]);
 
-        if ($product->photo && Storage::disk('public')->exists($product->photo)) {
-            Storage::disk('public')->delete($product->photo);
+        try {
+            // Panggil otorisasi untuk menghapus produk
+            $this->authorize('delete', $product);
+
+            if ($product->photo) {
+                Storage::disk('public')->delete($product->photo);
+            }
+            
+            $product->delete();
+
+            return redirect()
+                ->route('umkm_produk')
+                ->with('success', 'Produk berhasil dihapus!');
+                
+        } catch (\Exception $e) {
+            Log::error('Error deleting product', [
+                'error' => $e->getMessage(),
+                'product_id' => $product->id
+            ]);
+
+            return redirect()
+                ->back()
+                ->with('error', 'Terjadi kesalahan saat menghapus produk. ' . $e->getMessage());
         }
-
-        $product->delete();
-        return redirect()->route('umkm_produk')->with('success', 'Produk berhasil dihapus!');
     }
 }
