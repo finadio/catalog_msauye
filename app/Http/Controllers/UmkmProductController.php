@@ -155,13 +155,12 @@ class UmkmProductController extends Controller
             'description' => 'required|string',
             'price' => 'nullable|numeric|min:0',
             'category_id' => 'required|exists:categories,id',
-            'wa' => 'nullable|string|max:255',
+            'whatsapp' => 'nullable|string|max:255',
             'instagram' => 'nullable|string|max:255',
             'tiktok' => 'nullable|string|max:255',
             'website' => 'nullable|url|max:255',
             'telepon' => 'nullable|string|max:255',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'status_id' => 'required|exists:product_statuses,id',
         ]);
 
         $productData = [
@@ -169,12 +168,11 @@ class UmkmProductController extends Controller
             'description' => $validatedData['description'],
             'price' => $validatedData['price'],
             'category_id' => $validatedData['category_id'],
-            'whatsapp' => $validatedData['wa'] ?? null,
+            'whatsapp' => $validatedData['whatsapp'] ?? null,
             'instagram' => $validatedData['instagram'] ?? null,
             'tiktok_shop' => $validatedData['tiktok'] ?? null,
             'website' => $validatedData['website'] ?? null,
             'telepon' => $validatedData['telepon'] ?? null,
-            'status_id' => $validatedData['status_id'],
         ];
 
         \Log::info('DEBUG: Mulai proses update produk', ['product_id' => $product->id]);
