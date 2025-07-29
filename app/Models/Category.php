@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Product; // Penting: Import model Product
 
 class Category extends Model
 {
@@ -15,9 +16,15 @@ class Category extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'name', // Hanya kolom 'name' yang boleh diisi secara massal untuk Category
+        'name',
     ];
 
-    // Alternatif (jika Anda ingin semua kolom boleh diisi kecuali yang dijaga):
-    // protected $guarded = []; // Array kosong berarti tidak ada kolom yang dijaga dari mass assignment
+    /**
+     * Define the relationship with products.
+     * A category can have many products.
+     */
+    public function products()
+    {
+        return $this->hasMany(Product::class);
+    }
 }
