@@ -16,7 +16,7 @@
                 <a href="/" class="inline-block px-6 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 font-semibold transition">Lihat Katalog Publik</a>
             </div>
             <div class="flex-1 flex justify-center">
-                <img src="/img/background.png" alt="Dashboard" class="rounded-xl shadow-lg w-full max-w-xs object-cover">
+                <img src="/img/msa1.jpeg" alt="Dashboard" class="rounded-xl shadow-lg w-full max-w-xs object-cover">
             </div>
         </div>
     </section>

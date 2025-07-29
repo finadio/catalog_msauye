@@ -15,7 +15,7 @@
             {{-- Header section for the main box: Title and Add New UMKM Button --}}
             <div class="flex flex-col sm:flex-row items-center justify-between mb-6 gap-4">
                 <h3 class="text-2xl font-bold text-gray-900">Daftar UMKM</h3>
-                <a href="{{ route('admin.umkm.create') }}" class="h-10 px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition ease-in-out duration-150 font-semibold shadow-sm w-full sm:w-auto text-center inline-flex items-center justify-center">Tambah UMKM Baru</a>
+                <a href="{{ route('admin.umkm.create') }}" class="h-10 px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition ease-in-out duration-150 font-semibold shadow-sm w-full sm:w-auto text-center inline-flex items-center justify-center whitespace-nowrap">Tambah UMKM Baru</a>
             </div>
 
             {{-- Filter Form --}}
@@ -36,7 +36,8 @@
                     </a>
                     @endif
                 </div>
-                <select name="kategori" class="h-10 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-800 w-full sm:w-56">
+                {{-- Perbaikan utama di sini: tambahkan `pr-10` untuk memberi ruang pada ikon dropdown --}}
+                <select name="kategori" class="h-10 pl-4 pr-10 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-800 w-full sm:w-56 appearance-none">
                     <option value="">Semua Kategori Produk</option>
                     @foreach($categories as $category)
                         <option value="{{ $category->id }}" @selected(request('kategori') == $category->id)>
@@ -44,9 +45,9 @@
                         </option>
                     @endforeach
                 </select>
-                <button type="submit" class="h-10 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition ease-in-out duration-150 font-semibold shadow-sm w-full sm:w-auto">Filter</button>
+                <button type="submit" class="h-10 px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition ease-in-out duration-150 font-semibold shadow-sm w-full sm:w-auto whitespace-nowrap">Filter</button>
                 @if(request('q') || request('kategori'))
-                    <a href="{{ route('admin.umkm.index') }}" class="w-full sm:w-auto px-8 py-3 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 font-semibold text-lg transition duration-300 ease-in-out shadow-md transform hover:-translate-y-0.5 text-center">Reset</a>
+                    <a href="{{ route('admin.umkm.index') }}" class="w-full sm:w-auto px-6 py-2 h-10 bg-gray-300 text-gray-800 rounded-lg hover:bg-gray-400 font-semibold transition duration-300 ease-in-out shadow-md text-center inline-flex items-center justify-center whitespace-nowrap">Reset</a>
                 @endif
             </form>
 

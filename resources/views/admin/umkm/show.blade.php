@@ -9,7 +9,8 @@
         {{-- Bagian Detail UMKM --}}
         <div class="bg-white rounded-xl shadow-lg p-6 md:p-8 flex flex-col md:flex-row gap-8 mb-8">
             <div class="flex-shrink-0 w-full md:w-1/3 rounded-lg overflow-hidden shadow-md">
-                <img src="{{ $umkm->photo ? asset('storage/'.$umkm->photo) : asset('img/umkm-default.jpg') }}" alt="{{ $umkm->name }}" class="w-full h-56 md:h-72 object-cover">
+                {{-- PERBAIKAN: Mengubah ekstensi default .jpg menjadi .png --}}
+                <img src="{{ $umkm->photo ? asset('storage/'.$umkm->photo) : asset('img/umkm-default.png') }}" alt="{{ $umkm->name }}" class="w-full h-56 md:h-72 object-cover">
             </div>
             <div class="flex-1 flex flex-col">
                 <h2 class="text-3xl font-bold mb-3 text-gray-900">{{ $umkm->name }}</h2>
@@ -28,14 +29,12 @@
                             </a>
                         @endif
                         @if($umkm->instagram)
-                            {{-- HAPUS @ DI SINI --}}
                             <a href="https://instagram.com/{{ $umkm->instagram }}" target="_blank" class="flex items-center text-pink-600 hover:text-pink-700 font-medium">
                                 <i class='bx bxl-instagram text-lg mr-2'></i> Instagram: {{ $umkm->instagram }}
                             </a>
                         @endif
                         {{-- Field TikTok --}}
                         @if($umkm->tiktok)
-                            {{-- HAPUS @ DI SINI --}}
                             <a href="https://tiktok.com/@{{ $umkm->tiktok }}" target="_blank" class="flex items-center text-gray-800 hover:text-gray-900 font-medium">
                                 <i class='bx bxl-tiktok text-lg mr-2'></i> TikTok: {{ $umkm->tiktok }}
                             </a>
@@ -69,7 +68,29 @@
                         @forelse($umkm->products as $product)
                             <tr class="hover:bg-gray-50 transition-colors duration-150 ease-in-out">
                                 <td class="px-6 py-4 whitespace-nowrap">
-                                    <img src="{{ $product->photo ? asset('storage/'.$product->photo) : 'https://via.placeholder.com/80x60?text=Foto' }}" class="h-12 w-16 object-cover rounded shadow-sm"/>
+                                    @php
+                                        // Tentukan jalur foto yang benar secara kondisional
+                                        $photoPath = 'https://via.placeholder.com/80x60?text=Foto'; // Fallback default
+                                        if ($product->photo) {
+                                            // Cek apakah path foto adalah dummy image yang disimpan di public/img
+                                            if (Str::startsWith($product->photo, 'produk-dummy')) { //
+                                                $photoPath = asset('img/' . $product->photo); //
+                                            }
+                                            // Cek apakah path foto adalah dari 'products/' folder di storage
+                                            else if (Str::startsWith($product->photo, 'products/')) { //
+                                                $photoPath = asset('storage/' . $product->photo); //
+                                            }
+                                            // Cek apakah path foto adalah dari 'produk/' folder di storage
+                                            else if (Str::startsWith($product->photo, 'produk/')) { //
+                                                $photoPath = asset('storage/' . $product->photo); //
+                                            }
+                                            // Jika ada format path lain yang diharapkan dari storage
+                                            else {
+                                                $photoPath = asset('storage/' . $product->photo); //
+                                            }
+                                        }
+                                    @endphp
+                                    <img src="{{ $photoPath }}" class="h-12 w-16 object-cover rounded shadow-sm"/>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $product->name }}</td>
                                 <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $product->category->name ?? '-' }}</td>
