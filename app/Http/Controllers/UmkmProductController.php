@@ -11,7 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Facades\Log; // Pastikan ini diimpor untuk logging
+use Illuminate\Support\Facades\Log;
 
 class UmkmProductController extends Controller
 {
@@ -90,6 +90,8 @@ class UmkmProductController extends Controller
             'website' => 'nullable|url|max:255',
             'telepon' => 'nullable|string|max:255',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            // Tambahkan validasi untuk show_price jika itu input dari form
+            'show_price' => 'nullable|boolean', // Sesuaikan jika ini checkbox
         ]);
 
         $user = Auth::user();
@@ -97,7 +99,18 @@ class UmkmProductController extends Controller
 
         // Penting: Pastikan user memiliki UMKM sebelum mencoba membuat produk
         if (!$umkm) {
+            // Log error untuk debugging
+            Log::error('UMKM profile not found for user: ' . $user->id);
             return redirect()->back()->with('error', 'Anda harus memiliki profil UMKM untuk menambahkan produk.');
+        }
+
+        // Ambil ID status 'pending'. Pastikan ProductStatusSeeder sudah dijalankan.
+        $pendingStatus = ProductStatus::where('name', 'pending')->first();
+
+        if (!$pendingStatus) {
+            // Log error yang lebih detail jika status 'pending' tidak ditemukan
+            Log::error('Product status "pending" not found in database. Please run ProductStatusSeeder.');
+            return redirect()->back()->with('error', 'Terjadi kesalahan: Status produk "pending" tidak ditemukan. Harap hubungi administrator.');
         }
 
         $productData = [
@@ -106,14 +119,18 @@ class UmkmProductController extends Controller
             'description' => $validatedData['deskripsi'],
             'price' => $validatedData['harga'],
             'category_id' => $validatedData['category_id'],
-            'location' => $umkm->address,
-            'show_price' => true,
-            'whatsapp' => $validatedData['wa'],
-            'instagram' => $validatedData['instagram'],
-            'tiktok_shop' => $validatedData['tiktok'],
-            'website' => $validatedData['website'],
-            'telepon' => $validatedData['telepon'],
-            'status_id' => ProductStatus::where('name', 'pending')->first()->id,
+            // Menggunakan null coalesce operator untuk 'location' agar tidak error jika $umkm->address kosong
+            'location' => $umkm->address ?? 'Lokasi tidak tersedia',
+            // Perbaiki penanganan show_price: true jika checkbox dicentang, false jika tidak.
+            // Asumsi di form ada input checkbox dengan name="show_price".
+            'show_price' => $request->has('show_price') ? true : false,
+            // Perbaiki penanganan null untuk kolom kontak
+            'whatsapp' => $validatedData['wa'] ?? null,
+            'instagram' => $validatedData['instagram'] ?? null,
+            'tiktok_shop' => $validatedData['tiktok'] ?? null, // Sesuaikan dengan nama kolom di database Anda
+            'website' => $validatedData['website'] ?? null,
+            'telepon' => $validatedData['telepon'] ?? null,
+            'status_id' => $pendingStatus->id,
         ];
 
         if ($request->hasFile('photo')) {
@@ -125,13 +142,23 @@ class UmkmProductController extends Controller
             $productData['photo'] = null;
         }
 
-        $product = Product::create($productData);
+        try {
+            $product = Product::create($productData);
 
-        // Kirim notifikasi ke semua admin
-        $admins = User::where('role', 'admin')->get();
-        Notification::send($admins, new NewProductSubmittedNotification($product));
+            // Kirim notifikasi ke semua admin
+            $admins = User::where('role', 'admin')->get();
+            Notification::send($admins, new NewProductSubmittedNotification($product));
 
-        return redirect()->route('umkm_produk')->with('success', 'Produk berhasil ditambahkan!');
+            return redirect()->route('umkm_produk')->with('success', 'Produk berhasil ditambahkan!');
+        } catch (\Exception $e) {
+            // Log error untuk debugging jika ada masalah saat menyimpan ke database
+            Log::error('Error creating product: ' . $e->getMessage(), [
+                'user_id' => $user->id,
+                'product_data' => $productData,
+                'exception' => $e
+            ]);
+            return redirect()->back()->withInput()->with('error', 'Gagal menambahkan produk. Terjadi kesalahan server. Silakan coba lagi. Detail: ' . $e->getMessage());
+        }
     }
 
     /**
