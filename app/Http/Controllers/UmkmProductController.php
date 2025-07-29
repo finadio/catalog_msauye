@@ -177,15 +177,20 @@ class UmkmProductController extends Controller
             'status_id' => $validatedData['status_id'],
         ];
 
+        \Log::info('DEBUG: Mulai proses update produk', ['product_id' => $product->id]);
         if ($request->hasFile('photo')) {
-            if ($product->photo && Storage::disk('public')->exists($product->photo)) {
-                Storage::disk('public')->delete($product->photo);
+            \Log::info('DEBUG: File foto ditemukan di request', ['original_name' => $request->file('photo')->getClientOriginalName()]);
+            if ($product->photo && \Storage::disk('public')->exists($product->photo)) {
+                \Log::info('DEBUG: Menghapus foto lama', ['old_photo' => $product->photo]);
+                \Storage::disk('public')->delete($product->photo);
             }
             $image = $request->file('photo');
             $fileName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
             $path = $image->storeAs('products', $fileName, 'public');
+            \Log::info('DEBUG: Foto baru berhasil di-upload', ['path' => $path]);
             $productData['photo'] = $path;
         } else {
+            \Log::info('DEBUG: Tidak ada file foto di request, menggunakan foto lama', ['old_photo' => $product->photo]);
             $productData['photo'] = $product->photo;
         }
 
