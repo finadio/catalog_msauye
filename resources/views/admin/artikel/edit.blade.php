@@ -8,32 +8,33 @@
         <div class="bg-white rounded-xl shadow-lg p-6 md:p-8">
             <h3 class="text-2xl font-bold text-gray-900 mb-6 text-center">Form Edit Artikel</h3>
 
-            <form method="POST" action="{{ route('admin.artikel.update', $article->id) }}" enctype="multipart/form-data" class="space-y-6">
+            <form method="POST" action="{{ route('admin.artikel.update', $artikel->id) }}" enctype="multipart/form-data" class="space-y-6">
                 @csrf @method('PUT')
                 <div>
                     <label class="block mb-1 font-semibold text-gray-700">Judul</label>
-                    <input type="text" name="title" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" value="{{ old('title', $article->title) }}" required>
+                    <input type="text" name="title" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" value="{{ old('title', $artikel->title) }}" required>
                     @error('title')<div class="text-red-600 text-sm mt-1">{{ $message }}</div>@enderror
                 </div>
                 <div>
                     <label class="block mb-1 font-semibold text-gray-700">Tipe</label>
                     <select name="type" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" required>
                         <option value="">Pilih Tipe</option>
-                        <option value="edukasi" @selected(old('type', $article->type)=='edukasi')>Edukasi</option>
-                        <option value="berita" @selected(old('type', $article->type)=='berita')>Berita</option>
+                        <option value="edukasi" @selected(old('type', $artikel->type)=='edukasi')>Edukasi</option>
+                        <option value="berita" @selected(old('type', $artikel->type)=='berita')>Berita</option>
                     </select>
                     @error('type')<div class="text-red-600 text-sm mt-1">{{ $message }}</div>@enderror
                 </div>
                 <div>
                     <label class="block mb-1 font-semibold text-gray-700">Konten</label>
-                    <textarea name="content" rows="6" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" required>{{ old('content', $article->content) }}</textarea>
+                    <textarea name="content" rows="6" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" required>{{ old('content', $artikel->content) }}</textarea>
                     @error('content')<div class="text-red-600 text-sm mt-1">{{ $message }}</div>@enderror
                 </div>
                 <div>
                     <label class="block mb-1 font-semibold text-gray-700">Foto (opsional)</label>
-                    <input type="file" name="photo" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
-                    @if($article->photo)
-                        <img src="{{ asset('storage/'.$article->photo) }}" class="h-20 mt-2 rounded"/>
+                    {{-- Pastikan ini 'image' sesuai controller --}}
+                    <input type="file" name="image" class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400">
+                    @if($artikel->image) {{-- Menggunakan $artikel di sini --}}
+                        <img src="{{ asset('storage/'.$artikel->image) }}" class="h-20 mt-2 rounded"/> {{-- Menggunakan $artikel di sini --}}
                     @endif
                     @error('photo')<div class="text-red-600 text-sm mt-1">{{ $message }}</div>@enderror
                 </div>
