@@ -55,7 +55,7 @@ class AdminArticleController extends Controller
             'title' => 'required|string|max:255',
             'type' => 'required|string|max:255',
             'content' => 'required|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Validasi tetap 'image' karena itu nama input dari form
         ]);
 
         $imagePath = null;
@@ -68,7 +68,7 @@ class AdminArticleController extends Controller
             'slug' => Str::slug($request->title),
             'type' => $request->type,
             'content' => $request->content,
-            'image' => $imagePath,
+            'photo' => $imagePath, // <<< PERUBAHAN DI SINI: 'image' menjadi 'photo'
             'published_at' => now(), // Set published_at to current time
         ]);
 
@@ -92,23 +92,23 @@ class AdminArticleController extends Controller
             'title' => 'required|string|max:255',
             'type' => 'required|string|max:255',
             'content' => 'required|string',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Validasi tetap 'image' karena itu nama input dari form
         ]);
 
         // Handle image update
         if ($request->hasFile('image')) {
             // Delete old image if exists
-            if ($artikel->image) {
-                Storage::disk('public')->delete($artikel->image);
+            if ($artikel->photo) { // <<< PERUBAHAN DI SINI: $artikel->image menjadi $artikel->photo
+                Storage::disk('public')->delete($artikel->photo); // <<< PERUBAHAN DI SINI: $artikel->image menjadi $artikel->photo
             }
             $imagePath = $request->file('image')->store('article_images', 'public');
-            $artikel->image = $imagePath;
+            $artikel->photo = $imagePath; // <<< PERUBAHAN DI SINI: $artikel->image menjadi $artikel->photo
         } elseif ($request->input('remove_image')) {
             // Remove image if checkbox is checked
-            if ($artikel->image) {
-                Storage::disk('public')->delete($artikel->image);
+            if ($artikel->photo) { // <<< PERUBAHAN DI SINI: $artikel->image menjadi $artikel->photo
+                Storage::disk('public')->delete($artikel->photo); // <<< PERUBAHAN DI SINI: $artikel->image menjadi $artikel->photo
             }
-            $artikel->image = null;
+            $artikel->photo = null; // <<< PERUBAHAN DI SINI: $artikel->image menjadi $artikel->photo
         }
 
         $artikel->update([
@@ -116,7 +116,7 @@ class AdminArticleController extends Controller
             'slug' => Str::slug($request->title),
             'type' => $request->type,
             'content' => $request->content,
-            // 'image' is updated above
+            // 'photo' (bukan 'image') telah diperbarui di atas melalui $artikel->photo = $imagePath;
         ]);
 
         return redirect()->route('admin.artikel.index')->with('success', 'Artikel berhasil diperbarui!');
@@ -128,8 +128,8 @@ class AdminArticleController extends Controller
     public function destroy(Article $artikel)
     {
         // Delete image if exists
-        if ($artikel->image) {
-            Storage::disk('public')->delete($artikel->image);
+        if ($artikel->photo) { // <<< PERUBAHAN DI SINI: $artikel->image menjadi $artikel->photo
+            Storage::disk('public')->delete($artikel->photo); // <<< PERUBAHAN DI SINI: $artikel->image menjadi $artikel->photo
         }
 
         $artikel->delete();
