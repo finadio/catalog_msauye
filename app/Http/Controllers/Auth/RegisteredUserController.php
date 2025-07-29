@@ -5,10 +5,12 @@ namespace App\Http\Controllers\Auth;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Models\Umkm;
+use App\Notifications\NewUserRegisteredNotification;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
 
@@ -60,6 +62,10 @@ class RegisteredUserController extends Controller
 
         // Trigger event Laravel untuk pendaftaran
         event(new Registered($user));
+
+        // Kirim notifikasi ke semua admin
+        $admins = User::where('role', 'admin')->get();
+        Notification::send($admins, new NewUserRegisteredNotification($user));
 
         // Redirect ke halaman pending karena user perlu menunggu persetujuan admin
         return redirect()->route('auth.pending');

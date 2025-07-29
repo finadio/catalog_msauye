@@ -16,6 +16,7 @@ use App\Http\Controllers\AdminProductController;
 use App\Http\Controllers\AdminCategoryController;
 use App\Http\Controllers\AdminArticleController;
 use App\Http\Controllers\AdminContactController;
+use App\Http\Controllers\NotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -70,6 +71,12 @@ Route::prefix('u')->middleware(['auth'])->group(function () {
     Route::get('/produk/{product}/edit', [UmkmProductController::class, 'edit'])->name('umkm_produkedit');
     Route::post('/produk/{product}', [UmkmProductController::class, 'update'])->name('umkm_produkupdate');
     Route::delete('/produk/{product}', [UmkmProductController::class, 'destroy'])->name('umkm_produkdestroy');
+
+    // Notifikasi UMKM
+    Route::get('/notifikasi', [NotificationController::class, 'umkmIndex'])->name('umkm.notifications.index');
+    Route::post('/notifikasi/{id}/read', [NotificationController::class, 'markAsRead'])->name('umkm.notifications.read');
+    Route::post('/notifikasi/read-all', [NotificationController::class, 'markAllAsRead'])->name('umkm.notifications.read-all');
+    Route::delete('/notifikasi/{id}', [NotificationController::class, 'destroy'])->name('umkm.notifications.destroy');
 });
 
 // Dashboard Admin (Memerlukan autentikasi SAJA, tanpa middleware 'role' sementara)
@@ -88,6 +95,12 @@ Route::middleware(['auth'])->group(function () {
     Route::resource('/admin/artikel', AdminArticleController::class, [ 'as' => 'admin' ]);
     Route::post('/admin/contact/{id}/mark-as-read', [AdminContactController::class, 'markAsRead'])->name('admin.contact.markAsRead');
     Route::resource('/admin/contact', AdminContactController::class, [ 'as' => 'admin' ]);
+    
+    // Notifikasi Admin
+    Route::get('/admin/notifikasi', [NotificationController::class, 'adminIndex'])->name('admin.notifications.index');
+    Route::post('/admin/notifikasi/{id}/read', [NotificationController::class, 'markAsRead'])->name('admin.notifications.read');
+    Route::post('/admin/notifikasi/read-all', [NotificationController::class, 'markAllAsRead'])->name('admin.notifications.read-all');
+    Route::delete('/admin/notifikasi/{id}', [NotificationController::class, 'destroy'])->name('admin.notifications.destroy');
     // BARIS INI MENYEBABKAN KONFLIK DAN HARUS DIHAPUS:
     // Route::get('/produk/{id}/edit', [AdminProductController::class, 'edit'])->name('admin_produk.edit');
 });

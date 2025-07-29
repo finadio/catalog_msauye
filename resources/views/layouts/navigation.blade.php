@@ -83,6 +83,12 @@
                         <x-slot name="content">
                             @if(auth()->user()->role == 'admin')
                                 <x-dropdown-link :href="route('admin.dashboard')" class="text-gray-700 hover:bg-gray-100">{{ __('Dashboard Admin') }}</x-dropdown-link>
+                                <x-dropdown-link :href="route('admin.notifications.index')" class="text-gray-700 hover:bg-gray-100 flex items-center justify-between">
+                                    <span>{{ __('Notifikasi') }}</span>
+                                    @if($unreadNotificationsCount > 0)
+                                        <span class="bg-red-500 text-white text-xs px-2 py-1 rounded-full ml-2">{{ $unreadNotificationsCount }}</span>
+                                    @endif
+                                </x-dropdown-link>
                                 <x-dropdown-link :href="route('admin.umkm.index')" class="text-gray-700 hover:bg-gray-100">{{ __('Kelola UMKM') }}</x-dropdown-link>
                                 <x-dropdown-link :href="route('admin.produk.index')" class="text-gray-700 hover:bg-gray-100">{{ __('Kelola Produk') }}</x-dropdown-link>
                                 <x-dropdown-link :href="route('admin.kategori.index')" class="text-gray-700 hover:bg-gray-100">{{ __('Kelola Kategori') }}</x-dropdown-link>
@@ -91,6 +97,12 @@
                                 <x-dropdown-link :href="route('profile.edit')" class="text-gray-700 hover:bg-gray-100">{{ __('Edit Profile') }}</x-dropdown-link>
                             @elseif(auth()->user()->role == 'umkm')
                                 <x-dropdown-link :href="route('umkm_dashboard')" class="text-gray-700 hover:bg-gray-100">{{ __('Dashboard UMKM') }}</x-dropdown-link>
+                                <x-dropdown-link :href="route('umkm.notifications.index')" class="text-gray-700 hover:bg-gray-100 flex items-center justify-between">
+                                    <span>{{ __('Notifikasi') }}</span>
+                                    @if($unreadNotificationsCount > 0)
+                                        <span class="bg-red-500 text-white text-xs px-2 py-1 rounded-full ml-2">{{ $unreadNotificationsCount }}</span>
+                                    @endif
+                                </x-dropdown-link>
                                 <x-dropdown-link :href="route('umkm_produk')" class="text-gray-700 hover:bg-gray-100">{{ __('Kelola Produk') }}</x-dropdown-link>
                                 <x-dropdown-link :href="route('umkm_editprofile')" class="text-gray-700 hover:bg-gray-100">{{ __('Edit Profile') }}</x-dropdown-link>
                             @endif
@@ -174,15 +186,27 @@
                 <div class="mt-3 space-y-1">
                     @if(Auth::user()->role == 'umkm')
                         <x-responsive-nav-link :href="route('umkm_dashboard')" class="text-gray-700 hover:bg-gray-100">{{ __('Dashboard UMKM') }}</x-responsive-nav-link>
+                        <x-responsive-nav-link :href="route('umkm.notifications.index')" class="text-gray-700 hover:bg-gray-100 flex items-center justify-between">
+                            <span>{{ __('Notifikasi') }}</span>
+                            @if($unreadNotificationsCount > 0)
+                                <span class="bg-red-500 text-white text-xs px-2 py-1 rounded-full">{{ $unreadNotificationsCount }}</span>
+                            @endif
+                        </x-responsive-nav-link>
                         <x-responsive-nav-link :href="route('umkm_produk')" class="text-gray-700 hover:bg-gray-100">{{ __('Kelola Produk') }}</x-responsive-nav-link>
                         <x-responsive-nav-link :href="route('umkm_editprofile')" class="text-gray-700 hover:bg-gray-100">{{ __('Edit Profile') }}</x-responsive-nav-link>
                     @elseif(Auth::user()->role == 'admin')
+                        <x-responsive-nav-link :href="route('admin.notifications.index')" class="text-gray-700 hover:bg-gray-100 flex items-center justify-between">
+                            <span>{{ __('Notifikasi') }}</span>
+                            @if($unreadNotificationsCount > 0)
+                                <span class="bg-red-500 text-white text-xs px-2 py-1 rounded-full">{{ $unreadNotificationsCount }}</span>
+                            @endif
+                        </x-responsive-nav-link>
                         <x-responsive-nav-link :href="route('admin.umkm.index')" class="text-gray-700 hover:bg-gray-100">{{ __('Kelola UMKM') }}</x-responsive-nav-link>
                         <x-responsive-nav-link :href="route('admin.produk.index')" class="text-gray-700 hover:bg-gray-100">{{ __('Kelola Produk') }}</x-responsive-nav-link>
                         <x-responsive-nav-link :href="route('admin.kategori.index')" class="text-gray-700 hover:bg-gray-100">{{ __('Kelola Kategori') }}</x-responsive-nav-link>
                         <x-responsive-nav-link :href="route('admin.artikel.index')" class="text-gray-700 hover:bg-gray-100">{{ __('Kelola Artikel') }}</x-responsive-nav-link>
                         <x-responsive-nav-link :href="route('admin.contact.index')" class="text-gray-700 hover:bg-gray-100">{{ __('Pesan Masuk') }}</x-responsive-nav-link>
-                        <x-responsive-nav-link :href="route('umkm_editprofile')" class="text-gray-700 hover:bg-gray-100">{{ __('Edit Profile') }}</x-responsive-nav-link>
+                        <x-responsive-nav-link :href="route('profile.edit')" class="text-gray-700 hover:bg-gray-100">{{ __('Edit Profile') }}</x-responsive-nav-link>
                     @endif
                     
                     <!-- Fixed Mobile Logout Form -->
