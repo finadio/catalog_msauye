@@ -15,14 +15,43 @@ class UmkmProductController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         // Mendapatkan UMKM dari user yang sedang login
         $umkm = Auth::user()->umkm;
 
-        // Mendapatkan produk berdasarkan umkm_id yang terkait DENGAN PAGINASI
-        // Pastikan $umkm tidak null sebelum mencoba mengakses $umkm->id
-        $products = $umkm ? Product::where('umkm_id', $umkm->id)->paginate(10) : collect();
+        if (!$umkm) {
+            return view('umkm_produk', ['products' => collect()]);
+        }
+
+        // Mulai query builder
+        $query = Product::where('umkm_id', $umkm->id)->with('status');
+
+        // Handle pencarian
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where('name', 'like', "%{$search}%");
+        }
+
+        // Handle pengurutan
+        $sortBy = $request->get('sort_by', 'updated_at');
+        $sortOrder = $request->get('sort_order', 'desc');
+
+        switch ($sortBy) {
+            case 'name':
+                $query->orderBy('name', $sortOrder);
+                break;
+            case 'price':
+                $query->orderBy('price', $sortOrder);
+                break;
+            case 'status':
+                $query->orderBy('status_id', $sortOrder);
+                break;
+            default:
+                $query->orderBy('updated_at', 'desc');
+        }
+
+        $products = $query->paginate(10)->withQueryString();
 
         return view('umkm_produk', compact('products'));
     }
