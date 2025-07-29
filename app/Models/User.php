@@ -58,15 +58,17 @@ class User extends Authenticatable
         return $this->hasOne(Umkm::class);
     }
 
-    // Relasi 'produk()' yang Anda miliki (tidak diubah)
-    public function produk()
-    {
-        return $this->hasMany(\App\Models\Produk::class, 'user_id');
-    }
+    // Relasi 'produk()' dan 'products()' di bawah ini dihapus karena
+    // relasi user ke produk seharusnya melalui model UMKM.
+    // User -> Umkm (hasOne) -> Products (hasMany)
 
-    // Relasi 'products()' yang Anda miliki (tidak diubah)
-    public function products()
-    {
-        return $this->hasMany(\App\Models\Product::class, 'umkm_id');
-    }
+    // public function produk()
+    // {
+    //     return $this->hasMany(\App\Models\Produk::class, 'user_id');
+    // }
+
+    // public function products()
+    // {
+    //     return $this->hasMany(\App\Models\Product::class, 'umkm_id');
+    // }
 }

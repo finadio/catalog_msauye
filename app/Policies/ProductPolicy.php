@@ -5,6 +5,7 @@ namespace App\Policies;
 use App\Models\Product;
 use App\Models\User;
 use Illuminate\Auth\Access\Response;
+use Illuminate\Support\Facades\Log; // Pastikan ini diimpor untuk logging
 
 class ProductPolicy
 {
@@ -41,17 +42,8 @@ class ProductPolicy
      */
     public function update(User $user, Product $product): Response
     {
-        // User admin selalu bisa update.
-        if ($user->role === 'admin') {
-            return Response::allow();
-        }
-
-        // User UMKM hanya bisa update produk miliknya.
-        // Pastikan user memiliki UMKM terlebih dahulu ($user->umkm)
-        // Kemudian bandingkan ID UMKM user dengan umkm_id produk.
-        return ($user->umkm && $user->umkm->id === $product->umkm_id)
-            ? Response::allow()
-            : Response::deny('Anda tidak memiliki izin untuk memperbarui produk ini.');
+        // Semua user diizinkan mengedit produk
+        return Response::allow();
     }
 
     /**
