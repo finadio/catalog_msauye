@@ -77,7 +77,7 @@ class AdminUmkmController extends Controller
             'tiktok' => 'nullable|string|max:255',
             'website' => 'nullable|string|max:255',
             'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'username' => 'required|string|max:255|unique:users',
+            'username' => 'required|string|max:255|unique:users,name', // Menggunakan 'name' karena tidak ada kolom 'username'
             'password' => 'required|string|min:8|confirmed',
         ]);
 
@@ -91,7 +91,7 @@ class AdminUmkmController extends Controller
         $user = User::create([
             'name' => $request->name,
             'email' => $request->username . '@example.com', // Dummy email, consider unique user identifier
-            'username' => $request->username,
+            'username' => $request->username, // Pastikan kolom 'username' ada di tabel 'users' jika ingin menyimpan ini
             'password' => Hash::make($request->password),
             'role' => 'umkm', // Assign role as 'umkm'
         ]);
@@ -135,25 +135,33 @@ class AdminUmkmController extends Controller
     public function update(Request $request, Umkm $umkm)
     {
         $request->validate([
-            'name' => 'required|string|max:255',
-            'description' => 'nullable|string',
-            'address' => 'nullable|string|max:255',
-            'phone' => 'nullable|string|max:20',
-            'whatsapp' => 'nullable|string|max:20',
-            'instagram' => 'nullable|string|max:255',
-            'tiktok' => 'nullable|string|max:255',
-            'website' => 'nullable|string|max:255',
-            'photo' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'username' => 'required|string|max:255|unique:users,username,' . $umkm->user_id,
-            'password' => 'nullable|string|min:8|confirmed',
+            'name' => 'required|string|max:255', // Nama UMKM tetap wajib
+            'description' => 'sometimes|nullable|string', // Boleh kosong jika tidak diisi/tidak ada di request
+            'address' => 'sometimes|nullable|string|max:255', // Boleh kosong jika tidak diisi/tidak ada di request
+            'phone' => 'sometimes|nullable|string|max:20', // Boleh kosong jika tidak diisi/tidak ada di request
+            'whatsapp' => 'sometimes|nullable|string|max:20',
+            'instagram' => 'sometimes|nullable|string|max:255',
+            'tiktok' => 'sometimes|nullable|string|max:255',
+            'website' => 'sometimes|nullable|string|max:255',
+            'photo' => 'sometimes|nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Boleh kosong jika tidak diisi/tidak ada di request
+            'username' => 'required|string|max:255|unique:users,name,' . $umkm->user->id, // Username wajib dan unik, tapi akan mengecualikan user saat ini
+            'password' => 'nullable|string|min:8|confirmed', // Password baru opsional
         ]);
 
         // Update User data
         $umkm->user->update([
-            'name' => $request->name,
-            'username' => $request->username,
-            'email' => $request->username . '@example.com', // Keep dummy email or update if needed
+            'name' => $request->name, // Kolom 'name' di tabel users menyimpan username
+            // 'email' => $request->username . '@example.com', // Opsional: update email jika ada perubahan username, atau biarkan statis
         ]);
+
+        // Perbarui username user jika ada perubahan
+        if ($request->has('username') && $request->username !== $umkm->user->name) {
+             $umkm->user->update([
+                'name' => $request->username,
+                // Jika email juga berdasarkan username, perbarui di sini
+                // 'email' => $request->username . '@example.com',
+            ]);
+        }
 
         if ($request->filled('password')) {
             $umkm->user->update([
@@ -168,8 +176,8 @@ class AdminUmkmController extends Controller
                 Storage::disk('public')->delete($umkm->photo);
             }
             $photoPath = $request->file('photo')->store('umkm_photos', 'public');
-            $umkm->photo = $photoPath;
-        } elseif ($request->input('remove_photo')) {
+            $umkm->photo = $photoPath; // Ini memperbarui instance model UMKM
+        } elseif ($request->boolean('remove_photo')) { // Gunakan boolean() untuk checkbox
             // Remove photo if checkbox is checked
             if ($umkm->photo) {
                 Storage::disk('public')->delete($umkm->photo);
@@ -177,6 +185,7 @@ class AdminUmkmController extends Controller
             $umkm->photo = null;
         }
 
+        // Perbarui data UMKM
         $umkm->update([
             'name' => $request->name,
             'description' => $request->description,
@@ -186,7 +195,8 @@ class AdminUmkmController extends Controller
             'instagram' => $request->instagram,
             'tiktok' => $request->tiktok,
             'website' => $request->website,
-            // 'photo' is updated above
+            'photo' => $umkm->photo,
+            // 'photo' sudah diupdate di atas
         ]);
 
         return redirect()->route('admin.umkm.index')->with('success', 'UMKM berhasil diperbarui!');
