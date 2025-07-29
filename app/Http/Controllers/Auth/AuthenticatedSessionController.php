@@ -32,6 +32,21 @@ class AuthenticatedSessionController extends Controller
 
         $user = Auth::user();
 
+        // Cek status user untuk role umkm
+        if ($user->role === 'umkm') {
+            if ($user->status === 'pending') {
+                Auth::logout();
+                return redirect()->route('login')->withErrors([
+                    'email' => 'Akun Anda masih menunggu persetujuan admin. Silakan tunggu konfirmasi lebih lanjut.',
+                ]);
+            } elseif ($user->status === 'rejected') {
+                Auth::logout();
+                return redirect()->route('login')->withErrors([
+                    'email' => 'Akun Anda telah ditolak oleh admin. Silakan hubungi admin untuk informasi lebih lanjut.',
+                ]);
+            }
+        }
+
         // Mengarahkan pengguna berdasarkan peran mereka
         if ($user->role === 'admin') {
             return redirect()->route('admin.dashboard');

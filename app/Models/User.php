@@ -24,6 +24,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'status',
         'photo',
     ];
 
@@ -70,5 +71,21 @@ class User extends Authenticatable
     public function products()
     {
         return $this->hasMany(\App\Models\Product::class, 'umkm_id');
+    }
+
+    // Helper methods untuk status
+    public function isPending()
+    {
+        return $this->status === 'pending';
+    }
+
+    public function isApproved()
+    {
+        return $this->status === 'approved';
+    }
+
+    public function isRejected()
+    {
+        return $this->status === 'rejected';
     }
 }

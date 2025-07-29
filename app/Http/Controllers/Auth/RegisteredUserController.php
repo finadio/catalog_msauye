@@ -39,11 +39,13 @@ class RegisteredUserController extends Controller
             'umkm_phone' => ['required', 'string', 'max:20'],
         ]);
 
-        // Simpan user baru
+        // Simpan user baru dengan status pending
         $user = User::create([
             'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
+            'role' => 'umkm',
+            'status' => 'pending',
         ]);
 
         // Simpan UMKM baru yang terkait user
@@ -59,7 +61,7 @@ class RegisteredUserController extends Controller
         // Trigger event Laravel untuk pendaftaran
         event(new Registered($user));
 
-        // Redirect ke halaman login dengan notifikasi sukses
-        return redirect()->route('login')->with('status', 'Registrasi berhasil! Silakan login.');
+        // Redirect ke halaman pending karena user perlu menunggu persetujuan admin
+        return redirect()->route('auth.pending');
     }
 }

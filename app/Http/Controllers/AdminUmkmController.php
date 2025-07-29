@@ -16,7 +16,7 @@ class AdminUmkmController extends Controller
      */
     public function index(Request $request)
     {
-        $query = Umkm::query();
+        $query = Umkm::with('user');
 
         // Pencarian berdasarkan query 'q' (nama, deskripsi, alamat, telepon, dll.)
         if ($request->filled('q')) {
@@ -33,6 +33,14 @@ class AdminUmkmController extends Controller
             });
         }
 
+        // Filter berdasarkan status user
+        if ($request->filled('status')) {
+            $status = $request->status;
+            $query->whereHas('user', function ($q) use ($status) {
+                $q->where('status', $status);
+            });
+        }
+
         // Tambahkan filter kategori jika diperlukan, misalnya berdasarkan produk UMKM
         // Asumsi: Kita bisa memfilter UMKM berdasarkan kategori produk yang mereka miliki
         if ($request->filled('kategori')) {
@@ -44,12 +52,6 @@ class AdminUmkmController extends Controller
 
         $umkms = $query->latest()->paginate(10);
         $categories = Category::all();
-
-        // Jika ini adalah permintaan AJAX, kembalikan hanya partial view tabel
-        // Bagian ini mungkin tidak diperlukan jika tidak ada AJAX untuk tabel.
-        // if ($request->ajax()) {
-        //     return view('admin.umkm._partials.umkm_table', compact('umkms'))->render();
-        // }
 
         return view('admin.umkm.index', compact('umkms', 'categories'));
     }
@@ -220,5 +222,25 @@ class AdminUmkmController extends Controller
         $umkm->delete();
 
         return redirect()->route('admin.umkm.index')->with('success', 'UMKM berhasil dihapus!');
+    }
+
+    /**
+     * Approve user UMKM
+     */
+    public function approve(Umkm $umkm)
+    {
+        $umkm->user->update(['status' => 'approved']);
+        
+        return redirect()->route('admin.umkm.index')->with('success', 'UMKM ' . $umkm->name . ' berhasil disetujui!');
+    }
+
+    /**
+     * Reject user UMKM
+     */
+    public function reject(Umkm $umkm)
+    {
+        $umkm->user->update(['status' => 'rejected']);
+        
+        return redirect()->route('admin.umkm.index')->with('success', 'UMKM ' . $umkm->name . ' telah ditolak!');
     }
 }

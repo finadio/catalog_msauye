@@ -79,6 +79,8 @@ Route::middleware(['auth'])->group(function () {
 
     // Rute-rute manajemen admin lainnya
     Route::resource('/admin/umkm', AdminUmkmController::class, [ 'as' => 'admin' ]);
+    Route::patch('/admin/umkm/{umkm}/approve', [AdminUmkmController::class, 'approve'])->name('admin.umkm.approve');
+    Route::patch('/admin/umkm/{umkm}/reject', [AdminUmkmController::class, 'reject'])->name('admin.umkm.reject');
     Route::resource('/admin/produk', AdminProductController::class, [ 'as' => 'admin' ]); // Ini sudah membuat admin.produk.edit, admin.produk.update, dll.
     Route::post('/admin/produk/{id}/approve', [AdminProductController::class, 'approve'])->name('admin.produk.approve');
     Route::post('/admin/produk/{id}/reject', [AdminProductController::class, 'reject'])->name('admin.produk.reject');
@@ -89,6 +91,11 @@ Route::middleware(['auth'])->group(function () {
     // BARIS INI MENYEBABKAN KONFLIK DAN HARUS DIHAPUS:
     // Route::get('/produk/{id}/edit', [AdminProductController::class, 'edit'])->name('admin_produk.edit');
 });
+
+// Route untuk halaman pending
+Route::get('/pending', function () {
+    return view('auth.pending');
+})->name('auth.pending');
 
 // Ini adalah rute-rute autentikasi bawaan Laravel Breeze
 require __DIR__.'/auth.php';
