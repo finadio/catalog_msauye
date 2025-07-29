@@ -10,18 +10,9 @@ class AdminCategoryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index()
     {
-        $query = Category::query();
-
-        // Pencarian berdasarkan nama kategori
-        if ($request->filled('q')) {
-            $searchQuery = $request->q;
-            $query->where('name', 'like', '%'.$searchQuery.'%');
-        }
-
-        $categories = $query->latest()->paginate(10);
-
+        $categories = Category::latest()->paginate(10);
         return view('admin.kategori.index', compact('categories'));
     }
 
@@ -39,10 +30,10 @@ class AdminCategoryController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'name' => 'required|string|max:255|unique:categories',
+            'name' => 'required|string|max:255|unique:categories,name',
         ]);
 
-        Category::create($request->all());
+        Category::create($request->only('name'));
 
         return redirect()->route('admin.kategori.index')->with('success', 'Kategori berhasil ditambahkan!');
     }
@@ -50,29 +41,32 @@ class AdminCategoryController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Category $kategori)
+    public function show(string $id)
     {
-        // Not typically used for categories, but can be implemented if needed
+        // Metode ini biasanya untuk menampilkan detail satu kategori, jika diperlukan
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Category $kategori)
+    public function edit(Category $kategori) // Menggunakan Route Model Binding untuk Category
     {
+        // Variabel $kategori sudah berisi objek Category yang sesuai dari database.
+        // Kita meneruskannya ke view.
         return view('admin.kategori.edit', compact('kategori'));
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Category $kategori)
+    public function update(Request $request, Category $kategori) // Menggunakan Route Model Binding
     {
         $request->validate([
-            'name' => 'required|string|max:255|unique:categories,name,'.$kategori->id,
+            // Memastikan nama unik, kecuali untuk kategori yang sedang diedit ($kategori->id)
+            'name' => 'required|string|max:255|unique:categories,name,' . $kategori->id,
         ]);
 
-        $kategori->update($request->all());
+        $kategori->update($request->only('name'));
 
         return redirect()->route('admin.kategori.index')->with('success', 'Kategori berhasil diperbarui!');
     }
@@ -80,15 +74,15 @@ class AdminCategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Category $kategori)
+    public function destroy(Category $kategori) // Menggunakan Route Model Binding
     {
-        // Cek apakah ada produk yang terkait dengan kategori ini sebelum menghapus
+        // Sebelum menghapus kategori, Anda mungkin ingin memeriksa apakah ada produk yang terkait
+        // Jika ada, Anda perlu menangani mereka (misalnya, set ke null, hapus produk, atau cegah penghapusan)
         if ($kategori->products()->count() > 0) {
-            return redirect()->route('admin.kategori.index')->with('error', 'Tidak dapat menghapus kategori karena masih ada produk yang terkait!');
+            return redirect()->route('admin.kategori.index')->with('error', 'Tidak dapat menghapus kategori karena masih ada produk yang terkait.');
         }
 
         $kategori->delete();
-
         return redirect()->route('admin.kategori.index')->with('success', 'Kategori berhasil dihapus!');
     }
 }
