@@ -51,15 +51,32 @@ class ProductPolicy
      */
     public function delete(User $user, Product $product): Response
     {
+        Log::info('ProductPolicy@delete called', [
+            'user_id' => $user->id,
+            'user_role' => $user->role,
+            'user_umkm_id' => $user->umkm ? $user->umkm->id : null,
+            'product_id' => $product->id,
+            'product_umkm_id' => $product->umkm_id
+        ]);
+
         // User admin selalu bisa menghapus.
         if ($user->role === 'admin') {
+            Log::info('User is admin, allowing delete');
             return Response::allow();
         }
 
         // User UMKM hanya bisa menghapus produk miliknya.
         // Pastikan user memiliki UMKM terlebih dahulu ($user->umkm)
+        if (!$user->umkm) {
+            Log::warning('User does not have UMKM association');
+            return Response::deny('Anda tidak memiliki izin untuk menghapus produk ini.');
+        }
+
         // Kemudian bandingkan ID UMKM user dengan umkm_id produk.
-        return ($user->umkm && $user->umkm->id === $product->umkm_id)
+        $canDelete = $user->umkm->id === $product->umkm_id;
+        Log::info('Checking UMKM ownership', ['can_delete' => $canDelete]);
+        
+        return $canDelete
             ? Response::allow()
             : Response::deny('Anda tidak memiliki izin untuk menghapus produk ini.');
     }

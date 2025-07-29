@@ -69,7 +69,7 @@ Route::prefix('u')->middleware(['auth'])->group(function () {
     Route::post('/produk/store', [UmkmProductController::class, 'store'])->name('umkm_produkstore');
     Route::get('/produk/{product}/edit', [UmkmProductController::class, 'edit'])->name('umkm_produkedit');
     Route::post('/produk/{product}', [UmkmProductController::class, 'update'])->name('umkm_produkupdate');
-    Route::delete('/produk/{id}', [UmkmProductController::class, 'destroy'])->name('umkm_produkdestroy');
+    Route::delete('/produk/{product}', [UmkmProductController::class, 'destroy'])->name('umkm_produkdestroy');
 });
 
 // Dashboard Admin (Memerlukan autentikasi SAJA, tanpa middleware 'role' sementara)
