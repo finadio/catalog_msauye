@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use App\Models\Category; // Pastikan ini diimpor jika menggunakan Type Hinting
-use App\Models\Umkm; // Pastikan ini diimpor
-use App\Models\ProductStatus; // Pastikan ini diimpor
+use App\Models\Category;
+use App\Models\Umkm;
+use App\Models\ProductStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
@@ -23,7 +23,7 @@ class Product extends Model
         'whatsapp',
         'instagram',
         'tiktok_shop',
-        'photo', // Ini sudah benar, asalkan di database namanya juga 'photo' dan tipe string
+        'photo',
         'website',
         'telepon',
         'status_id',
@@ -32,10 +32,7 @@ class Product extends Model
     protected $casts = [
         'show_price' => 'boolean',
         'price' => 'decimal:2',
-        // Hapus casting 'images' ke array. Kolom 'photo' (string) tidak perlu dicasting ke array.
-        // Jika Anda sebelumnya memiliki kolom 'images' dan sekarang diganti 'photo',
-        // maka baris ini harus dihapus.
-        // 'images' => 'array' // <--- HAPUS BARIS INI
+        // 'images' => 'array' // Baris ini sudah benar dihapus/dikomentari
     ];
 
     // Hapus relasi 'user()' ini. Produk berelasi dengan UMKM melalui umkm_id,

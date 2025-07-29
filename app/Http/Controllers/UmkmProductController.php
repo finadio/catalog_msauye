@@ -8,6 +8,7 @@ use App\Models\ProductStatus;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Log; // Pastikan ini diimpor untuk logging
 
 class UmkmProductController extends Controller
 {
@@ -32,7 +33,7 @@ class UmkmProductController extends Controller
     public function create()
     {
         // Otorisasi untuk membuat produk
-        $this->authorize('create', Product::class); 
+        $this->authorize('create', Product::class);
 
         $categories = Category::all();
         return view('umkm_produkcreate', compact('categories'));
@@ -60,8 +61,8 @@ class UmkmProductController extends Controller
         ]);
 
         $user = Auth::user();
-        $umkm = $user->umkm; 
-        
+        $umkm = $user->umkm;
+
         // Penting: Pastikan user memiliki UMKM sebelum mencoba membuat produk
         if (!$umkm) {
             return redirect()->back()->with('error', 'Anda harus memiliki profil UMKM untuk menambahkan produk.');
@@ -110,10 +111,31 @@ class UmkmProductController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Product $product)
+    public function edit(Product $product) // Pastikan tipenya Product
     {
+        Log::info('--- UmkmProductController@edit Called ---');
+        Log::info('Product object received by edit method (before policy): ' . json_encode($product));
+
+        // Pemeriksaan tambahan untuk memastikan objek produk valid
+        // Jika Route Model Binding gagal, $product akan kosong atau null, dan ini akan memicu 404.
+        if (!$product || !($product instanceof Product) || empty($product->id)) {
+            Log::error('Route model binding FAILED. Product object is not valid or ID is missing.');
+            abort(404, 'Produk tidak ditemukan atau tidak valid untuk diedit.');
+        }
+
+        Log::info('Attempting to authorize update for product ID: ' . $product->id);
+        Log::info('Product umkm_id from controller: ' . $product->umkm_id); // Log dari controller
+        Log::info('Authenticated User ID from controller: ' . Auth::id());
+
+        $userUmkm = Auth::user()->umkm;
+        if ($userUmkm) {
+            Log::info('User UMKM ID from controller: ' . $userUmkm->id);
+        } else {
+            Log::warning('Authenticated user does not have an associated UMKM object in controller.');
+        }
+
         // Panggil otorisasi melalui Policy. Ini akan memicu ProductPolicy@update.
-        $this->authorize('update', $product); 
+        $this->authorize('update', $product);
 
         $categories = Category::all();
         $statuses = ProductStatus::all();
@@ -142,7 +164,18 @@ class UmkmProductController extends Controller
             'status_id' => 'required|exists:product_statuses,id',
         ]);
 
-        $productData = $validatedData;
+        $productData = [
+            'name' => $validatedData['name'],
+            'description' => $validatedData['description'],
+            'price' => $validatedData['price'],
+            'category_id' => $validatedData['category_id'],
+            'whatsapp' => $validatedData['wa'] ?? null,
+            'instagram' => $validatedData['instagram'] ?? null,
+            'tiktok_shop' => $validatedData['tiktok'] ?? null,
+            'website' => $validatedData['website'] ?? null,
+            'telepon' => $validatedData['telepon'] ?? null,
+            'status_id' => $validatedData['status_id'],
+        ];
 
         if ($request->hasFile('photo')) {
             if ($product->photo && Storage::disk('public')->exists($product->photo)) {
@@ -168,7 +201,7 @@ class UmkmProductController extends Controller
     {
         // Panggil otorisasi di sini juga
         $this->authorize('delete', $product);
-        
+
         if ($product->photo && Storage::disk('public')->exists($product->photo)) {
             Storage::disk('public')->delete($product->photo);
         }

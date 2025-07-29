@@ -30,7 +30,7 @@ use App\Http\Controllers\AdminContactController;
 
 // Routing halaman publik
 Route::get('/', [PublicController::class, 'home'])->name('home');
-Route::get('/produk', [PublicController::class, 'produkIndex'])->name('produk.index'); // Tambahkan baris ini
+Route::get('/produk', [PublicController::class, 'produkIndex'])->name('produk.index');
 Route::get('/produk/{id}', [PublicController::class, 'produkDetail'])->name('produk.detail');
 Route::get('/umkm', [PublicController::class, 'umkmIndex'])->name('public.umkm_index');
 Route::get('/umkm/{id}', [PublicController::class, 'umkmDetail'])->name('public.umkm_detail');
@@ -39,8 +39,10 @@ Route::get('/artikel/{id}', [PublicController::class, 'artikelDetail'])->name('a
 Route::get('/tentang', [PublicController::class, 'tentang'])->name('tentang');
 Route::get('/contact', [ContactController::class, 'create'])->name('contact');
 Route::post('/contact', [ContactController::class, 'store']);
-Route::get('/produk/{id}', [PublicController::class, 'produkDetail'])->name('produk.detail');
-Route::get('/produk', [PublicController::class, 'produkIndex'])->name('produk.index');
+// Baris ini duplikat, sudah ada di atas. Hapus salah satunya jika tidak ada perbedaan.
+// Route::get('/produk/{id}', [PublicController::class, 'produkDetail'])->name('produk.detail');
+// Route::get('/produk', [PublicController::class, 'produkIndex'])->name('produk.index');
+
 
 // Rute-rute yang memerlukan autentikasi (untuk semua peran)
 Route::middleware('auth')->group(function () {
@@ -65,26 +67,27 @@ Route::prefix('u')->middleware(['auth'])->group(function () {
     Route::get('/produk', [UmkmProductController::class, 'index'])->name('umkm_produk');
     Route::get('/produk/create', [UmkmProductController::class, 'create'])->name('umkm_produkcreate');
     Route::post('/produk/store', [UmkmProductController::class, 'store'])->name('umkm_produkstore');
-    Route::get('/produk/{id}/edit', [UmkmProductController::class, 'edit'])->name('umkm_produkedit');
+    Route::get('/produk/{product}/edit', [UmkmProductController::class, 'edit'])->name('umkm_produkedit');
     Route::put('/produk/{id}', [UmkmProductController::class, 'update'])->name('umkm_produkupdate');
     Route::delete('/produk/{id}', [UmkmProductController::class, 'destroy'])->name('umkm_produkdestroy');
-}); 
+});
 
 // Dashboard Admin (Memerlukan autentikasi SAJA, tanpa middleware 'role' sementara)
 Route::middleware(['auth'])->group(function () {
     // Rute Dashboard Admin yang baru
     Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
-    
+
     // Rute-rute manajemen admin lainnya
     Route::resource('/admin/umkm', AdminUmkmController::class, [ 'as' => 'admin' ]);
-    Route::resource('/admin/produk', AdminProductController::class, [ 'as' => 'admin' ]);
+    Route::resource('/admin/produk', AdminProductController::class, [ 'as' => 'admin' ]); // Ini sudah membuat admin.produk.edit, admin.produk.update, dll.
     Route::post('/admin/produk/{id}/approve', [AdminProductController::class, 'approve'])->name('admin.produk.approve');
     Route::post('/admin/produk/{id}/reject', [AdminProductController::class, 'reject'])->name('admin.produk.reject');
     Route::resource('/admin/kategori', AdminCategoryController::class, [ 'as' => 'admin' ]);
     Route::resource('/admin/artikel', AdminArticleController::class, [ 'as' => 'admin' ]);
     Route::post('/admin/contact/{id}/mark-as-read', [AdminContactController::class, 'markAsRead'])->name('admin.contact.markAsRead');
     Route::resource('/admin/contact', AdminContactController::class, [ 'as' => 'admin' ]);
-    Route::get('/produk/{id}/edit', [AdminProductController::class, 'edit'])->name('admin_produk.edit');
+    // BARIS INI MENYEBABKAN KONFLIK DAN HARUS DIHAPUS:
+    // Route::get('/produk/{id}/edit', [AdminProductController::class, 'edit'])->name('admin_produk.edit');
 });
 
 // Ini adalah rute-rute autentikasi bawaan Laravel Breeze
@@ -111,4 +114,3 @@ Route::get('/cek-auth', function () {
         'user' => Auth::user(),
     ];
 });
-

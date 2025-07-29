@@ -209,7 +209,7 @@
                                         Foto Saat Ini
                                     </label>
                                     <div class="relative inline-block">
-                                        <img src="{{ asset('img/' . $product->photo) }}" alt="Foto Produk"
+                                        <img src="{{ asset('storage/' . $product->photo) }}" alt="Foto Produk"
                                             class="w-40 h-40 object-cover rounded-2xl shadow-lg border-4 border-white">
                                         <div class="absolute inset-0 rounded-2xl bg-gradient-to-t from-black/20 to-transparent"></div>
                                     </div>
