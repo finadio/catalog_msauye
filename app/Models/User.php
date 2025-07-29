@@ -23,8 +23,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role', // Pastikan 'role' ada di sini jika Anda menggunakannya
-        // 'umkm_id', // Hapus ini dari fillable jika Anda menghapus kolom tersebut dari tabel users
+        'role',
+        'photo',
     ];
 
     /**

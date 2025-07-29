@@ -60,9 +60,17 @@
                     <x-dropdown align="right" width="48">
                         <x-slot name="trigger">
                             <button class="flex items-center text-sm font-medium text-gray-700 hover:text-blue-600 focus:outline-none transition ease-in-out duration-150">
-                                <div class="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center mr-2">
-                                    <span class="text-white font-semibold text-sm">{{ substr(Auth::user()->name, 0, 1) }}</span>
-                                </div>
+                                @if(Auth::user()->role == 'umkm' && Auth::user()->umkm && Auth::user()->umkm->photo)
+                                    <div class="w-8 h-8 rounded-full mr-2 overflow-hidden">
+                                        <img src="{{ asset('storage/' . Auth::user()->umkm->photo) }}" 
+                                             alt="{{ Auth::user()->umkm->name }}"
+                                             class="w-full h-full object-cover">
+                                    </div>
+                                @else
+                                    <div class="w-8 h-8 {{ Auth::user()->role === 'admin' ? 'bg-purple-600' : 'bg-blue-600' }} rounded-full flex items-center justify-center mr-2">
+                                        <span class="text-white font-semibold text-sm">{{ substr(Auth::user()->name, 0, 1) }}</span>
+                                    </div>
+                                @endif
                                 <div>{{ Auth::user()->name }}</div>
                                 <div class="ml-1">
                                     <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">

@@ -21,6 +21,9 @@ class PublicController extends Controller
     {
         $categories = Category::all();
         $products = Product::with(['umkm', 'category', 'status'])
+            ->whereHas('status', function($q) {
+                $q->where('name', 'approved');
+            })
             ->when($request->q, fn($q) => $q->where('name', 'like', '%'.$request->q.'%'))
             ->when($request->kategori, fn($q) => $q->where('category_id', $request->kategori))
             ->latest()->paginate(12);
@@ -40,7 +43,11 @@ class PublicController extends Controller
      */
     public function produkDetail($id)
     {
-        $product = Product::with(['umkm', 'status'])->findOrFail($id);
+        $product = Product::with(['umkm', 'status'])
+            ->whereHas('status', function($q) {
+                $q->where('name', 'approved');
+            })
+            ->findOrFail($id);
         return view('public.produk_detail', compact('product'));
     }
 
@@ -52,7 +59,11 @@ class PublicController extends Controller
      */
     public function umkmDetail($id)
     {
-        $umkm = Umkm::with(['products.status'])->findOrFail($id);
+        $umkm = Umkm::with(['products' => function($query) {
+            $query->whereHas('status', function($q) {
+                $q->where('name', 'approved');
+            });
+        }, 'products.status'])->findOrFail($id);
         return view('public.umkm_detail', compact('umkm'));
     }
 
