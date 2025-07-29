@@ -5,9 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\ProductStatus;
-use App\Models\Umkm; // Tambahkan ini
+use App\Models\Umkm;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage; // Tambahkan ini untuk hapus foto lama
+use Illuminate\Support\Facades\Storage;
 
 class AdminProductController extends Controller
 {
@@ -33,7 +33,7 @@ class AdminProductController extends Controller
     {
         $categories = Category::all();
         $statuses = ProductStatus::all();
-        $umkms = Umkm::all(); // Ambil semua UMKM untuk dropdown
+        $umkms = Umkm::all();
         return view('admin.produk.create', compact('categories', 'statuses', 'umkms'));
     }
 
@@ -47,9 +47,9 @@ class AdminProductController extends Controller
             'description' => 'required',
             'category_id' => 'required|exists:categories,id',
             'price' => 'required|numeric',
-            'photo' => 'required|image|max:2048', // Foto wajib saat tambah
-            'umkm_id' => 'required|exists:umkms,id', // Wajib pilih UMKM
-            'status_id' => 'required|exists:product_statuses,id', // Wajib pilih status
+            'photo' => 'required|image|max:2048',
+            'umkm_id' => 'required|exists:umkms,id',
+            'status_id' => 'required|exists:product_statuses,id',
         ]);
 
         $data = $request->only(['name','description','category_id','price','umkm_id','status_id']);
@@ -80,7 +80,8 @@ class AdminProductController extends Controller
         $product = Product::with('umkm')->findOrFail($id);
         $categories = Category::all();
         $statuses = ProductStatus::all();
-        return view('admin_produk.edit', compact('product','categories','statuses'));
+        // PERBAIKAN DI SINI: Ubah 'admin_produk.edit' menjadi 'admin.produk.edit'
+        return view('admin.produk.edit', compact('product','categories','statuses'));
     }
 
     /**

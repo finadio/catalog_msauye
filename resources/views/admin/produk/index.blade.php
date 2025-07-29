@@ -5,7 +5,7 @@
         </h2>
     </x-slot>
 
-    <div class="py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" x-data="{ q: '{{ request('q') }}', kategori: '{{ request('kategori') }}', status: '{{ request('status') }}' }"> {{-- Tambahkan x-data untuk q, kategori, status --}}
+    <div class="py-8 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8" x-data="{ q: '{{ request('q') }}', kategori: '{{ request('kategori') }}', status: '{{ request('status') }}' }">
         {{-- Notifikasi Sukses dengan Tombol Close --}}
         <x-success-notification :message="session('success')" />
 
@@ -20,19 +20,19 @@
 
             {{-- Filter Form --}}
             <form method="GET" class="mb-6 flex flex-col sm:flex-row flex-wrap items-center gap-3">
-                <div class="relative w-full sm:flex-1"> {{-- Wrapper untuk input dan tombol clear --}}
+                <div class="relative w-full sm:flex-1">
                     <input
-                        x-model="q" {{-- Gunakan x-model untuk mengikat nilai input --}}
+                        x-model="q"
                         type="text"
                         name="q"
                         placeholder="Cari produk..."
-                        class="h-10 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-800 placeholder-gray-500 w-full pr-12" {{-- pr-12 untuk ruang ikon --}}
+                        class="h-10 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-gray-800 placeholder-gray-500 w-full pr-12"
                     >
                     <button
-                        x-show="q.length > 0" {{-- Tampilkan tombol clear jika ada teks --}}
-                        @click.prevent="q = ''; $event.target.closest('form').querySelector('input[name=\'q\']').value = ''; $event.target.closest('form').submit();" {{-- Logika bersih dan submit --}}
+                        x-show="q.length > 0"
+                        @click.prevent="q = ''; $event.target.closest('form').querySelector('input[name=\'q\']').value = ''; $event.target.closest('form').submit();"
                         type="button"
-                        class="absolute inset-y-0 right-0 w-10 h-10 flex items-center justify-center text-gray-400 hover:text-gray-600 focus:outline-none z-20" {{-- z-index untuk clickability --}}
+                        class="absolute inset-y-0 right-0 w-10 h-10 flex items-center justify-center text-gray-400 hover:text-gray-600 focus:outline-none z-20"
                         aria-label="Clear search"
                     >
                         <svg class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -104,7 +104,8 @@
                                                 </button>
                                             </form>
                                         @endif
-                                        <a href="{{ route('admin_produk.edit', $product->id) }}" class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-yellow-700 bg-yellow-100 hover:bg-yellow-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 transition-colors duration-200">
+                                        {{-- PERBAIKAN DI SINI: Ubah 'admin_produk.edit' menjadi 'admin.produk.edit' --}}
+                                        <a href="{{ route('admin.produk.edit', $product->id) }}" class="inline-flex items-center px-3 py-1.5 border border-transparent text-xs font-medium rounded-md text-yellow-700 bg-yellow-100 hover:bg-yellow-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-yellow-500 transition-colors duration-200">
                                             Edit
                                         </a>
                                         <button
