@@ -14,9 +14,21 @@ class UmkmController extends Controller
     {
         \Log::info('Dashboard UMKM dipanggil oleh user ID: ' . auth()->id());
         // Pastikan relasi 'products' ada di model User
-        $products = Auth::user()->products()->with('status')->latest()->get();
-        return view('umkm_dashboard', compact('products'));
-    }
+        // $products = Auth::user()->products()->with('status')->latest()->get();
+
+        // return view('umkm_dashboard', compact('products'));
+
+        $user = Auth::user();
+        $products = Auth::user()->umkm->products;
+                       
+        $totalProduk = $user->umkm->products()->count();
+        $produkAktif = $user->umkm->products()->where('status_id', 2)->count();
+        $menungguReview = $user->umkm->products()->where('status_id', 1)->count();
+        $ditolak = $user->umkm->products()->where('status_id', 3)->count();
+        // $products = Auth::user()->products()->with('status_id')->latest()->get();
+
+        return view('umkm_dashboard', compact('products','totalProduk', 'produkAktif', 'menungguReview', 'ditolak'));
+        }
 
     /**
      * Menampilkan form edit profil UMKM.
