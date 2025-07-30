@@ -22,11 +22,11 @@ echo Push ke GitHub...
 echo ===============================
 git push origin main
 
-:: Pull untuk update dari GitHub
-echo ===============================
-echo Tarik perubahan terbaru dari GitHub...
-echo ===============================
-git pull origin main
+@REM :: Pull untuk update dari GitHub
+@REM echo ===============================
+@REM echo Tarik perubahan terbaru dari GitHub...
+@REM echo ===============================
+@REM git pull origin main
 
 echo.
 echo ✅ Sync selesai Bro!
