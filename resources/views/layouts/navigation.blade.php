@@ -18,8 +18,8 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-14 flex items-center justify-between">
         <div class="flex items-center flex-shrink-0">
             <a href="{{ route('home') }}" class="flex items-center group -ml-2 sm:-ml-4">
-                <img src="{{ asset('img/shaka_utama.png') }}" alt="Logo MSA Katalog UMKM" class="h-12 w-auto">
-                <span class="font-black text-xl ml-0.5 text-blue-700 whitespace-nowrap">MSA Katalog UMKM</span>
+                <img src="{{ asset('img/shaka_utama.png') }}" alt="Logo UMKMSmart" class="h-12 w-auto">
+                <span class="font-black text-xl ml-0.5 text-blue-700 whitespace-nowrap">UMKMSmart</span>
             </a>
         </div>
 

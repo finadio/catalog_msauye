@@ -56,7 +56,7 @@
         <div class="bg-white rounded-xl shadow-lg p-8 flex flex-col md:flex-row items-center gap-8">
             <div class="flex-1">
                 <h4 class="text-xl font-bold mb-2 text-blue-900">Tentang Platform</h4>
-                <p class="text-gray-700 mb-2">MSA Katalog UMKM adalah platform digital untuk mendukung pertumbuhan UMKM Indonesia. Admin dapat memantau data, mengelola produk, kategori, artikel, dan membantu UMKM berkembang.</p>
+                <p class="text-gray-700 mb-2">UMKMSmart adalah platform digital untuk mendukung pertumbuhan UMKM Indonesia. Admin dapat memantau data, mengelola produk, kategori, artikel, dan membantu UMKM berkembang.</p>
                 <a href="/tentang" class="inline-block mt-4 px-5 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 font-semibold transition">Tentang Kami</a>
             </div>
             <div class="flex-1 flex justify-center">
