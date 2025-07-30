@@ -71,7 +71,7 @@
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-green-100 text-sm font-semibold tracking-wide">PRODUK AKTIF</p>
-                            <p class="text-3xl font-bold mt-2">{{ $products->where('status.name', 'aktif')->count() }}</p>
+                            <p class="text-3xl font-bold mt-2">{{ $produkAktif }}</p>
                         </div>
                         <div class="bg-white/20 backdrop-blur-sm rounded-xl p-4 shadow-lg">
                             <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
@@ -85,9 +85,9 @@
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-yellow-100 text-sm font-semibold tracking-wide">MENUNGGU REVIEW</p>
-                            <p class="text-3xl font-bold mt-2">{{ $products->where('status.name', 'pending')->count() }}</p>
+                            <p class="text-3xl font-bold mt-2">{{ $menungguReview }}</p>
                             {{-- Highlight jika ada produk pending baru --}}
-                            @if($products->where('status.name', 'pending')->where('created_at', '>=', now()->subHour())->count() > 0)
+                            @if($products->where('status_id', '1')->where('created_at', '>=', now()->subHour())->count() > 0)
                                 <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-bold bg-white/20 text-yellow-100 mt-2">
                                     <span class="w-2 h-2 bg-red-400 rounded-full mr-1 animate-pulse"></span>
                                     Baru ditambahkan
@@ -106,7 +106,7 @@
                     <div class="flex items-center justify-between">
                         <div>
                             <p class="text-red-100 text-sm font-semibold tracking-wide">DITOLAK</p>
-                            <p class="text-3xl font-bold mt-2">{{ $products->where('status.name', 'ditolak')->count() }}</p>
+                            <p class="text-3xl font-bold mt-2">{{ $ditolak }}</p>
                         </div>
                         <div class="bg-white/20 backdrop-blur-sm rounded-xl p-4 shadow-lg">
                             <svg class="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5">
@@ -168,14 +168,14 @@
                                     <td class="px-8 py-6 border-r-2 border-gray-200">
                                         <div class="flex items-center">
                                             <div class="flex-shrink-0 h-16 w-16 rounded-2xl overflow-hidden shadow-lg border-2 border-white relative">
-    {{-- Badge untuk produk baru --}}
-    @if($p->created_at->diffInMinutes(now()) < 30)
-        <div class="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full animate-bounce">
-            BARU
-        </div>
-    @endif
-    <img src="{{ asset('img/' . $p->photo) }}" alt="{{ $p->nama }}" class="object-cover w-full h-full">
-</div>
+                                                {{-- Badge untuk produk baru --}}
+                                                @if($p->created_at->diffInMinutes(now()) < 30)
+                                                    <div class="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full animate-bounce">
+                                                        BARU
+                                                    </div>
+                                                @endif
+                                                <img src="{{ asset('storage/' . $p->photo) }}" alt="{{ $p->nama }}" class="object-cover w-full h-full">
+                                            </div>
 
                                             <div class="ml-6">
                                                 <div class="text-lg font-bold text-gray-900 mb-1">

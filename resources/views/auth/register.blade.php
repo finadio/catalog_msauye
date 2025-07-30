@@ -24,7 +24,7 @@
                 </div>
             @endif
 
-            <form method="POST" action="{{ route('register') }}">
+            <form method="POST" action="{{ route('register') }}" enctype="multipart/form-data">
                 @csrf
 
                 <div x-show="currentStep === 1" x-transition:enter="ease-out duration-500" x-transition:enter-start="opacity-0 -translate-x-10" x-transition:enter-end="opacity-100 translate-x-0"
@@ -95,7 +95,7 @@
                      class="space-y-6 flex-1">
                     {{-- UMKM Name --}}
                     <div>
-                        <x-input-label for="umkm_name" :value="__('Nama UMKM')" class="mb-2 text-gray-700 font-medium" />
+                        <x-input-label for="umkm_name" :value="__('Nama UMKM / Toko')" class="mb-2 text-gray-700 font-medium" />
                         <div class="relative">
                             <x-text-input id="umkm_name" class="block w-full pl-12 pr-4 py-3 border-gray-300 rounded-xl focus:border-blue-500 focus:ring-blue-500 transition duration-200" type="text" name="umkm_name" :value="old('umkm_name')" required placeholder="Nama Usaha Anda" />
                             <span class="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400">
@@ -125,13 +125,19 @@
 
                     {{-- UMKM Address --}}
                     <div class="mt-4">
-                        <x-input-label for="umkm_address" :value="__('Alamat UMKM')" class="mb-2 text-gray-700 font-medium" />
+                        <x-input-label for="umkm_address" :value="__('Alamat UMKM / Toko')" class="mb-2 text-gray-700 font-medium" />
                         <div class="relative">
                             <textarea id="umkm_address" name="umkm_address" class="block w-full pl-12 pr-4 py-3 border-gray-300 rounded-xl focus:border-blue-500 focus:ring-blue-500 transition duration-200" rows="3" required placeholder="Alamat lengkap UMKM Anda">{{ old('umkm_address') }}</textarea>
                             <span class="absolute left-4 top-3 text-gray-400">
                                 <i class='bx bx-map text-xl'></i>
                             </span>
                         </div>
+                    </div>
+
+                    {{-- UMKM Foto --}}
+                    <div class="mt-4">
+                        <label for="photo" class="block text-sm font-medium text-gray-700">Foto Toko/Usaha (Optional)</label>
+                        <input type="file" name="photo" id="photo" accept="image/*" class="mt-1 block w-full border rounded px-3 py-2">
                     </div>
 
                     {{-- UMKM Phone Number --}}

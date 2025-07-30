@@ -28,6 +28,14 @@
             </div>
             <div class="text-2xl font-bold text-blue-900">{{ $umkmCount ?? '-' }}</div>
             <div class="text-gray-500">UMKM</div>
+           
+             @if ($pendingUmkmCount > 0)
+                {{-- Debug --}}
+                <div class="text-xs text-red-700">Pending UMKM : {{ $pendingUmkmCount }}</div>
+                <span class="ml-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+                    {{ $pendingUmkmCount }}
+                </span>
+            @endif
         </div>
         <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center border-t-4 border-green-600">
             <div class="bg-green-100 p-3 rounded-full mb-2">
@@ -35,6 +43,16 @@
             </div>
             <div class="text-2xl font-bold text-green-900">{{ $productCount ?? '-' }}</div>
             <div class="text-gray-500">Produk</div>
+            
+            
+            @if ($pendingProductCount > 0)
+                {{-- Debug --}}
+                <div class="text-xs text-red-700">Pending Produk : {{ $pendingProductCount }}</div>
+
+                <span class="ml-2 bg-red-500 text-white text-xs font-bold px-2 py-1 rounded-full">
+                    {{ $pendingProductCount }}
+                </span>
+            @endif
         </div>
         <div class="bg-white rounded-xl shadow-lg p-6 flex flex-col items-center border-t-4 border-yellow-500">
             <div class="bg-yellow-100 p-3 rounded-full mb-2">
