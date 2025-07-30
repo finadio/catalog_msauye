@@ -138,8 +138,10 @@ class UmkmProductController extends Controller
             $fileName = time() . '_' . uniqid() . '.' . $image->getClientOriginalExtension();
             $path = $image->storeAs('products', $fileName, 'public');
             $productData['photo'] = $path;
+            \Log::info('DEBUG: Foto berhasil di-upload', ['path' => $path]);
         } else {
             $productData['photo'] = null;
+            \Log::info('DEBUG: Tidak ada foto yang di-upload');
         }
 
         try {
