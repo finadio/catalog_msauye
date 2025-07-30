@@ -39,6 +39,7 @@ class RegisteredUserController extends Controller
             'business_type' => ['required', 'string', 'max:100'],
             'umkm_address' => ['required', 'string', 'max:255'],
             'umkm_phone' => ['required', 'string', 'max:20'],
+            'photo' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:2048'], // Tambahan validasi foto
         ]);
 
         // Simpan user baru dengan status pending
@@ -50,6 +51,12 @@ class RegisteredUserController extends Controller
             'status' => 'pending',
         ]);
 
+        // Handle upload foto jika ada
+        $photoPath = null;
+        if ($request->hasFile('photo')) {
+            $photoPath = $request->file('photo')->store('umkm_photos', 'public');
+        }
+
         // Simpan UMKM baru yang terkait user
         Umkm::create([
             'user_id' => $user->id,
@@ -57,7 +64,8 @@ class RegisteredUserController extends Controller
             'business_type' => $request->business_type,
             'address' => $request->umkm_address,
             'phone' => $request->umkm_phone,
-            'description' => 'Deskripsi belum diisi.', // Set default jika tidak ada input dari user
+            'photo' => $photoPath, // Simpan path foto
+            'description' => 'Deskripsi belum diisi silahkan Edit Profile Anda.', // Default
         ]);
 
         // Trigger event Laravel untuk pendaftaran
@@ -67,7 +75,8 @@ class RegisteredUserController extends Controller
         $admins = User::where('role', 'admin')->get();
         Notification::send($admins, new NewUserRegisteredNotification($user));
 
-        // Redirect ke halaman pending karena user perlu menunggu persetujuan admin
+        // Redirect ke halaman pending
         return redirect()->route('auth.pending');
     }
+
 }
