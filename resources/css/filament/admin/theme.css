@@ -1,0 +1,30 @@
+@import '/vendor/filament/filament/resources/css/theme.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Subtle hover effects on stats cards */
+.fi-wi-stats-overview-stat {
+    transition: all 0.2s ease-in-out;
+}
+
+.fi-wi-stats-overview-stat:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Widget border radius */
+.fi-section {
+    border-radius: 0.75rem;
+    transition: box-shadow 0.2s ease-in-out;
+}
+
+.fi-section:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+/* Smooth animations */
+* {
+    scroll-behavior: smooth;
+}

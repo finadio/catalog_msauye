@@ -14,8 +14,8 @@ class ProductPolicy
      */
     public function viewAny(User $user): bool
     {
-        // Umumnya, semua user UMKM bisa melihat daftar produk mereka sendiri
-        return $user->role === 'umkm';
+        // Admin bisa lihat semua produk, UMKM bisa lihat produk mereka sendiri
+        return in_array($user->role, ['admin', 'umkm']);
     }
 
     /**

@@ -6,10 +6,12 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-use Laravel\Sanctum\HasApiTokens; // Pastikan ini ada jika menggunakan Sanctum
-use App\Models\Umkm; // Penting: Pastikan model Umkm diimpor
+use Laravel\Sanctum\HasApiTokens;
+use App\Models\Umkm;
+use Filament\Models\Contracts\FilamentUser;
+use Filament\Panel;
 
-class User extends Authenticatable
+class User extends Authenticatable implements FilamentUser
 {
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasApiTokens, HasFactory, Notifiable; // Tambahkan HasApiTokens jika menggunakan Sanctum
@@ -87,5 +89,12 @@ class User extends Authenticatable
     public function isRejected()
     {
         return $this->status === 'rejected';
+    }
+
+    // Filament Panel Access Control
+    public function canAccessPanel(Panel $panel): bool
+    {
+        // Hanya user dengan role 'admin' yang bisa akses Filament panel
+        return $this->role === 'admin' && $this->status === 'approved';
     }
 }

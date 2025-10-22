@@ -13,8 +13,22 @@ class Article extends Model
      */
     protected $fillable = [
         'title',
+        'slug',
         'content',
         'type',
         'photo',
+        'published_at',
     ];
+
+    /**
+     * Get the attributes that should be cast.
+     *
+     * @return array<string, string>
+     */
+    protected function casts(): array
+    {
+        return [
+            'published_at' => 'datetime',
+        ];
+    }
 }

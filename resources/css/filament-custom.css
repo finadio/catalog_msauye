@@ -1,0 +1,113 @@
+/* Custom Filament Admin Styles */
+
+/* Sidebar Styling */
+.fi-sidebar {
+    @apply shadow-lg border-r border-gray-200;
+}
+
+.fi-sidebar-nav-item {
+    @apply transition-all duration-200 ease-in-out;
+}
+
+.fi-sidebar-nav-item:hover {
+    @apply transform translate-x-1;
+}
+
+/* Badge Styling */
+.fi-badge {
+    @apply font-semibold shadow-sm;
+}
+
+/* Card Styling */
+.fi-section {
+    @apply shadow-md hover:shadow-lg transition-shadow duration-200;
+}
+
+/* Stats Card Enhancement */
+.fi-stats-overview {
+    @apply gap-4;
+}
+
+.fi-stats-overview .fi-section {
+    @apply border-l-4 transition-all duration-200;
+}
+
+.fi-stats-overview .fi-section:hover {
+    @apply transform scale-105;
+}
+
+/* Button Styling */
+.fi-btn {
+    @apply transition-all duration-200 shadow-sm;
+}
+
+.fi-btn:hover {
+    @apply shadow-md transform -translate-y-0.5;
+}
+
+/* Table Styling */
+.fi-table {
+    @apply rounded-lg overflow-hidden shadow-sm;
+}
+
+.fi-table-row:hover {
+    @apply bg-gray-50 transition-colors duration-150;
+}
+
+/* Form Styling */
+.fi-fo-field-wrp {
+    @apply transition-all duration-200;
+}
+
+.fi-fo-field-wrp:focus-within {
+    @apply ring-2 ring-blue-500 ring-opacity-50 rounded-lg;
+}
+
+/* Navigation Group Styling */
+.fi-sidebar-group-label {
+    @apply font-bold text-sm uppercase tracking-wider text-gray-600 mb-2;
+}
+
+/* Topbar Styling */
+.fi-topbar {
+    @apply shadow-md bg-white border-b border-gray-200;
+}
+
+/* Widget Styling */
+.fi-wi {
+    @apply rounded-xl shadow-md hover:shadow-lg transition-all duration-200;
+}
+
+/* Chart Styling */
+.fi-wi-chart {
+    @apply p-6;
+}
+
+/* Loading States */
+.fi-loading {
+    @apply animate-pulse;
+}
+
+/* Notification Toast */
+.fi-no-notification {
+    @apply shadow-xl rounded-lg;
+}
+
+/* Modal Styling */
+.fi-modal-content {
+    @apply rounded-2xl shadow-2xl;
+}
+
+/* Dropdown Styling */
+.fi-dropdown-panel {
+    @apply shadow-xl rounded-lg border border-gray-200;
+}
+
+/* Search Bar */
+.fi-global-search-field {
+    @apply rounded-full shadow-sm transition-all duration-200;
+}
+
+.fi-global-search-field:focus {
+    @apply ring-2 ring-blue-500 shadow-md;
+}

@@ -49,31 +49,31 @@
 ## 🛠️ Teknologi yang Digunakan
 
 ### **Backend**
-- **Laravel 10** - Framework PHP modern untuk backend yang robust
+- **Laravel 12** - Framework PHP modern untuk backend yang robust
 - **MySQL/MariaDB** - Database relasional untuk data produk dan UMKM
-- **PHP 8.1+** - Bahasa pemrograman server-side dengan performa optimal
+- **PHP 8.2+** - Bahasa pemrograman server-side dengan performa optimal
 
 ### **Frontend**
 - **Blade Template Engine** - Templating engine bawaan Laravel
-- **Bootstrap 5** - Framework CSS untuk responsive design
-- **Tailwind CSS** - Utility-first CSS framework untuk styling modern
-- **Alpine.js** - JavaScript framework untuk interaktivitas ringan
+- **Tailwind CSS 3** - Utility-first CSS framework untuk styling modern
+- **Alpine.js 3** - JavaScript framework untuk interaktivitas ringan
+- **Vite 6** - Modern build tool untuk asset bundling
 
 ### **Tools & Dependencies**
-- **Laravel Permission** - Package untuk role-based access control
+- **Spatie Laravel Permission** - Package untuk role-based access control
+- **Laravel Sanctum** - API authentication
 - **Laravel Notifications** - Sistem notifikasi built-in Laravel
-- **Intervention Image** - Manipulasi dan optimasi gambar produk
-- **Laravel Debugbar** - Debugging tools untuk development
+- **Laravel Pail** - Real-time log viewer
 
 ---
 
 ## 🚀 Cara Instalasi
 
 ### **Prasyarat**
-- PHP 8.1 atau lebih baru
+- PHP 8.2 atau lebih baru
 - Composer
 - MySQL/MariaDB
-- Node.js & NPM
+- Node.js & NPM (untuk Vite)
 
 ### **Langkah Instalasi**
 

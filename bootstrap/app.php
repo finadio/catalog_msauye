@@ -11,7 +11,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        // Register custom middleware untuk redirect Filament ke Laravel login
+        $middleware->web(append: [
+            \App\Http\Middleware\FilamentAuthRedirect::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
