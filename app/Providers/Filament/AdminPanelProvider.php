@@ -32,7 +32,7 @@ class AdminPanelProvider extends PanelProvider
             ->brandName('UMKMSmart')
             ->brandLogo(fn () => view('filament.components.brand-logo'))
             ->favicon(asset('img/shaka_utama.png'))
-            // Gunakan Laravel auth, bukan Filament login
+            // Auth configuration - gunakan Laravel login
             ->authGuard('web')
             // Color scheme modern
             ->colors([
