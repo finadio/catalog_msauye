@@ -11,15 +11,66 @@
 
         <div class="max-w-4xl mx-auto text-center relative z-20 px-6 py-10">
             <h1 class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-6 tracking-tight drop-shadow-lg">
-                Gerbang Digital UMKM Binaan <br class="hidden md:inline">PT BPR MSA
+                Gerbang Digital <br class="hidden md:inline">UMKM Binaan PT BPR MSA
             </h1>
             <p class="text-base sm:text-lg md:text-xl mb-10 leading-relaxed text-gray-200 drop-shadow-md">
-                Jelajahi koleksi produk dan layanan berkualitas tinggi dari para pelaku UMKM lokal terkemuka.
-                Dukung pertumbuhan ekonomi daerah dengan setiap klik dan eksplorasi Anda!
+                Jelajahi koleksi produk dan layanan berkualitas tinggi dari para pelaku UMKM lokal terkemuka. Dukung pertumbuhan ekonomi daerah dengan setiap klik dan eksplorasi Anda!
             </p>
-            <a href="{{ route('produk.index') }}" class="inline-block px-12 py-4 bg-blue-600 text-white rounded-full shadow-lg hover:bg-blue-700 font-bold text-lg transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105">
-                Jelajahi Produk UMKM
-            </a>
+            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <a href="{{ route('produk.index') }}" class="inline-flex items-center gap-2 px-8 py-3 bg-white text-gray-900 rounded-lg font-semibold text-base shadow-lg hover:shadow-xl hover:bg-gray-50 transition-all duration-300">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                    Jelajahi Produk
+                </a>
+                <a href="{{ route('tentang') }}" class="inline-flex items-center gap-2 px-8 py-3 bg-gray-600/50 backdrop-blur-sm text-white rounded-lg font-semibold text-base border border-white/30 hover:bg-gray-600/70 transition-all duration-300">
+                    Tentang Kami
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                    </svg>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    {{-- Stats Section --}}
+    <section class="py-12 bg-white">
+        <div class="max-w-6xl mx-auto px-4">
+            <div class="backdrop-blur-xl bg-gradient-to-br from-blue-50 to-purple-50 rounded-2xl shadow-lg overflow-hidden p-6 md:p-8">
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+                    {{-- Produk --}}
+                    <div class="text-center p-4 hover:bg-white/50 rounded-xl transition-all duration-300">
+                        <div class="text-3xl md:text-4xl font-black text-gray-900 mb-1">
+                            {{ $products->count() }}+
+                        </div>
+                        <div class="text-xs md:text-sm font-semibold text-gray-600">Produk</div>
+                    </div>
+
+                    {{-- Kategori --}}
+                    <div class="text-center p-4 hover:bg-white/50 rounded-xl transition-all duration-300">
+                        <div class="text-3xl md:text-4xl font-black text-gray-900 mb-1">
+                            {{ $categories->count() }}+
+                        </div>
+                        <div class="text-xs md:text-sm font-semibold text-gray-600">Kategori</div>
+                    </div>
+
+                    {{-- UMKM --}}
+                    <div class="text-center p-4 hover:bg-white/50 rounded-xl transition-all duration-300">
+                        <div class="text-3xl md:text-4xl font-black text-gray-900 mb-1">
+                            100+
+                        </div>
+                        <div class="text-xs md:text-sm font-semibold text-gray-600">UMKM</div>
+                    </div>
+
+                    {{-- Pelanggan --}}
+                    <div class="text-center p-4 hover:bg-white/50 rounded-xl transition-all duration-300">
+                        <div class="text-3xl md:text-4xl font-black text-gray-900 mb-1">
+                            5K+
+                        </div>
+                        <div class="text-xs md:text-sm font-semibold text-gray-600">Pelanggan</div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
