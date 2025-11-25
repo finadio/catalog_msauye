@@ -1,11 +1,4 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h1 class="font-semibold text-2xl text-gray-800 leading-tight">
-            {{ __('Tentang Kami') }}
-        </h1>
-    </x-slot>
-
-    {{-- Penambahan ruang di bawah header untuk pemisahan yang jelas --}}
     <div class="pt-8 md:pt-12 bg-gray-50 min-h-screen">
         <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8 md:p-10 lg:p-12">
             <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-12 md:mb-16 text-center leading-tight">Mengenal Lebih Dekat <br class="hidden md:inline">PT BPR MSA</h2>

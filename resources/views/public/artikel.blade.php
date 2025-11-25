@@ -1,7 +1,4 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h1 class="text-2xl font-bold text-gray-800">Artikel & Edukasi</h1>
-    </x-slot>
     <div class="py-12 bg-gray-50 min-h-screen">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-gray-900 mb-10 md:mb-14 text-center leading-tight tracking-tight">Wawasan dan Inspirasi untuk UMKM</h2>

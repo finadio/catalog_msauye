@@ -1,8 +1,4 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h1 class="text-2xl font-bold text-gray-800">Daftar UMKM</h1>
-    </x-slot>
-
     <div class="py-12 md:py-16 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-10 md:mb-14 text-center leading-tight tracking-tight">Jelajahi UMKM Binaan Kami</h2>

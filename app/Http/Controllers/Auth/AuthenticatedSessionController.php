@@ -49,8 +49,8 @@ class AuthenticatedSessionController extends Controller
 
         // Mengarahkan pengguna berdasarkan peran mereka
         if ($user->role === 'admin') {
-            // Admin redirect ke Filament Panel
-            return redirect('/filament');
+            // Admin redirect ke dashboard admin
+            return redirect('/admin/dashboard');
         } elseif ($user->role === 'umkm') {
             return redirect()->intended(route('umkm_dashboard', absolute: false));
         } else {
@@ -73,4 +73,3 @@ class AuthenticatedSessionController extends Controller
         return redirect('/');
     }
 }
-

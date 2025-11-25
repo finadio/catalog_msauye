@@ -1,8 +1,4 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h1 class="text-2xl font-bold text-gray-800">Hubungi Kami</h1>
-    </x-slot>
-
     <div class="py-5 bg-gray-100 min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8">
         <div class="max-w-5xl w-full bg-white rounded-2xl shadow-xl overflow-hidden border border-gray-200">
             <div class="flex flex-col md:flex-row">

@@ -1,7 +1,4 @@
 <x-app-layout>
-    <x-slot name="header">
-        <h1 class="text-2xl font-bold text-gray-800">Detail Artikel</h1>
-    </x-slot>
     <div class="py-12 bg-gray-50 min-h-screen">
         <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8">
             @php
