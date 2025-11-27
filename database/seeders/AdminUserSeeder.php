@@ -19,6 +19,7 @@ class AdminUserSeeder extends Seeder
                 'email' => 'admin@msa.com',
                 'password' => Hash::make('password'), // ganti sesuai kebutuhan
                 'role' => 'admin',
+                'status' => 'active',
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);

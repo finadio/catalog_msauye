@@ -14,15 +14,15 @@ class LoginController extends Controller
     protected function authenticated(Request $request, $user)
     {
         if ($user->role === 'admin') {
-            return redirect()->route('admin.dashboard');
+            return redirect('/filament');
         }
 
         if ($user->role === 'umkm') {
-            return redirect()->route('/u/dashboard'); 
+            return redirect()->route('/u/dashboard');
         } else {
-        return redirect()->route('dashboard'); // fallback untuk role lain
+            return redirect()->route('dashboard'); // fallback untuk role lain
         }
 
-        return back()->withErrors(['email' => 'Login gagal']);
+
     }
 }

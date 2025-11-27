@@ -88,17 +88,17 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin/dashboard', [AdminDashboardController::class, 'index'])->name('admin.dashboard');
 
     // Rute-rute manajemen admin lainnya
-    Route::resource('/admin/umkm', AdminUmkmController::class, [ 'as' => 'admin' ]);
+    Route::resource('/admin/umkm', AdminUmkmController::class, ['as' => 'admin']);
     Route::patch('/admin/umkm/{umkm}/approve', [AdminUmkmController::class, 'approve'])->name('admin.umkm.approve');
     Route::patch('/admin/umkm/{umkm}/reject', [AdminUmkmController::class, 'reject'])->name('admin.umkm.reject');
-    Route::resource('/admin/produk', AdminProductController::class, [ 'as' => 'admin' ]); // Ini sudah membuat admin.produk.edit, admin.produk.update, dll.
+    Route::resource('/admin/produk', AdminProductController::class, ['as' => 'admin']); // Ini sudah membuat admin.produk.edit, admin.produk.update, dll.
     Route::post('/admin/produk/{id}/approve', [AdminProductController::class, 'approve'])->name('admin.produk.approve');
     Route::post('/admin/produk/{id}/reject', [AdminProductController::class, 'reject'])->name('admin.produk.reject');
-    Route::resource('/admin/kategori', AdminCategoryController::class, [ 'as' => 'admin' ]);
-    Route::resource('/admin/artikel', AdminArticleController::class, [ 'as' => 'admin' ]);
+    Route::resource('/admin/kategori', AdminCategoryController::class, ['as' => 'admin']);
+    Route::resource('/admin/artikel', AdminArticleController::class, ['as' => 'admin']);
     Route::post('/admin/contact/{id}/mark-as-read', [AdminContactController::class, 'markAsRead'])->name('admin.contact.markAsRead');
-    Route::resource('/admin/contact', AdminContactController::class, [ 'as' => 'admin' ]);
-    
+    Route::resource('/admin/contact', AdminContactController::class, ['as' => 'admin']);
+
     // Notifikasi Admin
     Route::get('/admin/notifikasi', [NotificationController::class, 'adminIndex'])->name('admin.notifications.index');
     Route::post('/admin/notifikasi/{id}/read', [NotificationController::class, 'markAsRead'])->name('admin.notifications.read');
@@ -114,14 +114,14 @@ Route::get('/pending', function () {
 })->name('auth.pending');
 
 // Ini adalah rute-rute autentikasi bawaan Laravel Breeze
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 
 // Route untuk redirect setelah login, sesuaikan agar pengunjung diarahkan ke dashboard yang sesuai peran
 // Middleware 'auth' tetap dipertahankan, tetapi logika redirect akan tetap berfungsi
 Route::get('/redirect-by-role', function () {
     $user = auth()->user();
     if ($user->role === 'admin') {
-        return redirect()->route('admin.dashboard');
+        return redirect('/filament');
     } elseif ($user->role === 'umkm') {
         return redirect()->route('umkm_dashboard');
     } else {
