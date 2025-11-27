@@ -1,22 +1,4 @@
 <x-app-layout>
-<<<<<<< Updated upstream
-    <div class="py-12 bg-gray-50 min-h-screen">
-        <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8">
-            @php
-                // Mengambil gambar berdasarkan tipe artikel, dengan fallback ke dummy jika tidak ditemukan
-                $articleImageMap = [
-                    'edukasi' => 'artikel-edukasi.jpg',
-                    'berita' => 'artikel-berita.jpg',
-                    'default' => 'artikel-default.jpg', // Fallback umum
-                ];
-                $localImagePath = $articleImageMap[$article->type] ?? $articleImageMap['default'];
-            @endphp
-            <img src="{{ $article->photo ? asset('storage/'.$article->photo) : asset('img/' . $localImagePath) }}" alt="{{ $article->title }}" class="rounded-lg w-full object-cover h-64 md:h-80 mb-8 shadow-md">
-            <div class="mb-4 text-gray-600 text-sm">
-                <span class="font-semibold">Tipe:</span> <span class="capitalize">{{ $article->type }}</span>
-                <span class="mx-2">|</span>
-                <span class="font-semibold">Tanggal:</span> {{ $article->created_at->format('d M Y') }}
-=======
     {{-- Hero Section with Background Image --}}
     @php
         $articleImageMap = [
@@ -25,7 +7,7 @@
             'default' => 'artikel-default.jpg',
         ];
         $localImagePath = $articleImageMap[$article->type] ?? $articleImageMap['default'];
-        $imageUrl = $article->photo ? asset('storage/'.$article->photo) : asset('img/' . $localImagePath);
+        $imageUrl = $article->photo ? asset('storage/' . $article->photo) : asset('img/' . $localImagePath);
     @endphp
 
     <div class="relative h-[60vh] min-h-[500px] bg-gray-900 overflow-hidden">
@@ -40,7 +22,8 @@
         <div class="absolute bottom-0 left-0 right-0 pb-20 pt-32">
             <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div class="flex items-center gap-3 mb-6">
-                    <span class="px-3 py-1 bg-blue-600 text-white text-xs font-bold uppercase tracking-wider rounded-lg shadow-lg">
+                    <span
+                        class="px-3 py-1 bg-blue-600 text-white text-xs font-bold uppercase tracking-wider rounded-lg shadow-lg">
                         {{ $article->type }}
                     </span>
                     <span class="text-gray-300 text-sm font-medium flex items-center gap-2">
@@ -48,11 +31,10 @@
                         {{ $article->created_at->format('d F Y') }}
                     </span>
                 </div>
-                
+
                 <h1 class="text-3xl md:text-4xl lg:text-5xl font-bold text-white leading-tight mb-4 drop-shadow-lg">
                     {{ $article->title }}
                 </h1>
->>>>>>> Stashed changes
             </div>
         </div>
     </div>
@@ -76,23 +58,28 @@
                 </div>
 
                 {{-- Share & Navigation --}}
-                <div class="mt-12 pt-8 border-t border-gray-100 flex flex-col sm:flex-row justify-between items-center gap-6">
+                <div
+                    class="mt-12 pt-8 border-t border-gray-100 flex flex-col sm:flex-row justify-between items-center gap-6">
                     <div class="flex items-center gap-4">
                         <span class="text-sm font-semibold text-gray-900">Bagikan:</span>
                         <div class="flex gap-2">
-                            <a href="#" class="w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center hover:bg-blue-600 hover:text-white transition-all">
+                            <a href="#"
+                                class="w-8 h-8 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center hover:bg-blue-600 hover:text-white transition-all">
                                 <i class='bx bxl-facebook'></i>
                             </a>
-                            <a href="#" class="w-8 h-8 rounded-full bg-green-50 text-green-600 flex items-center justify-center hover:bg-green-600 hover:text-white transition-all">
+                            <a href="#"
+                                class="w-8 h-8 rounded-full bg-green-50 text-green-600 flex items-center justify-center hover:bg-green-600 hover:text-white transition-all">
                                 <i class='bx bxl-whatsapp'></i>
                             </a>
-                            <a href="#" class="w-8 h-8 rounded-full bg-sky-50 text-sky-600 flex items-center justify-center hover:bg-sky-600 hover:text-white transition-all">
+                            <a href="#"
+                                class="w-8 h-8 rounded-full bg-sky-50 text-sky-600 flex items-center justify-center hover:bg-sky-600 hover:text-white transition-all">
                                 <i class='bx bxl-twitter'></i>
                             </a>
                         </div>
                     </div>
 
-                    <a href="{{ route('artikel.index') }}" class="inline-flex items-center gap-2 px-6 py-3 bg-gray-100 text-gray-700 rounded-xl font-semibold hover:bg-gray-200 transition-colors">
+                    <a href="{{ route('artikel.index') }}"
+                        class="inline-flex items-center gap-2 px-6 py-3 bg-gray-100 text-gray-700 rounded-xl font-semibold hover:bg-gray-200 transition-colors">
                         <i class='bx bx-arrow-back'></i>
                         Kembali ke Artikel
                     </a>
