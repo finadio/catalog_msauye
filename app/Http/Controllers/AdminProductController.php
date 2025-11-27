@@ -17,14 +17,14 @@ class AdminProductController extends Controller
      */
     public function index(Request $request)
     {
-        $products = Product::with(['umkm','category','status'])
-            ->when($request->q, fn($q) => $q->where('name','like','%'.$request->q.'%'))
+        $products = Product::with(['umkm', 'category', 'status'])
+            ->when($request->q, fn($q) => $q->where('name', 'like', '%' . $request->q . '%'))
             ->when($request->kategori, fn($q) => $q->where('category_id', $request->kategori))
             ->when($request->status, fn($q) => $q->where('status_id', $request->status))
             ->latest()->paginate(12);
         $categories = Category::all();
         $statuses = ProductStatus::all();
-        return view('admin.produk.index', compact('products','categories','statuses'));
+        return view('admin.produk.index', compact('products', 'categories', 'statuses'));
     }
 
     /**
@@ -53,16 +53,16 @@ class AdminProductController extends Controller
             'status_id' => 'required|exists:product_statuses,id',
         ]);
 
-        $data = $request->only(['name','description','category_id','price','umkm_id','status_id']);
+        $data = $request->only(['name', 'description', 'category_id', 'price', 'umkm_id', 'status_id']);
 
         // Handle photo upload
         if ($request->hasFile('photo')) {
-            $data['photo'] = $request->file('photo')->store('produk','public');
+            $data['photo'] = $request->file('photo')->store('produk', 'public');
         }
 
         Product::create($data);
 
-        return redirect()->route('admin.produk.index')->with('success','Produk berhasil ditambahkan!');
+        return redirect()->route('admin.produk.index')->with('success', 'Produk berhasil ditambahkan!');
     }
 
     /**
@@ -82,7 +82,7 @@ class AdminProductController extends Controller
         $categories = Category::all();
         $statuses = ProductStatus::all();
         // PERBAIKAN DI SINI: Ubah 'admin_produk.edit' menjadi 'admin.produk.edit'
-        return view('admin.produk.edit', compact('product','categories','statuses'));
+        return view('admin.produk.edit', compact('product', 'categories', 'statuses'));
     }
 
     /**
@@ -99,16 +99,16 @@ class AdminProductController extends Controller
             'status_id' => 'required|exists:product_statuses,id',
             'photo' => 'nullable|image|max:2048',
         ]);
-        $data = $request->only(['name','description','category_id','price','status_id']);
+        $data = $request->only(['name', 'description', 'category_id', 'price', 'status_id']);
         if ($request->hasFile('photo')) {
             // Hapus foto lama jika ada
             if ($product->photo) {
                 Storage::disk('public')->delete($product->photo);
             }
-            $data['photo'] = $request->file('photo')->store('produk','public');
+            $data['photo'] = $request->file('photo')->store('produk', 'public');
         }
         $product->update($data);
-        return redirect()->route('admin.produk.index')->with('success','Produk berhasil diupdate!');
+        return redirect()->route('admin.produk.index')->with('success', 'Produk berhasil diupdate!');
     }
 
     /**
@@ -122,36 +122,36 @@ class AdminProductController extends Controller
             Storage::disk('public')->delete($product->photo);
         }
         $product->delete();
-        return redirect()->route('admin.produk.index')->with('success','Produk berhasil dihapus!');
+        return redirect()->route('admin.produk.index')->with('success', 'Produk berhasil dihapus!');
     }
 
     public function approve($id)
     {
         $product = Product::with('umkm.user')->findOrFail($id);
-        $status = ProductStatus::where('name','approved')->first();
-        if($status) {
+        $status = ProductStatus::where('name', 'aktif')->first();
+        if ($status) {
             $product->update(['status_id' => $status->id]);
-            
+
             // Kirim notifikasi ke user UMKM
-            if($product->umkm && $product->umkm->user) {
-                $product->umkm->user->notify(new ProductStatusChangedNotification($product, 'approved'));
+            if ($product->umkm && $product->umkm->user) {
+                $product->umkm->user->notify(new ProductStatusChangedNotification($product, 'aktif'));
             }
         }
-        return redirect()->route('admin.produk.index')->with('success','Produk berhasil di-approve!');
+        return redirect()->route('admin.produk.index')->with('success', 'Produk berhasil di-approve!');
     }
 
     public function reject($id)
     {
         $product = Product::with('umkm.user')->findOrFail($id);
-        $status = ProductStatus::where('name','rejected')->first();
-        if($status) {
+        $status = ProductStatus::where('name', 'ditolak')->first();
+        if ($status) {
             $product->update(['status_id' => $status->id]);
-            
+
             // Kirim notifikasi ke user UMKM
-            if($product->umkm && $product->umkm->user) {
-                $product->umkm->user->notify(new ProductStatusChangedNotification($product, 'rejected'));
+            if ($product->umkm && $product->umkm->user) {
+                $product->umkm->user->notify(new ProductStatusChangedNotification($product, 'ditolak'));
             }
         }
-        return redirect()->route('admin.produk.index')->with('success','Produk berhasil di-reject!');
+        return redirect()->route('admin.produk.index')->with('success', 'Produk berhasil di-reject!');
     }
 }

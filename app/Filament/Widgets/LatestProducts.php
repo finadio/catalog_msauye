@@ -10,9 +10,9 @@ use Filament\Widgets\TableWidget as BaseWidget;
 class LatestProducts extends BaseWidget
 {
     protected static ?int $sort = 3;
-    
-    protected int | string | array $columnSpan = 'full';
-    
+
+    protected int|string|array $columnSpan = 'full';
+
     public function table(Table $table): Table
     {
         return $table
@@ -29,36 +29,36 @@ class LatestProducts extends BaseWidget
                     ->label('Foto')
                     ->circular()
                     ->defaultImageUrl(asset('img/default-product.png')),
-                    
+
                 Tables\Columns\TextColumn::make('name')
                     ->label('Nama Produk')
                     ->searchable()
                     ->sortable()
                     ->weight('bold'),
-                    
+
                 Tables\Columns\TextColumn::make('category.name')
                     ->label('Kategori')
                     ->badge()
                     ->color('info'),
-                    
+
                 Tables\Columns\TextColumn::make('umkm.name')
                     ->label('UMKM')
                     ->searchable()
                     ->sortable(),
-                    
+
                 Tables\Columns\TextColumn::make('price')
                     ->label('Harga')
                     ->money('IDR')
                     ->sortable(),
-                    
+
                 Tables\Columns\BadgeColumn::make('status.name')
                     ->label('Status')
                     ->colors([
                         'warning' => 'pending',
-                        'success' => 'approved',
-                        'danger' => 'rejected',
+                        'success' => 'aktif',
+                        'danger' => 'ditolak',
                     ]),
-                    
+
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Ditambahkan')
                     ->dateTime('d M Y, H:i')
@@ -69,7 +69,7 @@ class LatestProducts extends BaseWidget
                 Tables\Actions\Action::make('view')
                     ->label('Lihat')
                     ->icon('heroicon-o-eye')
-                    ->url(fn (Product $record): string => route('filament.admin.resources.products.view', ['record' => $record])),
+                    ->url(fn(Product $record): string => route('filament.admin.resources.products.view', ['record' => $record])),
             ]);
     }
 }

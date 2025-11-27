@@ -22,10 +22,10 @@ class PublicController extends Controller
     {
         $categories = Category::all();
         $products = Product::with(['umkm', 'category', 'status'])
-            ->whereHas('status', function($q) {
-                $q->where('name', 'approved');
+            ->whereHas('status', function ($q) {
+                $q->where('name', 'aktif');
             })
-            ->when($request->q, fn($q) => $q->where('name', 'like', '%'.$request->q.'%'))
+            ->when($request->q, fn($q) => $q->where('name', 'like', '%' . $request->q . '%'))
             ->when($request->kategori, fn($q) => $q->where('category_id', $request->kategori))
             ->latest()->paginate(12);
 
@@ -45,8 +45,8 @@ class PublicController extends Controller
     public function produkDetail($id)
     {
         $product = Product::with(['umkm', 'status'])
-            ->whereHas('status', function($q) {
-                $q->where('name', 'approved');
+            ->whereHas('status', function ($q) {
+                $q->where('name', 'aktif');
             })
             ->findOrFail($id);
         return view('public.produk_detail', compact('product'));
@@ -60,11 +60,14 @@ class PublicController extends Controller
      */
     public function umkmDetail($id)
     {
-        $umkm = Umkm::with(['products' => function($query) {
-            $query->whereHas('status', function($q) {
-                $q->where('name', 'approved');
-            });
-        }, 'products.status'])->findOrFail($id);
+        $umkm = Umkm::with([
+            'products' => function ($query) {
+                $query->whereHas('status', function ($q) {
+                    $q->where('name', 'aktif');
+                });
+            },
+            'products.status'
+        ])->findOrFail($id);
         return view('public.umkm_detail', compact('umkm'));
     }
 
@@ -98,15 +101,15 @@ class PublicController extends Controller
         // Pencarian berdasarkan query 'q' (nama, deskripsi, dll.)
         if ($request->filled('q')) {
             $searchQuery = $request->q;
-            $query->where(function($q) use ($searchQuery) {
-                $q->where('name', 'like', '%'.$searchQuery.'%')
-                  ->orWhere('description', 'like', '%'.$searchQuery.'%')
-                  ->orWhere('address', 'like', '%'.$searchQuery.'%')
-                  ->orWhere('phone', 'like', '%'.$searchQuery.'%')
-                  ->orWhere('whatsapp', 'like', '%'.$searchQuery.'%')
-                  ->orWhere('instagram', 'like', '%'.$searchQuery.'%')
-                  ->orWhere('tiktok', 'like', '%'.$searchQuery.'%')
-                  ->orWhere('website', 'like', '%'.$searchQuery.'%');
+            $query->where(function ($q) use ($searchQuery) {
+                $q->where('name', 'like', '%' . $searchQuery . '%')
+                    ->orWhere('description', 'like', '%' . $searchQuery . '%')
+                    ->orWhere('address', 'like', '%' . $searchQuery . '%')
+                    ->orWhere('phone', 'like', '%' . $searchQuery . '%')
+                    ->orWhere('whatsapp', 'like', '%' . $searchQuery . '%')
+                    ->orWhere('instagram', 'like', '%' . $searchQuery . '%')
+                    ->orWhere('tiktok', 'like', '%' . $searchQuery . '%')
+                    ->orWhere('website', 'like', '%' . $searchQuery . '%');
             });
         }
 
@@ -134,9 +137,9 @@ class PublicController extends Controller
         // Pencarian berdasarkan query 'q' (judul atau konten)
         if ($request->filled('q')) {
             $searchQuery = $request->q;
-            $query->where(function($q) use ($searchQuery) {
-                $q->where('title', 'like', '%'.$searchQuery.'%')
-                  ->orWhere('content', 'like', '%'.$searchQuery.'%');
+            $query->where(function ($q) use ($searchQuery) {
+                $q->where('title', 'like', '%' . $searchQuery . '%')
+                    ->orWhere('content', 'like', '%' . $searchQuery . '%');
             });
         }
 
@@ -179,17 +182,17 @@ class PublicController extends Controller
     public function produkIndex(Request $request)
     {
         $query = Product::query()->with(['umkm', 'category', 'status'])
-                        ->whereHas('status', function($q){ // Hanya tampilkan produk dengan status 'approved'
-                            $q->where('name', 'approved');
-                        });
+            ->whereHas('status', function ($q) { // Hanya tampilkan produk dengan status 'approved'
+                $q->where('name', 'aktif');
+            });
 
         if ($request->filled('q')) {
             $q = $request->q;
             $query->where('name', 'like', "%$q%")
-                  ->orWhere('description', 'like', "%$q%")
-                  ->orWhereHas('umkm', function($u) use ($q) {
-                      $u->where('name', 'like', "%$q%");
-                  });
+                ->orWhere('description', 'like', "%$q%")
+                ->orWhereHas('umkm', function ($u) use ($q) {
+                    $u->where('name', 'like', "%$q%");
+                });
         }
         if ($request->filled('kategori')) {
             $query->where('category_id', $request->kategori);
@@ -210,17 +213,17 @@ class PublicController extends Controller
     public function produkAjax(Request $request)
     {
         $query = Product::query()->with(['umkm', 'category', 'status'])
-                        ->whereHas('status', function($q){
-                            $q->where('name', 'approved');
-                        });
+            ->whereHas('status', function ($q) {
+                $q->where('name', 'aktif');
+            });
 
         if ($request->filled('q')) {
             $q = $request->q;
             $query->where('name', 'like', "%$q%")
-                  ->orWhere('description', 'like', "%$q%")
-                  ->orWhereHas('umkm', function($u) use ($q) {
-                      $u->where('name', 'like', "%$q%");
-                  });
+                ->orWhere('description', 'like', "%$q%")
+                ->orWhereHas('umkm', function ($u) use ($q) {
+                    $u->where('name', 'like', "%$q%");
+                });
         }
         if ($request->filled('kategori')) {
             $query->where('category_id', $request->kategori);
@@ -252,10 +255,10 @@ class PublicController extends Controller
 
         if ($request->filled('q')) {
             $search = $request->q;
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', '%' . $search . '%')
-                  ->orWhere('location', 'like', '%' . $search . '%')
-                  ->orWhere('description', 'like', '%' . $search . '%');
+                    ->orWhere('location', 'like', '%' . $search . '%')
+                    ->orWhere('description', 'like', '%' . $search . '%');
             });
         }
 

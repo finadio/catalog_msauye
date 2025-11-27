@@ -64,9 +64,9 @@ class Product extends Model
         $name = $this->status?->name; // Mengakses nama status melalui relasi
 
         return match ($name) {
-            'approved' => '<span class="badge bg-success">Disetujui</span>',
+            'aktif' => '<span class="badge bg-success">Aktif</span>',
             'pending' => '<span class="badge bg-warning">Menunggu</span>',
-            'rejected' => '<span class="badge bg-danger">Ditolak</span>',
+            'ditolak' => '<span class="badge bg-danger">Ditolak</span>',
             default => '<span class="badge bg-secondary">Tidak diketahui</span>',
         };
     }
@@ -77,7 +77,7 @@ class Product extends Model
             return 'Hubungi Penjual';
         }
 
-        return 'Rp ' . number_format($this->price, 0, ',', '.');
+        return 'Rp ' . number_format((float) $this->price, 0, ',', '.');
     }
 
     // Accessor ini perlu diubah untuk mengakses nama kategori melalui relasi 'category()'
