@@ -12,12 +12,24 @@ class CategorySeeder extends Seeder
      */
     public function run(): void
     {
-        \DB::table('categories')->insert([
-            ['name' => 'Makanan'],
-            ['name' => 'Minuman'],
-            ['name' => 'Kerajinan'],
-            ['name' => 'Jasa'],
-            ['name' => 'Fashion'],
-        ]);
+        $categories = [
+            'Makanan',
+            'Minuman',
+            'Kerajinan',
+            'Jasa',
+            'Fashion',
+            'Kesehatan',
+            'Elektronik',
+            'Rumah Tangga',
+            'Pertanian',
+            'Otomotif',
+        ];
+
+        foreach ($categories as $category) {
+            \DB::table('categories')->updateOrInsert(
+                ['name' => $category],
+                ['updated_at' => now()] // Only update timestamp if exists, or insert if not
+            );
+        }
     }
 }

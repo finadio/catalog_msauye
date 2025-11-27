@@ -52,9 +52,10 @@ class ProductStatusChangedNotification extends Notification
      */
     public function toArray(object $notifiable): array
     {
-        $statusText = $this->status === 'approved' ? 'disetujui' : 'ditolak';
-        $color = $this->status === 'approved' ? 'success' : 'danger';
-        $icon = $this->status === 'approved' ? 'fas fa-check-circle' : 'fas fa-times-circle';
+        $isApproved = in_array($this->status, ['approved', 'aktif']);
+        $statusText = $isApproved ? 'disetujui' : 'ditolak';
+        $color = $isApproved ? 'success' : 'danger';
+        $icon = $isApproved ? 'fas fa-check-circle' : 'fas fa-times-circle';
 
         return [
             'title' => 'Status Produk Diperbarui',

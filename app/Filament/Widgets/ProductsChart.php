@@ -26,20 +26,20 @@ class ProductsChart extends ChartWidget
                     'label' => 'Jumlah Produk',
                     'data' => $categories->pluck('products_count')->toArray(),
                     'backgroundColor' => [
-                        'rgba(59, 130, 246, 0.5)',  // blue
-                        'rgba(16, 185, 129, 0.5)',  // green
-                        'rgba(245, 158, 11, 0.5)',  // orange
-                        'rgba(239, 68, 68, 0.5)',   // red
-                        'rgba(139, 92, 246, 0.5)',  // purple
-                        'rgba(236, 72, 153, 0.5)',  // pink
+                        'rgba(99, 102, 241, 0.5)',  // indigo-500
+                        'rgba(16, 185, 129, 0.5)',  // emerald-500
+                        'rgba(249, 115, 22, 0.5)',  // orange-500
+                        'rgba(244, 63, 94, 0.5)',   // rose-500
+                        'rgba(6, 182, 212, 0.5)',   // cyan-500
+                        'rgba(139, 92, 246, 0.5)',  // violet-500
                     ],
                     'borderColor' => [
-                        'rgb(59, 130, 246)',
+                        'rgb(99, 102, 241)',
                         'rgb(16, 185, 129)',
-                        'rgb(245, 158, 11)',
-                        'rgb(239, 68, 68)',
+                        'rgb(249, 115, 22)',
+                        'rgb(244, 63, 94)',
+                        'rgb(6, 182, 212)',
                         'rgb(139, 92, 246)',
-                        'rgb(236, 72, 153)',
                     ],
                     'borderWidth' => 2,
                 ],

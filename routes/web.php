@@ -17,6 +17,7 @@ use App\Http\Controllers\AdminCategoryController;
 use App\Http\Controllers\AdminArticleController;
 use App\Http\Controllers\AdminContactController;
 use App\Http\Controllers\NotificationController;
+use App\Http\Controllers\CommunityAdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,6 +39,8 @@ Route::get('/umkm/{id}', [PublicController::class, 'umkmDetail'])->name('public.
 Route::get('/artikel', [PublicController::class, 'artikel'])->name('artikel.index');
 Route::get('/artikel/{id}', [PublicController::class, 'artikelDetail'])->name('artikel.detail');
 Route::get('/tentang', [PublicController::class, 'tentang'])->name('tentang');
+Route::get('/komunitas', [PublicController::class, 'komunitas'])->name('komunitas');
+Route::get('/komunitas/{id}', [PublicController::class, 'komunitasDetail'])->name('komunitas.detail');
 Route::get('/contact', [ContactController::class, 'create'])->name('contact');
 Route::post('/contact', [ContactController::class, 'store']);
 // Baris ini duplikat, sudah ada di atas. Hapus salah satunya jika tidak ada perbedaan.
@@ -133,4 +136,13 @@ Route::get('/cek-auth', function () {
         'user_id' => Auth::id(),
         'user' => Auth::user(),
     ];
+});
+
+// Route::get('/komunitas/{id}', [PublicController::class, 'komunitasDetail'])->name('komunitas.detail'); // Menambahkan rute untuk halaman detail komunitas
+Route::post('/komunitas/{id}/join', [PublicController::class, 'joinCommunity'])->name('komunitas.join')->middleware('auth');
+
+Route::middleware(['auth'])->group(function () {
+    Route::get('/komunitas/{id}/manage', [CommunityAdminController::class, 'index'])->name('community.admin.index');
+    Route::post('/komunitas/{id}/members/{userId}/approve', [CommunityAdminController::class, 'approveMember'])->name('community.admin.approve');
+    Route::post('/komunitas/{id}/members/{userId}/reject', [CommunityAdminController::class, 'rejectMember'])->name('community.admin.reject');
 });

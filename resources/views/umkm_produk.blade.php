@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="min-h-screen py-12 pb-20 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+    <div class="min-h-screen py-12 bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
 
             {{-- Header dan Search/Sort --}}
@@ -150,19 +150,19 @@
                                     </td>
                                     <td class="px-8 py-6">
                                         <span class="inline-flex items-center gap-2 rounded-full border-2 px-4 py-2 text-sm font-bold transition-all duration-200
-                                            @if ($product->status->name === 'approved')
+                                            @if ($product->status->name === 'aktif')
                                                 bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100
                                             @elseif ($product->status->name === 'pending')
                                                 bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100
-                                            @elseif ($product->status->name === 'rejected')
+                                            @elseif ($product->status->name === 'ditolak')
                                                 bg-red-50 text-red-700 border-red-200 hover:bg-red-100
                                             @else
                                                 bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100
                                             @endif">
                                             <div class="h-2 w-2 rounded-full
-                                                @if ($product->status->name === 'approved') bg-emerald-500
+                                                @if ($product->status->name === 'aktif') bg-emerald-500
                                                 @elseif ($product->status->name === 'pending') bg-amber-500
-                                                @elseif ($product->status->name === 'rejected') bg-red-500
+                                                @elseif ($product->status->name === 'ditolak') bg-red-500
                                                 @else bg-gray-500
                                                 @endif"></div>
                                             {{ ucfirst($product->status->name) }}

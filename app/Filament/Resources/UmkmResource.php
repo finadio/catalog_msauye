@@ -85,6 +85,16 @@ class UmkmResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('photo')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('user.status')
+                    ->label('Status Akun')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'pending' => 'warning',
+                        'approved' => 'success',
+                        'rejected' => 'danger',
+                        default => 'gray',
+                    })
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()

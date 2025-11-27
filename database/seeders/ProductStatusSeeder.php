@@ -12,10 +12,18 @@ class ProductStatusSeeder extends Seeder
      */
     public function run(): void
     {
-        \DB::table('product_statuses')->insert([
-            ['name' => 'pending'],
-            ['name' => 'approved'],
-            ['name' => 'rejected'],
-        ]);
+        $statuses = [
+            'approved',
+            'pending',
+            'rejected',
+        ];
+
+        foreach ($statuses as $status) {
+            \DB::table('product_statuses')->updateOrInsert([
+                'name' => $status
+            ], [
+                'name' => $status
+            ]);
+        }
     }
 }

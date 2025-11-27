@@ -1,5 +1,5 @@
 <x-app-layout>
-    <div class="pt-20 pb-10 min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
+    <div class="py-12 min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100">
         <div class="max-w-4xl mx-auto px-6">
             <div class="bg-white/90 backdrop-blur-sm rounded-3xl shadow-2xl p-10 border border-white/20 relative overflow-hidden">
 

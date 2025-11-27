@@ -172,8 +172,8 @@ class ProductResource extends Resource
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
                         'pending' => 'warning',
-                        'approved' => 'success',
-                        'rejected' => 'danger',
+                        'aktif' => 'success',
+                        'ditolak' => 'danger',
                         default => 'gray',
                     }),
                     
@@ -207,16 +207,16 @@ class ProductResource extends Resource
                         ->label('Setujui')
                         ->icon('heroicon-o-check-circle')
                         ->color('success')
-                        ->visible(fn (Product $record) => $record->status->name !== 'approved')
+                        ->visible(fn (Product $record) => $record->status->name !== 'aktif')
                         ->requiresConfirmation()
                         ->action(function (Product $record) {
-                            $status = ProductStatus::where('name', 'approved')->first();
+                            $status = ProductStatus::where('name', 'aktif')->first();
                             if ($status) {
                                 $record->update(['status_id' => $status->id]);
                                 
                                 // Kirim notifikasi ke user UMKM
                                 if ($record->umkm && $record->umkm->user) {
-                                    $record->umkm->user->notify(new ProductStatusChangedNotification($record, 'approved'));
+                                    $record->umkm->user->notify(new ProductStatusChangedNotification($record, 'aktif'));
                                 }
                                 
                                 Notification::make()
@@ -231,16 +231,16 @@ class ProductResource extends Resource
                         ->label('Tolak')
                         ->icon('heroicon-o-x-circle')
                         ->color('danger')
-                        ->visible(fn (Product $record) => $record->status->name !== 'rejected')
+                        ->visible(fn (Product $record) => $record->status->name !== 'ditolak')
                         ->requiresConfirmation()
                         ->action(function (Product $record) {
-                            $status = ProductStatus::where('name', 'rejected')->first();
+                            $status = ProductStatus::where('name', 'ditolak')->first();
                             if ($status) {
                                 $record->update(['status_id' => $status->id]);
                                 
                                 // Kirim notifikasi ke user UMKM
                                 if ($record->umkm && $record->umkm->user) {
-                                    $record->umkm->user->notify(new ProductStatusChangedNotification($record, 'rejected'));
+                                    $record->umkm->user->notify(new ProductStatusChangedNotification($record, 'ditolak'));
                                 }
                                 
                                 Notification::make()

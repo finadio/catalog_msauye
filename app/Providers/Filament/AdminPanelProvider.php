@@ -36,17 +36,17 @@ class AdminPanelProvider extends PanelProvider
             ->authGuard('web')
             // Color scheme modern
             ->colors([
-                'primary' => Color::Blue,
-                'danger' => Color::Red,
+                'primary' => Color::Indigo,
+                'danger' => Color::Rose,
                 'gray' => Color::Slate,
-                'info' => Color::Sky,
-                'success' => Color::Green,
-                'warning' => Color::Amber,
+                'info' => Color::Cyan,
+                'success' => Color::Emerald,
+                'warning' => Color::Orange,
             ])
             // Dark mode support
-            ->darkMode(false)
+            ->darkMode(true)
             // Font modern
-            ->font('Inter')
+            ->font('Poppins')
             // Sidebar
             ->sidebarCollapsibleOnDesktop()
             ->sidebarWidth('16rem')
@@ -68,6 +68,7 @@ class AdminPanelProvider extends PanelProvider
                 \App\Filament\Widgets\StatsOverview::class,
                 \App\Filament\Widgets\ProductsChart::class,
                 \App\Filament\Widgets\LatestProducts::class,
+                \App\Filament\Widgets\LatestNotifications::class,
             ])
             ->middleware([
                 EncryptCookies::class,
@@ -83,6 +84,9 @@ class AdminPanelProvider extends PanelProvider
             ->authMiddleware([
                 Authenticate::class,
             ])
+            // Database Notifications
+            ->databaseNotifications()
+            ->databaseNotificationsPolling('30s')
             // Global search
             ->globalSearchKeyBindings(['command+k', 'ctrl+k'])
             ->globalSearchFieldKeyBindingSuffix()
@@ -95,39 +99,111 @@ class AdminPanelProvider extends PanelProvider
             // Custom CSS for hover effects
             ->renderHook(
                 PanelsRenderHook::HEAD_END,
-                fn () => Blade::render('<style>
+                fn () => Blade::render('
+                <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+                <style>
+                    /* General Font Smoothing */
+                    body {
+                        -webkit-font-smoothing: antialiased;
+                        -moz-osx-font-smoothing: grayscale;
+                        background-color: #f8fafc; /* Slate 50 */
+                        font-family: "Poppins", sans-serif;
+                    }
+                    
+                    /* Dark mode background override */
+                    .dark body {
+                        background-color: #0f172a; /* Slate 900 */
+                    }
+
+                    /* Sidebar Active Item Style */
+                    .fi-sidebar-item-active a {
+                        background-color: rgba(var(--primary-500), 0.1) !important;
+                        color: rgb(var(--primary-600)) !important;
+                        font-weight: 600;
+                    }
+                    .fi-sidebar-item-active a:hover {
+                        background-color: rgba(var(--primary-500), 0.15) !important;
+                    }
+
                     /* Subtle hover effects on stats cards */
                     .fi-wi-stats-overview-stat {
-                        transition: all 0.2s ease-in-out;
+                        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+                        border: 1px solid rgba(226, 232, 240, 0.8);
+                        background: white;
                     }
+                    .dark .fi-wi-stats-overview-stat {
+                        background: #1e293b;
+                        border-color: #334155;
+                    }
+                    
                     .fi-wi-stats-overview-stat:hover {
-                        transform: translateY(-2px);
-                        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+                        transform: translateY(-4px);
+                        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+                        border-color: rgb(var(--primary-500));
                     }
-                    /* Widget border radius */
-                    .fi-section {
-                        border-radius: 0.75rem;
-                        transition: box-shadow 0.2s ease-in-out;
+
+                    /* Widget border radius & shadow */
+                    .fi-section, .fi-wi-widget {
+                        border-radius: 1rem;
+                        box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+                        transition: box-shadow 0.3s ease;
+                        border: 1px solid rgba(226, 232, 240, 0.8);
                     }
-                    .fi-section:hover {
-                        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+                    .dark .fi-section, .dark .fi-wi-widget {
+                        border-color: #334155;
                     }
-                    /* Sidebar spacing fix */
+                    
+                    .fi-section:hover, .fi-wi-widget:hover {
+                        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+                    }
+
+                    /* Sidebar styling */
                     .fi-sidebar-nav {
-                        gap: 0.25rem !important;
+                        gap: 0.5rem !important;
                     }
                     .fi-sidebar-item {
-                        margin-bottom: 0 !important;
+                        transition: transform 0.2s ease;
                     }
-                    .fi-sidebar-group {
-                        gap: 0.25rem !important;
-                    }
-                    .fi-sidebar-group-items {
-                        gap: 0.25rem !important;
+                    .fi-sidebar-item:hover {
+                        transform: translateX(4px);
                     }
                     .fi-sidebar-group-label {
-                        margin-top: 0.75rem !important;
-                        margin-bottom: 0.5rem !important;
+                        font-weight: 700;
+                        letter-spacing: 0.05em;
+                        text-transform: uppercase;
+                        font-size: 0.7rem;
+                        color: rgb(var(--gray-400));
+                    }
+
+                    /* Table styling */
+                    .fi-ta-row {
+                        transition: background-color 0.2s ease;
+                    }
+                    .fi-ta-row:hover {
+                        background-color: rgba(var(--gray-50), 0.8);
+                    }
+                    .dark .fi-ta-row:hover {
+                        background-color: rgba(255, 255, 255, 0.05);
+                    }
+                    
+                    /* Button gradients */
+                    .fi-btn-primary {
+                        background-image: linear-gradient(to bottom right, rgb(var(--primary-500)), rgb(var(--primary-600)));
+                        box-shadow: 0 4px 6px -1px rgba(var(--primary-500), 0.3), 0 2px 4px -1px rgba(var(--primary-500), 0.15);
+                        transition: all 0.2s;
+                    }
+                    .fi-btn-primary:hover {
+                        background-image: linear-gradient(to bottom right, rgb(var(--primary-400)), rgb(var(--primary-500)));
+                        transform: scale(1.02);
+                    }
+                    
+                    /* Topbar Glass Effect */
+                    .fi-topbar {
+                        background-color: rgba(255, 255, 255, 0.8);
+                        backdrop-filter: blur(12px);
+                    }
+                    .dark .fi-topbar {
+                        background-color: rgba(15, 23, 42, 0.8);
                     }
                 </style>')
             );

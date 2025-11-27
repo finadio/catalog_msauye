@@ -21,6 +21,7 @@ public function run(): void
         UmkmSeeder::class, // Tambahkan ini
         ArticleSeeder::class,
         ProductSeeder::class,
+        CommunitySeeder::class, // Seeder komunitas
     ]);
 }
     

@@ -97,4 +97,11 @@ class User extends Authenticatable implements FilamentUser
         // Hanya user dengan role 'admin' dan status 'active' yang bisa akses Filament panel
         return $this->role === 'admin' && $this->status === 'active';
     }
+
+    public function communities()
+    {
+        return $this->belongsToMany(Community::class, 'community_members')
+                    ->withPivot('role', 'status', 'join_reason')
+                    ->withTimestamps();
+    }
 }

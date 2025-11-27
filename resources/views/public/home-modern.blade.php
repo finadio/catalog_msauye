@@ -351,75 +351,7 @@
         </div>
     </section>
 
-    {{-- Footer --}}
-    <footer class="bg-gray-900 text-white py-16">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
-                <div>
-                    <h3 class="text-2xl font-black mb-4 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                        PT BPR MSA
-                    </h3>
-                    <p class="text-gray-400 leading-relaxed mb-6">
-                        Lembaga keuangan terpercaya yang menyediakan solusi permodalan bagi UMKM
-                    </p>
-                    <div class="flex gap-3">
-                        <a href="https://www.instagram.com/bprmsa.official/" target="_blank" 
-                           class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-blue-600 transition-all duration-300">
-                            <i class='bx bxl-instagram text-lg'></i>
-                        </a>
-                        <a href="https://web.facebook.com/bprmsa.official" target="_blank" 
-                           class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-blue-600 transition-all duration-300">
-                            <i class='bx bxl-facebook text-lg'></i>
-                        </a>
-                        <a href="https://www.tiktok.com/@bprmsa" target="_blank" 
-                           class="w-10 h-10 bg-white/10 rounded-full flex items-center justify-center hover:bg-blue-600 transition-all duration-300">
-                            <i class='bx bxl-tiktok text-lg'></i>
-                        </a>
-                    </div>
-                </div>
-
-                <div>
-                    <h4 class="text-lg font-bold mb-4">Kontak</h4>
-                    <div class="space-y-3 text-gray-400">
-                        <p class="flex items-center gap-2">
-                            <i class='bx bx-phone'></i>
-                            0274-549400
-                        </p>
-                        <p class="flex items-center gap-2">
-                            <i class='bx bx-envelope'></i>
-                            bprmadani@gmail.com
-                        </p>
-                        <p class="flex items-center gap-2">
-                            <i class='bx bx-globe'></i>
-                            www.bprmsa.co.id
-                        </p>
-                    </div>
-                </div>
-
-                <div>
-                    <h4 class="text-lg font-bold mb-4">Quick Links</h4>
-                    <div class="space-y-2">
-                        <a href="{{ route('produk.index') }}" class="block text-gray-400 hover:text-white transition-colors">Produk</a>
-                        <a href="{{ route('artikel.index') }}" class="block text-gray-400 hover:text-white transition-colors">Artikel</a>
-                        <a href="{{ route('tentang') }}" class="block text-gray-400 hover:text-white transition-colors">Tentang</a>
-                        <a href="{{ route('contact') }}" class="block text-gray-400 hover:text-white transition-colors">Kontak</a>
-                    </div>
-                </div>
-
-                <div>
-                    <h4 class="text-lg font-bold mb-4">Alamat</h4>
-                    <p class="text-gray-400 leading-relaxed">
-                        Jalan C. Simanjuntak No. 26<br>
-                        Kota Yogyakarta 55223
-                    </p>
-                </div>
-            </div>
-
-            <div class="border-t border-gray-800 pt-8 text-center text-gray-400 text-sm">
-                <p>© {{ date('Y') }} PT BPR MSA Yogyakarta. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
+    {{-- Footer Section removed (using layout footer) --}}
 
     {{-- Custom Animations --}}
     <style>

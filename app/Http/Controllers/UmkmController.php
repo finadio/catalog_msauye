@@ -25,12 +25,11 @@ class UmkmController extends Controller
         $produkAktif = $user->umkm->products()->where('status_id', 2)->count();
         $menungguReview = $user->umkm->products()->where('status_id', 1)->count();
         $ditolak = $user->umkm->products()->where('status_id', 3)->count();
-        // $products = Auth::user()->products()->with('status_id')->latest()->get();
+        
+        $communities = $user->communities;
 
-        return view('umkm_dashboard', compact('products','totalProduk', 'produkAktif', 'menungguReview', 'ditolak'));
-        }
-
-    /**
+        return view('umkm_dashboard', compact('products','totalProduk', 'produkAktif', 'menungguReview', 'ditolak', 'communities'));
+    }    /**
      * Menampilkan form edit profil UMKM.
      */
     public function editProfile()

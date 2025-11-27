@@ -1,4 +1,5 @@
 <x-app-layout>
+<<<<<<< Updated upstream
     <div class="pt-8 md:pt-12 bg-gray-50 min-h-screen">
         <div class="max-w-4xl mx-auto bg-white rounded-xl shadow-lg p-8 md:p-10 lg:p-12">
             <h2 class="text-3xl sm:text-4xl font-extrabold text-gray-900 mb-12 md:mb-16 text-center leading-tight">Mengenal Lebih Dekat <br class="hidden md:inline">PT BPR MSA</h2>
@@ -68,115 +69,118 @@
                     </div>
                 </div>
             </section>
+=======
+    {{-- Hero Section --}}
+    <div class="relative bg-slate-900 pt-40 pb-20 lg:pt-52 lg:pb-32 overflow-hidden">
+        <div class="absolute inset-0 opacity-20">
+            <img src="{{ asset('img/msa1.jpeg') }}" class="w-full h-full object-cover" alt="Background">
+            <div class="absolute inset-0 bg-slate-900 mix-blend-multiply"></div>
+        </div>
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 tracking-tight">
+                Mengenal Lebih Dekat <br class="hidden md:inline"><span class="text-blue-400">PT BPR MSA</span>
+            </h1>
+            <p class="text-lg md:text-xl text-slate-300 max-w-3xl mx-auto leading-relaxed">
+                Mitra perbankan terpercaya yang berkomitmen untuk pertumbuhan ekonomi regional dan kesuksesan UMKM di Indonesia.
+            </p>
+>>>>>>> Stashed changes
         </div>
     </div>
 
-    {{-- Footer Section --}}
-    <footer class="bg-gray-900 text-white py-10 md:py-12 mt-10">
-        <div class="max-w-7xl mx-auto px-4">
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10 mb-8 md:mb-12">
-
-                <div class="footer-section">
-                    <div class="footer-logo mb-4">
-                        <h4 class="text-xl md:text-2xl font-bold text-white mb-2">PT BPR MSA Yogyakarta</h4>
+    {{-- Main Content --}}
+    <div class="bg-white py-16 lg:py-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            {{-- Visi Section --}}
+            <div class="flex flex-col md:flex-row items-center gap-12 lg:gap-20 mb-24">
+                <div class="w-full md:w-1/2">
+                    <div class="relative rounded-2xl overflow-hidden shadow-2xl">
+                        <img src="{{ asset('img/msa1.jpeg') }}" alt="Gedung BPR MSA" class="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700">
                     </div>
-                    <p class="company-description text-gray-300 text-sm leading-relaxed mb-4">
-                        Lembaga keuangan terpercaya yang menyediakan solusi permodalan bagi UMKM dan kebutuhan bisnis profesional Anda.
+                </div>
+                <div class="w-full md:w-1/2">
+                    <div class="inline-flex items-center justify-center px-4 py-2 rounded-full bg-blue-50 text-blue-700 font-semibold text-sm mb-6 border border-blue-100">
+                        Visi Kami
+                    </div>
+                    <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-6 leading-tight">Menjadi <span class="text-blue-700">Smart Banking</span> BPR Terbaik di Indonesia</h2>
+                    <p class="text-lg text-slate-600 leading-relaxed mb-8">
+                        Kami bertekad untuk terus berinovasi dan memberikan layanan perbankan yang cerdas, efisien, dan terpercaya bagi seluruh masyarakat, mendukung pertumbuhan ekonomi yang berkelanjutan.
                     </p>
-                    <div class="social-links flex gap-3 mt-4">
-                        <a href="https://www.instagram.com/bprmsa.official/" target="_blank" aria-label="Instagram"
-                           class="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center text-white text-lg hover:bg-blue-700 transition-all duration-300 transform hover:-translate-y-1">
-                            <i class='bx bxl-instagram'></i>
-                        </a>
-                        <a href="https://web.facebook.com/bprmsa.official" target="_blank" aria-label="Facebook"
-                           class="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center text-white text-lg hover:bg-blue-700 transition-all duration-300 transform hover:-translate-y-1">
-                            <i class='bx bxl-facebook'></i>
-                        </a>
-                        <a href="https://www.tiktok.com/@bprmsa" target="_blank" aria-label="TikTok"
-                           class="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center text-white text-lg hover:bg-blue-700 transition-all duration-300 transform hover:-translate-y-1">
-                            <i class='bx bxl-tiktok'></i>
-                        </a>
+                    <div class="flex items-center gap-4">
+                        <div class="h-px w-12 bg-blue-600"></div>
+                        <span class="text-slate-500 font-medium tracking-wide uppercase text-sm">PT BPR MSA</span>
                     </div>
                 </div>
-
-                <div class="footer-section">
-                    <h4 class="text-lg md:text-xl font-semibold text-white mb-5 relative footer-heading-underline">Kontak Kami</h4>
-                    <div class="contact-info flex flex-col gap-4">
-                        <div class="contact-item flex items-start gap-3">
-                            <i class='bx bxs-phone text-blue-400 text-xl flex-shrink-0 mt-0.5'></i>
-                            <div>
-                                <strong class="block text-white text-sm font-semibold mb-1">Telepon</strong>
-                                <p class="text-gray-300 text-sm">0274-549400</p>
-                            </div>
-                        </div>
-                        <div class="contact-item flex items-start gap-3">
-                            <i class='bx bx-envelope text-blue-400 text-xl flex-shrink-0 mt-0.5'></i>
-                            <div>
-                                <strong class="block text-white text-sm font-semibold mb-1">Email</strong>
-                                <p class="text-gray-300 text-sm">bprmadani@gmail.com</p>
-                            </div>
-                        </div>
-                        <div class="contact-item flex items-start gap-3">
-                            <i class='bx bx-globe text-blue-400 text-xl flex-shrink-0 mt-0.5'></i>
-                            <div>
-                                <strong class="block text-white text-sm font-semibold mb-1">Website</strong>
-                                <p class="text-gray-300 text-sm">www.bprmsa.co.id</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="footer-section">
-                    <h4 class="text-lg md:text-xl font-semibold text-white mb-5 relative footer-heading-underline">Kantor Pusat</h4>
-                    <div class="office-info mb-4">
-                        <div class="address-info flex items-start gap-3">
-                            <i class='bx bx-map-pin text-blue-400 text-xl flex-shrink-0 mt-0.5'></i>
-                            <div>
-                                <strong class="block text-white text-sm font-semibold mb-1">Alamat</strong>
-                                <p class="text-gray-300 text-sm leading-relaxed">Jalan C. Simanjuntak No. 26<br>Kota Yogyakarta 55223</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="map-container w-full h-40 rounded-xl overflow-hidden shadow-lg">
-                        <iframe
-                            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3953.103333946491!2d110.37076757439262!3d-7.778867192240737!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e7a5769f94c5885%3A0xeeffcc651da7e6d6!2sPT%20BPR%20Madani%20Sejahtera%20Abadi!5e0!3m2!1sen!2sid!4v1753067076562!5m2!1sen!2sid"
-                            width="100%"
-                            height="100%"
-                            style="border:0;"
-                            allowfullscreen=""
-                            loading="lazy"
-                            referrerpolicy="no-referrer-when-downgrade"
-                            title="Lokasi BPR MSA Yogyakarta">
-                        </iframe>
-                    </div>
-                </div>
-
             </div>
 
-            <div class="border-t border-gray-700 py-6 mt-8 flex flex-col md:flex-row items-center justify-between gap-3">
-                <p class="copyright text-gray-400 text-xs text-center md:text-left mb-0">
-                    © {{ date('Y') }} PT BPR MSA Yogyakarta. All rights reserved.
+            {{-- Misi Section --}}
+            <div class="flex flex-col md:flex-row-reverse items-center gap-12 lg:gap-20 mb-24">
+                <div class="w-full md:w-1/2">
+                    <div class="relative rounded-2xl overflow-hidden shadow-2xl">
+                        <img src="{{ asset('img/timbpr.png') }}" alt="Tim BPR MSA" class="w-full h-full object-cover transform hover:scale-105 transition-transform duration-700">
+                    </div>
+                </div>
+                <div class="w-full md:w-1/2">
+                    <div class="inline-flex items-center justify-center px-4 py-2 rounded-full bg-green-50 text-green-700 font-semibold text-sm mb-6 border border-green-100">
+                        Misi Kami
+                    </div>
+                    <h2 class="text-3xl md:text-4xl font-bold text-slate-900 mb-6 leading-tight">Komitmen Pelayanan & Tata Kelola</h2>
+                    <ul class="space-y-5">
+                        <li class="flex items-start gap-4">
+                            <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0 mt-1">
+                                <i class='bx bx-check text-green-600 text-xl'></i>
+                            </div>
+                            <span class="text-slate-700 text-lg">Menciptakan <strong>Good Corporate Governance</strong> berbasis perbankan yang sehat.</span>
+                        </li>
+                        <li class="flex items-start gap-4">
+                            <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0 mt-1">
+                                <i class='bx bx-check text-green-600 text-xl'></i>
+                            </div>
+                            <span class="text-slate-700 text-lg">Menjalankan bisnis secara <strong>prudent</strong> dengan prinsip kehati-hatian.</span>
+                        </li>
+                        <li class="flex items-start gap-4">
+                            <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0 mt-1">
+                                <i class='bx bx-check text-green-600 text-xl'></i>
+                            </div>
+                            <span class="text-slate-700 text-lg">Menjadi partner bisnis strategis bagi <strong>UMKM</strong>.</span>
+                        </li>
+                        <li class="flex items-start gap-4">
+                            <div class="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center flex-shrink-0 mt-1">
+                                <i class='bx bx-check text-green-600 text-xl'></i>
+                            </div>
+                            <span class="text-slate-700 text-lg">Memberikan pelayanan prima untuk kepuasan nasabah.</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            {{-- Identity Section --}}
+            <div class="bg-slate-50 rounded-3xl p-12 lg:p-16 text-center border border-slate-100">
+                <h3 class="text-2xl font-bold text-slate-900 mb-8">Identitas Kami</h3>
+                <div class="flex justify-center mb-8">
+                    <img src="{{ asset('img/msa.png') }}" alt="Logo BPR MSA" class="h-24 md:h-32 object-contain">
+                </div>
+                <p class="text-slate-600 max-w-2xl mx-auto text-lg leading-relaxed">
+                    BPR MSA hadir sebagai solusi keuangan yang dekat dan mengerti kebutuhan Anda. Kami tumbuh bersama masyarakat Yogyakarta dan sekitarnya.
                 </p>
-                <div class="footer-links flex gap-4 sm:gap-5 md:gap-6 justify-center">
-                    <a href="{{ route('tentang') }}" class="text-gray-300 text-xs hover:text-white font-medium transition-colors duration-300">Tentang Kami</a>
-                    <a href="{{ route('artikel.index') }}" class="text-gray-300 text-xs hover:text-white font-medium transition-colors duration-300">Artikel</a>
-                    <a href="{{ route('contact') }}" class="text-gray-300 text-xs hover:text-white font-medium transition-colors duration-300">Kontak</a>
+            </div>
+
+            {{-- CTA Section --}}
+            <div class="mt-24 text-center">
+                <h2 class="text-3xl font-bold text-slate-900 mb-6">Siap Bermitra dengan Kami?</h2>
+                <p class="text-slate-600 text-lg mb-8 max-w-2xl mx-auto">
+                    Hubungi kami untuk informasi lebih lanjut mengenai produk dan layanan kami.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4">
+                    <a href="{{ route('contact') }}" class="inline-flex items-center justify-center px-8 py-4 bg-blue-700 text-white font-semibold rounded-xl hover:bg-blue-800 transition-colors shadow-lg shadow-blue-700/20">
+                        Hubungi Kami
+                    </a>
+                    <a href="mailto:bprmadani@gmail.com" class="inline-flex items-center justify-center px-8 py-4 bg-white text-slate-700 font-semibold rounded-xl border border-slate-200 hover:bg-slate-50 transition-colors">
+                        <i class='bx bx-envelope mr-2 text-xl'></i> Kirim Email
+                    </a>
                 </div>
             </div>
-        </div>
-    </footer>
 
-    {{-- Custom CSS untuk pseudo-element ::after pada judul footer --}}
-    <style>
-    .footer-heading-underline::after {
-        content: '';
-        position: absolute;
-        bottom: -6px;
-        left: 0;
-        width: 30px;
-        height: 2px;
-        background: linear-gradient(135deg, #3B82F6, #10B981);
-        border-radius: 2px;
-    }
-    </style>
+        </div>
+    </div>
 </x-app-layout>

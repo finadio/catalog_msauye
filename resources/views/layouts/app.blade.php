@@ -19,6 +19,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 
+<<<<<<< Updated upstream
 <body class="font-sans antialiased bg-gray-100"> {{-- Default background body --}}
     <div class="min-h-screen">
         @include('layouts.navigation')
@@ -38,3 +39,13 @@
 </body>
 
 </html>
+=======
+            <main>
+                {{ $slot }}
+            </main>
+
+            @include('layouts.footer')
+        </div>
+    </body>
+</html>
+>>>>>>> Stashed changes

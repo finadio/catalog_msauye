@@ -8,6 +8,7 @@ use App\Models\Umkm;
 use App\Models\Category;
 use App\Models\Article;
 use App\Models\ProductStatus;
+use App\Models\Community;
 
 class PublicController extends Controller
 {
@@ -238,5 +239,80 @@ class PublicController extends Controller
             ]
         ];
         return response()->json($data);
+    }
+
+    /**
+     * Menampilkan halaman komunitas.
+     *
+     * @return \Illuminate\View\View
+     */
+    public function komunitas(Request $request)
+    {
+        $query = Community::query();
+
+        if ($request->filled('q')) {
+            $search = $request->q;
+            $query->where(function($q) use ($search) {
+                $q->where('name', 'like', '%' . $search . '%')
+                  ->orWhere('location', 'like', '%' . $search . '%')
+                  ->orWhere('description', 'like', '%' . $search . '%');
+            });
+        }
+
+        $communities = $query->withCount('members')->get();
+
+        return view('public.komunitas', compact('communities'));
+    }
+
+    /*
+    public function komunitas_old(Request $request)
+    {
+        // Data Dummy untuk Komunitas (Sesuai Screenshot)
+        $communities = [
+            [
+                'id' => 1,
+                'name' => 'Ruang UMKM',
+                'location' => 'Yogyakarta, Daerah Istimewa Yogyakarta',
+                'description' => 'Sinergi bagi para UMKM inovatif yang ingin terus belajar dan berkolaborasi.',
+                'image' => 'img/msa1.jpeg', // Ganti dengan path gambar yang sesuai
+                'logo' => 'img/msa.png',   // Ganti dengan path logo yang sesuai
+                'tags' => ['UMKM Jogja', 'Publik', '5 anggota'],
+                'type' => 'Publik'
+            ],
+    /*
+     * Old dummy data removed.
+     */
+
+    /**
+     * Menampilkan detail komunitas.
+     *
+     * @param int $id
+     * @return \Illuminate\View\View
+     */
+    public function komunitasDetail($id)
+    {
+        $community = Community::with(['members.user'])->withCount('members')->findOrFail($id);
+        return view('public.komunitas_detail', compact('community'));
+    }
+
+    /**
+     * Mengirim permintaan bergabung ke komunitas.
+     *
+     * @param int $id
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function joinCommunity($id)
+    {
+        Community::findOrFail($id);
+        $user = auth()->user();
+
+        // Check if already a member
+        if ($user->communities()->where('community_id', $id)->exists()) {
+            return back()->with('error', 'Anda sudah bergabung atau permintaan sedang diproses.');
+        }
+
+        $user->communities()->attach($id, ['status' => 'pending', 'role' => 'member']);
+
+        return back()->with('success', 'Permintaan bergabung telah dikirim! Admin komunitas akan meninjau permintaan Anda.');
     }
 }
