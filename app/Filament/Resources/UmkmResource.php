@@ -83,8 +83,21 @@ class UmkmResource extends Resource
                     ->searchable(),
                 Tables\Columns\TextColumn::make('website')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('photo')
-                    ->searchable(),
+                Tables\Columns\ImageColumn::make('photo')
+                    ->label('Foto')
+                    ->size(60)
+                    ->checkFileExistence(false)
+                    ->defaultImageUrl(asset('img/umkm-default.png'))
+                    ->state(function ($record) {
+                        if (!$record->photo) return null;
+                        if (str_starts_with($record->photo, 'http')) {
+                            return $record->photo;
+                        }
+                        if (str_starts_with($record->photo, 'umkm-default')) {
+                            return asset('img/' . $record->photo);
+                        }
+                        return asset('storage/' . $record->photo);
+                    }),
                 Tables\Columns\TextColumn::make('user.status')
                     ->label('Status Akun')
                     ->badge()

@@ -33,7 +33,7 @@
 
                 <!-- Banner Image -->
                 <div class="h-64 md:h-96 w-full relative bg-gray-200">
-                    <img src="{{ asset($community->image) }}" alt="{{ $community->name }}"
+                    <img src="{{ Str::startsWith($community->image, 'http') ? $community->image : asset($community->image) }}" alt="{{ $community->name }}"
                         class="w-full h-full object-cover">
                 </div>
 
@@ -43,7 +43,7 @@
                         <div class="flex items-center gap-4">
                             <!-- Logo -->
                             <div class="w-16 h-16 rounded-full bg-white shadow-md p-1 flex-shrink-0">
-                                <img src="{{ asset($community->logo) }}" alt="Logo"
+                                <img src="{{ Str::startsWith($community->logo, 'http') ? $community->logo : asset($community->logo) }}" alt="Logo"
                                     class="w-full h-full object-contain rounded-full">
                             </div>
 
@@ -126,9 +126,26 @@
 
                         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
                             @foreach($community->members as $member)
+                                @php
+                                    $photo = $member->user->photo;
+                                    if (!$photo && $member->user->umkm) {
+                                        $photo = $member->user->umkm->photo;
+                                    }
+                                    
+                                    $photoUrl = asset('img/umkm-default.png');
+                                    if ($photo) {
+                                        if (Str::startsWith($photo, 'http')) {
+                                            $photoUrl = $photo;
+                                        } elseif (Str::startsWith($photo, 'img/')) {
+                                             $photoUrl = asset($photo);
+                                        } else {
+                                            $photoUrl = asset('storage/' . $photo);
+                                        }
+                                    }
+                                @endphp
                                 <div
                                     class="border border-gray-100 rounded-lg p-3 flex flex-col items-center text-center hover:shadow-md transition-shadow bg-white">
-                                    <img src="{{ $member->user->photo ? asset('storage/' . $member->user->photo) : asset('img/umkm-default.png') }}"
+                                    <img src="{{ $photoUrl }}"
                                         alt="{{ $member->user->name }}"
                                         class="w-12 h-12 rounded-full mb-2 bg-gray-100 object-cover">
                                     <h4 class="text-sm font-bold text-gray-900 truncate w-full">{{ $member->user->name }}
@@ -145,13 +162,163 @@
 
                     <!-- Discussion Section -->
                     <div>
-                        <h3 class="text-lg font-bold text-gray-900 mb-4">Diskusi & Pengumuman</h3>
-                        <div class="text-gray-500 text-sm">
-                            Belum ada diskusi/pengumuman.
+                        <div class="flex items-center justify-between mb-6">
+                            <h3 class="text-lg font-bold text-gray-900">Diskusi & Pengumuman</h3>
+                            @auth
+                                @if($memberStatus === 'approved')
+                                    <button onclick="document.getElementById('createPostModal').classList.remove('hidden')" 
+                                        class="px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-lg hover:bg-blue-700 transition-colors">
+                                        Buat Diskusi Baru
+                                    </button>
+                                @endif
+                            @endauth
                         </div>
+
+                        @php
+                            $posts = \App\Models\CommunityPost::where('community_id', $community->id)
+                                ->with(['user', 'comments.user'])
+                                ->orderBy('is_pinned', 'desc')
+                                ->orderBy('created_at', 'desc')
+                                ->get();
+                        @endphp
+
+                        @if($posts->count() > 0)
+                            <div class="space-y-6">
+                                @foreach($posts as $post)
+                                    <div class="bg-white border border-gray-200 rounded-xl p-6 {{ $post->is_pinned ? 'border-l-4 border-l-blue-500' : '' }}">
+                                        <div class="flex items-start justify-between mb-4">
+                                            <div class="flex items-center gap-3">
+                                                @php
+                                                    $posterPhoto = $post->user->photo;
+                                                    if (!$posterPhoto && $post->user->umkm) {
+                                                        $posterPhoto = $post->user->umkm->photo;
+                                                    }
+                                                    $posterPhotoUrl = asset('img/umkm-default.png');
+                                                    if ($posterPhoto) {
+                                                        if (Str::startsWith($posterPhoto, 'http')) {
+                                                            $posterPhotoUrl = $posterPhoto;
+                                                        } elseif (Str::startsWith($posterPhoto, 'img/')) {
+                                                            $posterPhotoUrl = asset($posterPhoto);
+                                                        } else {
+                                                            $posterPhotoUrl = asset('storage/' . $posterPhoto);
+                                                        }
+                                                    }
+                                                @endphp
+                                                <img src="{{ $posterPhotoUrl }}"
+                                                    alt="{{ $post->user->name }}"
+                                                    class="w-10 h-10 rounded-full object-cover">
+                                                <div>
+                                                    <h4 class="font-bold text-gray-900">{{ $post->user->name }}</h4>
+                                                    <p class="text-xs text-gray-500">{{ $post->created_at->diffForHumans() }}</p>
+                                                </div>
+                                            </div>
+                                            @if($post->is_pinned)
+                                                <span class="px-2 py-1 bg-blue-50 text-blue-600 text-xs font-medium rounded-full flex items-center gap-1">
+                                                    <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z"/></svg>
+                                                    Pinned
+                                                </span>
+                                            @endif
+                                        </div>
+
+                                        <h4 class="text-lg font-bold text-gray-900 mb-2">{{ $post->title }}</h4>
+                                        <p class="text-gray-700 mb-4 whitespace-pre-line">{{ $post->content }}</p>
+
+                                        <!-- Comments Section -->
+                                        <div class="bg-gray-50 rounded-lg p-4">
+                                            <h5 class="text-sm font-bold text-gray-700 mb-3">Komentar ({{ $post->comments->count() }})</h5>
+                                            
+                                            <div class="space-y-3 mb-4">
+                                                @foreach($post->comments as $comment)
+                                                    <div class="flex gap-3">
+                                                        @php
+                                                            $commenterPhoto = $comment->user->photo;
+                                                            if (!$commenterPhoto && $comment->user->umkm) {
+                                                                $commenterPhoto = $comment->user->umkm->photo;
+                                                            }
+                                                            $commenterPhotoUrl = asset('img/umkm-default.png');
+                                                            if ($commenterPhoto) {
+                                                                if (Str::startsWith($commenterPhoto, 'http')) {
+                                                                    $commenterPhotoUrl = $commenterPhoto;
+                                                                } elseif (Str::startsWith($commenterPhoto, 'img/')) {
+                                                                    $commenterPhotoUrl = asset($commenterPhoto);
+                                                                } else {
+                                                                    $commenterPhotoUrl = asset('storage/' . $commenterPhoto);
+                                                                }
+                                                            }
+                                                        @endphp
+                                                        <img src="{{ $commenterPhotoUrl }}"
+                                                            class="w-8 h-8 rounded-full object-cover flex-shrink-0">
+                                                        <div class="bg-white p-3 rounded-lg border border-gray-200 flex-1">
+                                                            <div class="flex justify-between items-start mb-1">
+                                                                <span class="font-semibold text-sm text-gray-900">{{ $comment->user->name }}</span>
+                                                                <span class="text-xs text-gray-500">{{ $comment->created_at->diffForHumans() }}</span>
+                                                            </div>
+                                                            <p class="text-sm text-gray-600">{{ $comment->content }}</p>
+                                                        </div>
+                                                    </div>
+                                                @endforeach
+                                            </div>
+
+                                            @auth
+                                                @if($memberStatus === 'approved')
+                                                    <form action="{{ route('communities.comments.store', $post->id) }}" method="POST" class="flex gap-2">
+                                                        @csrf
+                                                        <input type="text" name="content" placeholder="Tulis komentar..." required
+                                                            class="flex-1 rounded-lg border-gray-300 text-sm focus:border-blue-500 focus:ring-blue-500">
+                                                        <button type="submit" class="px-4 py-2 bg-gray-800 text-white text-sm font-medium rounded-lg hover:bg-gray-900">
+                                                            Kirim
+                                                        </button>
+                                                    </form>
+                                                @endif
+                                            @endauth
+                                        </div>
+                                    </div>
+                                @endforeach
+                            </div>
+                        @else
+                            <div class="text-center py-8 bg-gray-50 rounded-xl border border-dashed border-gray-300">
+                                <p class="text-gray-500">Belum ada diskusi. Jadilah yang pertama memulai!</p>
+                            </div>
+                        @endif
                     </div>
 
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Post Modal -->
+    <div id="createPostModal" class="fixed inset-0 z-50 hidden overflow-y-auto" aria-labelledby="modal-title" role="dialog" aria-modal="true">
+        <div class="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity" aria-hidden="true" onclick="document.getElementById('createPostModal').classList.add('hidden')"></div>
+            <span class="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
+            <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
+                <form action="{{ route('communities.posts.store', $community->id) }}" method="POST">
+                    @csrf
+                    <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+                        <h3 class="text-lg leading-6 font-medium text-gray-900 mb-4" id="modal-title">Buat Diskusi Baru</h3>
+                        <div class="space-y-4">
+                            <div>
+                                <label for="title" class="block text-sm font-medium text-gray-700">Judul Diskusi</label>
+                                <input type="text" name="title" id="title" required
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+                            </div>
+                            <div>
+                                <label for="content" class="block text-sm font-medium text-gray-700">Isi Diskusi</label>
+                                <textarea name="content" id="content" rows="4" required
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                        <button type="submit" class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-blue-600 text-base font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 sm:ml-3 sm:w-auto sm:text-sm">
+                            Posting
+                        </button>
+                        <button type="button" onclick="document.getElementById('createPostModal').classList.add('hidden')" class="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm">
+                            Batal
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

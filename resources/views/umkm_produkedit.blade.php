@@ -209,7 +209,7 @@
                                         Foto Saat Ini
                                     </label>
                                     <div class="relative inline-block">
-                                        <img src="{{ Str::startsWith($product->photo, 'produk-dummy') ? asset('img/' . $product->photo) : asset('storage/' . $product->photo) }}" alt="Foto Produk"
+                                        <img src="{{ Str::startsWith($product->photo, 'http') ? $product->photo : (Str::startsWith($product->photo, 'produk-dummy') ? asset('img/' . $product->photo) : asset('storage/' . $product->photo)) }}" alt="Foto Produk"
                                             class="w-40 h-40 object-cover rounded-2xl shadow-lg border-4 border-white">
                                         <div class="absolute inset-0 rounded-2xl bg-gradient-to-t from-black/20 to-transparent"></div>
                                     </div>

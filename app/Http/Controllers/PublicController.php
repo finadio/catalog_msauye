@@ -23,7 +23,7 @@ class PublicController extends Controller
         $categories = Category::all();
         $products = Product::with(['umkm', 'category', 'status'])
             ->whereHas('status', function ($q) {
-                $q->where('name', 'aktif');
+                $q->where('name', 'approved');
             })
             ->when($request->q, fn($q) => $q->where('name', 'like', '%' . $request->q . '%'))
             ->when($request->kategori, fn($q) => $q->where('category_id', $request->kategori))
@@ -46,7 +46,7 @@ class PublicController extends Controller
     {
         $product = Product::with(['umkm', 'status'])
             ->whereHas('status', function ($q) {
-                $q->where('name', 'aktif');
+                $q->where('name', 'approved');
             })
             ->findOrFail($id);
         return view('public.produk_detail', compact('product'));
@@ -63,7 +63,7 @@ class PublicController extends Controller
         $umkm = Umkm::with([
             'products' => function ($query) {
                 $query->whereHas('status', function ($q) {
-                    $q->where('name', 'aktif');
+                    $q->where('name', 'approved');
                 });
             },
             'products.status'
@@ -113,7 +113,7 @@ class PublicController extends Controller
             });
         }
 
-        $umkms = $query->latest()->paginate(12);
+        $umkms = $query->latest()->paginate(20);
         $categories = Category::all(); // Ambil semua kategori untuk dropdown filter
 
         return view('public.umkm_index', compact('umkms', 'categories'));
@@ -183,7 +183,7 @@ class PublicController extends Controller
     {
         $query = Product::query()->with(['umkm', 'category', 'status'])
             ->whereHas('status', function ($q) { // Hanya tampilkan produk dengan status 'approved'
-                $q->where('name', 'aktif');
+                $q->where('name', 'approved');
             });
 
         if ($request->filled('q')) {
@@ -214,7 +214,7 @@ class PublicController extends Controller
     {
         $query = Product::query()->with(['umkm', 'category', 'status'])
             ->whereHas('status', function ($q) {
-                $q->where('name', 'aktif');
+                $q->where('name', 'approved');
             });
 
         if ($request->filled('q')) {
@@ -294,7 +294,12 @@ class PublicController extends Controller
      */
     public function komunitasDetail($id)
     {
-        $community = Community::with(['members.user'])->withCount('members')->findOrFail($id);
+        $community = Community::with([
+            'members.user.umkm', // Load UMKM for photo fallback
+            'posts.user.umkm',   // Load User and UMKM for posts
+            'posts.comments.user.umkm' // Load User and UMKM for comments
+        ])->withCount('members')->findOrFail($id);
+        
         return view('public.komunitas_detail', compact('community'));
     }
 

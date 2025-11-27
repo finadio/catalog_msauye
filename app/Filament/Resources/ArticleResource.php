@@ -107,9 +107,20 @@ class ArticleResource extends Resource
             ->columns([
                 Tables\Columns\ImageColumn::make('photo')
                     ->label('Gambar')
-                    ->disk('public')
                     ->size(60)
-                    ->square(),
+                    ->square()
+                    ->checkFileExistence(false)
+                    ->defaultImageUrl(asset('img/artikel-default.jpg'))
+                    ->state(function ($record) {
+                        if (!$record->photo) return null;
+                        if (str_starts_with($record->photo, 'http')) {
+                            return $record->photo;
+                        }
+                        if (str_starts_with($record->photo, 'artikel-')) {
+                            return asset('img/' . $record->photo);
+                        }
+                        return asset('storage/' . $record->photo);
+                    }),
                     
                 Tables\Columns\TextColumn::make('title')
                     ->label('Judul')

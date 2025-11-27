@@ -1,0 +1,40 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    /**
+     * Run the migrations.
+     */
+    public function up(): void
+    {
+        // Add title to community_posts
+        Schema::table('community_posts', function (Blueprint $table) {
+            $table->string('title')->after('user_id')->nullable();
+        });
+
+        // Create community_comments table
+        Schema::create('community_comments', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('community_post_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->text('content');
+            $table->timestamps();
+        });
+    }
+
+    /**
+     * Reverse the migrations.
+     */
+    public function down(): void
+    {
+        Schema::dropIfExists('community_comments');
+
+        Schema::table('community_posts', function (Blueprint $table) {
+            $table->dropColumn('title');
+        });
+    }
+};

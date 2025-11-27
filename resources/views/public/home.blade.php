@@ -347,7 +347,7 @@
                         
                         {{-- Image Container --}}
                         <div class="relative h-56 overflow-hidden">
-                            <img src="{{ $article->photo ? asset('storage/'.$article->photo) : asset('img/' . $localImagePath) }}"
+                            <img src="{{ $article->photo ? (Str::startsWith($article->photo, 'http') ? $article->photo : asset('storage/'.$article->photo)) : asset('img/' . $localImagePath) }}"
                                  alt="{{ $article->title }}"
                                  class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700">
                             
@@ -471,7 +471,7 @@
                                 ];
                                 $localDummyImagePath = $productDummyImages[$loop->index % count($productDummyImages)];
                             @endphp
-                            <img src="{{ Str::startsWith($product->photo, 'produk-dummy') ? asset('img/' . $product->photo) : asset('storage/' . $product->photo) }}"
+                            <img src="{{ Str::startsWith($product->photo, 'http') ? $product->photo : (Str::startsWith($product->photo, 'produk-dummy') ? asset('img/' . $product->photo) : asset('storage/' . $product->photo)) }}"
                                 alt="{{ $product->name }}"
                                 class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700 ease-in-out">
                             

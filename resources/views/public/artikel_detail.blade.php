@@ -7,7 +7,7 @@
             'default' => 'artikel-default.jpg',
         ];
         $localImagePath = $articleImageMap[$article->type] ?? $articleImageMap['default'];
-        $imageUrl = $article->photo ? asset('storage/' . $article->photo) : asset('img/' . $localImagePath);
+        $imageUrl = $article->photo ? (Str::startsWith($article->photo, 'http') ? $article->photo : asset('storage/' . $article->photo)) : asset('img/' . $localImagePath);
     @endphp
 
     <div class="relative h-[60vh] min-h-[500px] bg-gray-900 overflow-hidden">

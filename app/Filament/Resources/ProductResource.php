@@ -144,8 +144,19 @@ class ProductResource extends Resource
             ->columns([
                 Tables\Columns\ImageColumn::make('photo')
                     ->label('Foto')
-                    ->disk('public')
-                    ->size(60),
+                    ->size(60)
+                    ->checkFileExistence(false)
+                    ->defaultImageUrl(asset('img/produk-dummy1.jpg'))
+                    ->state(function ($record) {
+                        if (!$record->photo) return null;
+                        if (str_starts_with($record->photo, 'http')) {
+                            return $record->photo;
+                        }
+                        if (str_starts_with($record->photo, 'produk-dummy')) {
+                            return asset('img/' . $record->photo);
+                        }
+                        return asset('storage/' . $record->photo);
+                    }),
                     
                 Tables\Columns\TextColumn::make('name')
                     ->label('Nama Produk')
@@ -172,8 +183,8 @@ class ProductResource extends Resource
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
                         'pending' => 'warning',
-                        'aktif' => 'success',
-                        'ditolak' => 'danger',
+                        'approved', 'aktif' => 'success',
+                        'rejected', 'ditolak' => 'danger',
                         default => 'gray',
                     }),
                     
@@ -207,16 +218,16 @@ class ProductResource extends Resource
                         ->label('Setujui')
                         ->icon('heroicon-o-check-circle')
                         ->color('success')
-                        ->visible(fn (Product $record) => $record->status->name !== 'aktif')
+                        ->visible(fn (Product $record) => !in_array($record->status->name, ['aktif', 'approved']))
                         ->requiresConfirmation()
                         ->action(function (Product $record) {
-                            $status = ProductStatus::where('name', 'aktif')->first();
+                            $status = ProductStatus::where('name', 'approved')->first() ?? ProductStatus::where('name', 'aktif')->first();
                             if ($status) {
                                 $record->update(['status_id' => $status->id]);
                                 
                                 // Kirim notifikasi ke user UMKM
                                 if ($record->umkm && $record->umkm->user) {
-                                    $record->umkm->user->notify(new ProductStatusChangedNotification($record, 'aktif'));
+                                    $record->umkm->user->notify(new ProductStatusChangedNotification($record, 'approved'));
                                 }
                                 
                                 Notification::make()
@@ -231,10 +242,10 @@ class ProductResource extends Resource
                         ->label('Tolak')
                         ->icon('heroicon-o-x-circle')
                         ->color('danger')
-                        ->visible(fn (Product $record) => $record->status->name !== 'ditolak')
+                        ->visible(fn (Product $record) => !in_array($record->status->name, ['ditolak', 'rejected']))
                         ->requiresConfirmation()
                         ->action(function (Product $record) {
-                            $status = ProductStatus::where('name', 'ditolak')->first();
+                            $status = ProductStatus::where('name', 'rejected')->first() ?? ProductStatus::where('name', 'ditolak')->first();
                             if ($status) {
                                 $record->update(['status_id' => $status->id]);
                                 

@@ -17,16 +17,16 @@
                     {{-- Image Section --}}
                     <div class="lg:w-1/2 bg-gray-100 relative group">
                         <div class="aspect-square lg:aspect-auto lg:h-full relative overflow-hidden">
-                            <img src="{{ Str::startsWith($product->photo, 'produk-dummy') ? asset('img/' . $product->photo) : asset('storage/' . $product->photo) }}"
+                            <img src="{{ Str::startsWith($product->photo, 'http') ? $product->photo : (Str::startsWith($product->photo, 'produk-dummy') ? asset('img/' . $product->photo) : asset('storage/' . $product->photo)) }}"
                                 alt="{{ $product->name }}"
                                 class="w-full h-full object-cover transform transition-transform duration-500 group-hover:scale-105">
 
-                            @if($product->status->name != 'aktif')
+                            @if($product->status->name != 'approved' && $product->status->name != 'aktif')
                                 <div class="absolute top-4 left-4">
                                     <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider
                                                 @if($product->status->name == 'pending') bg-yellow-400 text-yellow-900
                                                 @else bg-red-500 text-white @endif">
-                                        {{ ucfirst($product->status->name) }}
+                                        {{ ucfirst($product->status->name === 'rejected' ? 'Ditolak' : $product->status->name) }}
                                     </span>
                                 </div>
                             @endif
@@ -65,7 +65,7 @@
                                 <div
                                     class="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center overflow-hidden border border-gray-200">
                                     @if($product->umkm->photo)
-                                        <img src="{{ asset('storage/' . $product->umkm->photo) }}"
+                                        <img src="{{ Str::startsWith($product->umkm->photo, 'http') ? $product->umkm->photo : asset('storage/' . $product->umkm->photo) }}"
                                             alt="{{ $product->umkm->name }}" class="w-full h-full object-cover">
                                     @else
                                         <i class='bx bx-store text-2xl text-gray-400'></i>

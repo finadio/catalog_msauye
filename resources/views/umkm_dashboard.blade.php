@@ -118,7 +118,7 @@
                             <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-all duration-300 group">
                                 <div class="h-32 bg-gray-100 relative overflow-hidden">
                                     @if($community->image)
-                                        <img src="{{ asset('storage/' . $community->image) }}" alt="{{ $community->name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                                        <img src="{{ Str::startsWith($community->image, 'http') ? $community->image : asset('storage/' . $community->image) }}" alt="{{ $community->name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                                     @else
                                         <div class="w-full h-full bg-gradient-to-br from-blue-500 to-indigo-600"></div>
                                     @endif
@@ -133,7 +133,7 @@
                                     <div class="flex items-center gap-4 mb-3">
                                         <div class="w-12 h-12 rounded-xl bg-white shadow-md p-1 -mt-10 relative z-10">
                                             @if($community->logo)
-                                                <img src="{{ asset('storage/' . $community->logo) }}" alt="Logo" class="w-full h-full object-contain rounded-lg">
+                                                <img src="{{ Str::startsWith($community->logo, 'http') ? $community->logo : asset('storage/' . $community->logo) }}" alt="Logo" class="w-full h-full object-contain rounded-lg">
                                             @else
                                                 <div class="w-full h-full bg-gray-50 rounded-lg flex items-center justify-center text-gray-400 text-xs font-bold">LOGO</div>
                                             @endif
@@ -188,7 +188,7 @@
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <div class="flex items-center">
                                             <div class="h-10 w-10 flex-shrink-0 rounded-lg bg-gray-100 overflow-hidden">
-                                                <img class="h-10 w-10 object-cover" src="{{ asset('storage/' . $p->photo) }}" alt="">
+                                                <img class="h-10 w-10 object-cover" src="{{ Str::startsWith($p->photo, 'http') ? $p->photo : (Str::startsWith($p->photo, 'produk-dummy') ? asset('img/' . $p->photo) : asset('storage/' . $p->photo)) }}" alt="">
                                             </div>
                                             <div class="ml-4">
                                                 <div class="text-sm font-medium text-gray-900">{{ $p->nama }}</div>
@@ -201,11 +201,11 @@
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium
-                                            @if($p->status?->name == 'aktif') bg-green-100 text-green-800
+                                            @if($p->status?->name == 'approved' || $p->status?->name == 'aktif') bg-green-100 text-green-800
                                             @elseif($p->status?->name == 'pending') bg-yellow-100 text-yellow-800
-                                            @elseif($p->status?->name == 'ditolak') bg-red-100 text-red-800
+                                            @elseif($p->status?->name == 'rejected' || $p->status?->name == 'ditolak') bg-red-100 text-red-800
                                             @else bg-gray-100 text-gray-800 @endif">
-                                            {{ ucfirst($p->status->name ?? 'Unknown') }}
+                                            {{ ucfirst($p->status->name === 'approved' ? 'Disetujui' : ($p->status->name === 'rejected' ? 'Ditolak' : ($p->status->name ?? 'Unknown'))) }}
                                         </span>
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">

@@ -193,7 +193,7 @@
                         @if($umkm->photo)
                             <div class="mt-4">
                                 <p class="text-sm text-gray-600 mb-2">Foto saat ini:</p>
-                                <img src="{{ asset('storage/' . $umkm->photo) }}"
+                                <img src="{{ Str::startsWith($umkm->photo, 'http') ? $umkm->photo : (Str::startsWith($umkm->photo, 'umkm-default') ? asset('img/' . $umkm->photo) : asset('storage/' . $umkm->photo)) }}"
                                      alt="Foto UMKM {{ $umkm->name }}"
                                      class="h-48 w-full object-cover rounded-lg shadow-sm">
                             </div>

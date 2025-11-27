@@ -71,7 +71,18 @@ class CommunityResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\ImageColumn::make('logo')
-                    ->circular(),
+                    ->circular()
+                    ->checkFileExistence(false)
+                    ->state(function ($record) {
+                        if (!$record->logo) return null;
+                        if (str_starts_with($record->logo, 'http')) {
+                            return $record->logo;
+                        }
+                        if (str_starts_with($record->logo, 'img/')) {
+                            return asset($record->logo);
+                        }
+                        return asset('storage/' . $record->logo);
+                    }),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable()
                     ->sortable(),
@@ -103,7 +114,7 @@ class CommunityResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\MembersRelationManager::class,
         ];
     }
 

@@ -120,7 +120,7 @@
                                     <td class="px-8 py-6">
                                         <div class="relative">
                                             @if($product->photo)
-                                                <img src="{{ asset('storage/' . $product->photo) }}" 
+                                                <img src="{{ Str::startsWith($product->photo, 'http') ? $product->photo : (Str::startsWith($product->photo, 'produk-dummy') ? asset('img/' . $product->photo) : asset('storage/' . $product->photo)) }}" 
                                                      alt="{{ $product->name }}"
                                                      class="h-20 w-28 rounded-xl border-2 border-gray-200 object-cover shadow-md transition-all duration-200 group-hover:shadow-lg">
                                             @else
@@ -150,22 +150,22 @@
                                     </td>
                                     <td class="px-8 py-6">
                                         <span class="inline-flex items-center gap-2 rounded-full border-2 px-4 py-2 text-sm font-bold transition-all duration-200
-                                            @if ($product->status->name === 'aktif')
+                                            @if ($product->status->name === 'approved' || $product->status->name === 'aktif')
                                                 bg-emerald-50 text-emerald-700 border-emerald-200 hover:bg-emerald-100
                                             @elseif ($product->status->name === 'pending')
                                                 bg-amber-50 text-amber-700 border-amber-200 hover:bg-amber-100
-                                            @elseif ($product->status->name === 'ditolak')
+                                            @elseif ($product->status->name === 'rejected' || $product->status->name === 'ditolak')
                                                 bg-red-50 text-red-700 border-red-200 hover:bg-red-100
                                             @else
                                                 bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100
                                             @endif">
                                             <div class="h-2 w-2 rounded-full
-                                                @if ($product->status->name === 'aktif') bg-emerald-500
+                                                @if ($product->status->name === 'approved' || $product->status->name === 'aktif') bg-emerald-500
                                                 @elseif ($product->status->name === 'pending') bg-amber-500
-                                                @elseif ($product->status->name === 'ditolak') bg-red-500
+                                                @elseif ($product->status->name === 'rejected' || $product->status->name === 'ditolak') bg-red-500
                                                 @else bg-gray-500
                                                 @endif"></div>
-                                            {{ ucfirst($product->status->name) }}
+                                            {{ ucfirst($product->status->name === 'approved' ? 'Disetujui' : ($product->status->name === 'rejected' ? 'Ditolak' : $product->status->name)) }}
                                         </span>
                                     </td>
                                     <td class="px-8 py-6 text-center">
@@ -180,7 +180,7 @@
 
                                             {{-- Enhanced Delete Button --}}
                                             <button type="button"
-                                                onclick="showDeleteModal('{{ $product->id }}', '{{ $product->name }}', '{{ Str::startsWith($product->photo, 'produk-dummy') ? asset('img/' . $product->photo) : asset('storage/' . $product->photo) }}')"
+                                                onclick="showDeleteModal('{{ $product->id }}', '{{ $product->name }}', '{{ Str::startsWith($product->photo, 'http') ? $product->photo : (Str::startsWith($product->photo, 'produk-dummy') ? asset('img/' . $product->photo) : asset('storage/' . $product->photo)) }}')"
                                                 class="group inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-red-500 to-pink-600 px-5 py-2.5 text-sm font-semibold text-white shadow-md transition-all duration-200 hover:shadow-lg hover:from-red-600 hover:to-pink-700">
                                                 <svg class="h-4 w-4 transition-transform duration-200 group-hover:scale-110" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>

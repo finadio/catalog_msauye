@@ -53,7 +53,7 @@
                         <button @click="open = !open" class="flex items-center text-sm font-medium text-gray-500 hover:text-gray-700 hover:border-gray-300 focus:outline-none transition duration-150 ease-in-out">
                             <div class="flex items-center gap-2">
                                 @if(Auth::user()->umkm && Auth::user()->umkm->photo)
-                                    <img src="{{ asset('storage/' . Auth::user()->umkm->photo) }}" alt="{{ Auth::user()->name }}" class="h-8 w-8 rounded-full object-cover border border-gray-200">
+                                    <img src="{{ Str::startsWith(Auth::user()->umkm->photo, 'http') ? Auth::user()->umkm->photo : (Str::startsWith(Auth::user()->umkm->photo, 'umkm-default') ? asset('img/' . Auth::user()->umkm->photo) : asset('storage/' . Auth::user()->umkm->photo)) }}" alt="{{ Auth::user()->name }}" class="h-8 w-8 rounded-full object-cover border border-gray-200">
                                 @else
                                     <div class="h-8 w-8 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">
                                         {{ substr(Auth::user()->name, 0, 1) }}
@@ -127,7 +127,7 @@
                 <div class="flex items-center px-4">
                     <div class="shrink-0">
                         @if(Auth::user()->umkm && Auth::user()->umkm->photo)
-                            <img src="{{ asset('storage/' . Auth::user()->umkm->photo) }}" alt="{{ Auth::user()->name }}" class="h-10 w-10 rounded-full object-cover">
+                            <img src="{{ Str::startsWith(Auth::user()->umkm->photo, 'http') ? Auth::user()->umkm->photo : (Str::startsWith(Auth::user()->umkm->photo, 'umkm-default') ? asset('img/' . Auth::user()->umkm->photo) : asset('storage/' . Auth::user()->umkm->photo)) }}" alt="{{ Auth::user()->name }}" class="h-10 w-10 rounded-full object-cover">
                         @else
                             <div class="h-10 w-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 font-bold">
                                 {{ substr(Auth::user()->name, 0, 1) }}
@@ -350,7 +350,7 @@
                             @if(Auth::user()->role == 'umkm' && Auth::user()->umkm && Auth::user()->umkm->photo)
                                 <div class="rounded-full overflow-hidden ring-2 transition-all"
                                      :class="scrolled ? 'w-8 h-8 ring-blue-100' : 'w-9 h-9 ring-white/50'">
-                                    <img src="{{ asset('storage/' . Auth::user()->umkm->photo) }}" alt="Foto" class="w-full h-full object-cover">
+                                    <img src="{{ Str::startsWith(Auth::user()->umkm->photo, 'http') ? Auth::user()->umkm->photo : (Str::startsWith(Auth::user()->umkm->photo, 'umkm-default') ? asset('img/' . Auth::user()->umkm->photo) : asset('storage/' . Auth::user()->umkm->photo)) }}" alt="Foto" class="w-full h-full object-cover">
                                 </div>
                             @else
                                 <div class="rounded-full flex items-center justify-center font-bold text-sm shadow-md transition-all"

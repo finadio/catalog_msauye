@@ -128,13 +128,13 @@ class AdminProductController extends Controller
     public function approve($id)
     {
         $product = Product::with('umkm.user')->findOrFail($id);
-        $status = ProductStatus::where('name', 'aktif')->first();
+        $status = ProductStatus::where('name', 'approved')->first() ?? ProductStatus::where('name', 'aktif')->first();
         if ($status) {
             $product->update(['status_id' => $status->id]);
 
             // Kirim notifikasi ke user UMKM
             if ($product->umkm && $product->umkm->user) {
-                $product->umkm->user->notify(new ProductStatusChangedNotification($product, 'aktif'));
+                $product->umkm->user->notify(new ProductStatusChangedNotification($product, 'approved'));
             }
         }
         return redirect()->route('admin.produk.index')->with('success', 'Produk berhasil di-approve!');
@@ -143,7 +143,7 @@ class AdminProductController extends Controller
     public function reject($id)
     {
         $product = Product::with('umkm.user')->findOrFail($id);
-        $status = ProductStatus::where('name', 'ditolak')->first();
+        $status = ProductStatus::where('name', 'rejected')->first() ?? ProductStatus::where('name', 'ditolak')->first();
         if ($status) {
             $product->update(['status_id' => $status->id]);
 

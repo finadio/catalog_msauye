@@ -28,7 +28,18 @@ class LatestProducts extends BaseWidget
                 Tables\Columns\ImageColumn::make('photo')
                     ->label('Foto')
                     ->circular()
-                    ->defaultImageUrl(asset('img/default-product.png')),
+                    ->checkFileExistence(false)
+                    ->defaultImageUrl(asset('img/produk-dummy1.jpg'))
+                    ->state(function ($record) {
+                        if (!$record->photo) return null;
+                        if (str_starts_with($record->photo, 'http')) {
+                            return $record->photo;
+                        }
+                        if (str_starts_with($record->photo, 'produk-dummy')) {
+                            return asset('img/' . $record->photo);
+                        }
+                        return asset('storage/' . $record->photo);
+                    }),
 
                 Tables\Columns\TextColumn::make('name')
                     ->label('Nama Produk')
@@ -51,13 +62,15 @@ class LatestProducts extends BaseWidget
                     ->money('IDR')
                     ->sortable(),
 
-                Tables\Columns\BadgeColumn::make('status.name')
+                Tables\Columns\TextColumn::make('status.name')
                     ->label('Status')
-                    ->colors([
-                        'warning' => 'pending',
-                        'success' => 'aktif',
-                        'danger' => 'ditolak',
-                    ]),
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        'pending' => 'warning',
+                        'approved', 'aktif' => 'success',
+                        'rejected', 'ditolak' => 'danger',
+                        default => 'gray',
+                    }),
 
                 Tables\Columns\TextColumn::make('created_at')
                     ->label('Ditambahkan')

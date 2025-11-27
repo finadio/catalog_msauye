@@ -88,7 +88,7 @@
                         class="group bg-white rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 flex flex-col h-full transform hover:-translate-y-1">
                         {{-- Image --}}
                         <div class="relative h-56 overflow-hidden bg-gray-100">
-                            <img src="{{ $umkm->photo ? asset('storage/' . $umkm->photo) : asset('img/umkm-default.png') }}"
+                            <img src="{{ $umkm->photo ? (Str::startsWith($umkm->photo, 'http') ? $umkm->photo : asset('storage/' . $umkm->photo)) : asset('img/umkm-default.png') }}"
                                 alt="{{ $umkm->name }}"
                                 class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500 relative z-10">
                             <div

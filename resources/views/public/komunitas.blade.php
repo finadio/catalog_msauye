@@ -62,7 +62,7 @@
                         class="bg-white rounded-2xl shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden border border-gray-100 flex flex-col h-full group">
                         {{-- Banner Image --}}
                         <div class="h-40 bg-gray-200 relative">
-                            <img src="{{ asset($community->image) }}" alt="{{ $community->name }}"
+                            <img src="{{ Str::startsWith($community->image, 'http') ? $community->image : asset($community->image) }}" alt="{{ $community->name }}"
                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
                         </div>
 
@@ -72,7 +72,7 @@
                             <div class="flex justify-start -mt-10 mb-4">
                                 <div
                                     class="w-20 h-20 rounded-full border-4 border-white bg-white shadow-md overflow-hidden z-10">
-                                    <img src="{{ asset($community->logo) }}" alt="Logo"
+                                    <img src="{{ Str::startsWith($community->logo, 'http') ? $community->logo : asset($community->logo) }}" alt="Logo"
                                         class="w-full h-full object-contain p-1">
                                 </div>
                             </div>

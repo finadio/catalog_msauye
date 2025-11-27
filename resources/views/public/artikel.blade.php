@@ -88,7 +88,7 @@
                         @endphp
 
                         <div class="relative h-56 overflow-hidden">
-                            <img src="{{ $article->photo ? asset('storage/' . $article->photo) : asset('img/' . $localImagePath) }}"
+                            <img src="{{ $article->photo ? (Str::startsWith($article->photo, 'http') ? $article->photo : asset('storage/' . $article->photo)) : asset('img/' . $localImagePath) }}"
                                 alt="{{ $article->title }}"
                                 class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
 

@@ -18,6 +18,7 @@ use App\Http\Controllers\AdminArticleController;
 use App\Http\Controllers\AdminContactController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\CommunityAdminController;
+use App\Http\Controllers\CommunityController;
 
 /*
 |--------------------------------------------------------------------------
@@ -80,6 +81,10 @@ Route::prefix('u')->middleware(['auth'])->group(function () {
     Route::post('/notifikasi/{id}/read', [NotificationController::class, 'markAsRead'])->name('umkm.notifications.read');
     Route::post('/notifikasi/read-all', [NotificationController::class, 'markAllAsRead'])->name('umkm.notifications.read-all');
     Route::delete('/notifikasi/{id}', [NotificationController::class, 'destroy'])->name('umkm.notifications.destroy');
+
+    // Community Features for Members
+    Route::post('/communities/{id}/posts', [CommunityController::class, 'storePost'])->name('communities.posts.store');
+    Route::post('/communities/posts/{id}/comments', [CommunityController::class, 'storeComment'])->name('communities.comments.store');
 });
 
 // Dashboard Admin (Memerlukan autentikasi SAJA, tanpa middleware 'role' sementara)

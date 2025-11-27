@@ -12,7 +12,7 @@
                 {{-- Profile Image --}}
                 <div
                     class="w-32 h-32 md:w-40 md:h-40 rounded-2xl overflow-hidden border-4 border-white/10 shadow-2xl flex-shrink-0 bg-white">
-                    <img src="{{ $umkm->photo ? asset('storage/' . $umkm->photo) : asset('img/umkm-default.png') }}"
+                    <img src="{{ $umkm->photo ? (Str::startsWith($umkm->photo, 'http') ? $umkm->photo : asset('storage/' . $umkm->photo)) : asset('img/umkm-default.png') }}"
                         alt="{{ $umkm->name }}" class="w-full h-full object-cover">
                 </div>
 

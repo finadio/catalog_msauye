@@ -324,5 +324,41 @@ class ProductSeeder extends Seeder
                 'updated_at' => now()->subDays(9),
             ],
         ]);
+
+        // Tambahkan 10 produk tambahan untuk satu UMKM acak agar memiliki banyak produk
+        // Kita ambil UMKM pertama dari database atau yang baru dibuat
+        $targetUmkm = Umkm::inRandomOrder()->first();
+        $categories = Category::all();
+
+        if ($targetUmkm && $categories->count() > 0) {
+            $extraProducts = [];
+            for ($i = 1; $i <= 10; $i++) {
+                // Random status: 70% approved, 30% pending
+                $isApproved = rand(1, 10) <= 7; 
+                $statusId = $isApproved ? $statusApproved->id : $statusPending->id;
+                $randomCategory = $categories->random();
+                
+                // Generate random keyword for image based on category
+                $keyword = 'product';
+                if (stripos($randomCategory->name, 'makanan') !== false) $keyword = 'food';
+                elseif (stripos($randomCategory->name, 'minuman') !== false) $keyword = 'drink';
+                elseif (stripos($randomCategory->name, 'fashion') !== false) $keyword = 'fashion';
+                elseif (stripos($randomCategory->name, 'kerajinan') !== false) $keyword = 'craft';
+                
+                $extraProducts[] = [
+                    'umkm_id' => $targetUmkm->id,
+                    'category_id' => $randomCategory->id,
+                    'name' => 'Produk Spesial ' . $i . ' ' . $targetUmkm->name,
+                    'description' => 'Produk unggulan dari ' . $targetUmkm->name . '. Kualitas terjamin dan harga terjangkau. Dibuat dengan bahan pilihan.',
+                    'price' => rand(15000, 250000),
+                    'photo' => 'https://loremflickr.com/640/480/' . $keyword . '?random=' . rand(10000, 99999),
+                    'status_id' => $statusId,
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ];
+            }
+            DB::table('products')->insert($extraProducts);
+            $this->command->info('Added 10 extra products to UMKM: ' . $targetUmkm->name);
+        }
     }
 }
