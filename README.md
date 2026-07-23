@@ -12,6 +12,53 @@ UMKMSmart merupakan aplikasi web yang dikembangkan sebagai proyek Kerja Praktik 
 
 Aplikasi ini menerapkan Role-Based Access Control (RBAC) sehingga setiap pengguna memiliki hak akses sesuai perannya, mulai dari pengunjung, mitra UMKM, hingga administrator.
 
+## Tampilan Aplikasi
+
+Berikut screenshot utama yang sudah tersedia di folder public/screenshoot:
+
+<table>
+  <tr>
+    <td align="center">
+      <img src="public/screenshoot/homepage.png" alt="Beranda" width="100%" />
+      <br />Beranda
+    </td>
+    <td align="center">
+      <img src="public/screenshoot/produk.png" alt="Katalog Produk" width="100%" />
+      <br />Katalog Produk
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="public/screenshoot/produkdetail.png" alt="Detail Produk" width="100%" />
+      <br />Detail Produk
+    </td>
+    <td align="center">
+      <img src="public/screenshoot/detailumkm.png" alt="Profil UMKM" width="100%" />
+      <br />Profil UMKM
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="public/screenshoot/dashboardumkm.png" alt="Dashboard UMKM" width="100%" />
+      <br />Dashboard UMKM
+    </td>
+    <td align="center">
+      <img src="public/screenshoot/dashboardadmin.png" alt="Dashboard Admin" width="100%" />
+      <br />Dashboard Admin
+    </td>
+  </tr>
+  <tr>
+    <td align="center">
+      <img src="public/screenshoot/artikel.png" alt="Artikel" width="100%" />
+      <br />Artikel
+    </td>
+    <td align="center">
+      <img src="public/screenshoot/komunitas.png" alt="Komunitas" width="100%" />
+      <br />Komunitas
+    </td>
+  </tr>
+</table>
+
 ## Fitur
 
 ### Pengunjung
@@ -74,21 +121,6 @@ Role pengguna dikelola menggunakan Role-Based Access Control (RBAC) dengan tiga 
 - Verifikasi Produk
 - Dashboard Admin
 - Contact Us
-
-## Tampilan Aplikasi
-
-Berikut screenshot utama yang sudah tersedia di folder public/screenshoot:
-
-| Halaman | Screenshot |
-|---|---|
-| Beranda | ![Beranda](public/screenshoot/homepage.png) |
-| Katalog Produk | ![Produk](public/screenshoot/produk.png) |
-| Detail Produk | ![Detail Produk](public/screenshoot/produkdetail.png) |
-| Profil UMKM | ![Profil UMKM](public/screenshoot/detailumkm.png) |
-| Dashboard UMKM | ![Dashboard UMKM](public/screenshoot/dashboardumkm.png) |
-| Dashboard Admin | ![Dashboard Admin](public/screenshoot/dashboardadmin.png) |
-| Artikel | ![Artikel](public/screenshoot/artikel.png) |
-| Komunitas | ![Komunitas](public/screenshoot/komunitas.png) |
 
 ## Struktur Project
 
