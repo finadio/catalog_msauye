@@ -1,187 +1,180 @@
 <div align="center">
-  <img src="public/img/msa.png" alt="PT BPR MSA Logo" width="200"/>
-  <h1>UMKM Catalog PT BPR MSA</h1>
-  <p><strong>Sistem Digitalisasi Katalog UMKM untuk Mendukung Ekonomi Lokal</strong></p>
+  <img src="public/img/msa.png" alt="PT BPR MSA Logo" width="180"/>
+  <h1>UMKMSmart</h1>
+  <p><strong>Aplikasi katalog UMKM binaan PT BPR Madani Sejahtera Abadi Yogyakarta</strong></p>
 </div>
 
 ---
 
-## 📋 Tentang Project
+## Tentang Project
 
-**UMKM Catalog PT BPR MSA** adalah platform digital yang dikembangkan oleh tim mahasiswa sebagai bagian dari program kerja praktik di PT BPR MSA. Sistem ini dirancang untuk mendigitalisasi dan mempermudah proses pengelolaan katalog produk UMKM (Usaha Mikro Kecil Menengah) yang menjadi mitra PT BPR MSA, sekaligus memperluas jangkauan pasar produk-produk lokal berkualitas.
+UMKMSmart merupakan aplikasi web yang dikembangkan sebagai proyek Kerja Praktik di PT BPR Madani Sejahtera Abadi (BPR MSA) Yogyakarta. Sistem ini dibangun untuk membantu digitalisasi promosi produk UMKM binaan melalui katalog produk online, manajemen data UMKM, serta penyediaan ruang interaksi bagi komunitas pelaku usaha.
 
-### 🎯 Tujuan
-- **Mendigitalisasi katalog produk UMKM** mitra PT BPR MSA secara terpusat dan terstruktur
-- **Mempermudah akses konsumen** terhadap produk-produk UMKM berkualitas dari mitra PT BPR MSA
-- **Meningkatkan efisiensi** dalam proses promosi dan penjualan produk UMKM
-- **Mendukung pertumbuhan ekonomi lokal** melalui platform digital yang inovatif
-- **Membangun ekosistem digital** yang kondusif untuk UMKM mitra PT BPR MSA
+Aplikasi ini menerapkan Role-Based Access Control (RBAC) sehingga setiap pengguna memiliki hak akses sesuai perannya, mulai dari pengunjung, mitra UMKM, hingga administrator.
 
----
+## Fitur
 
-## ✨ Fitur Utama
+### Pengunjung
+- Melihat katalog produk UMKM
+- Mencari produk berdasarkan nama atau kategori
+- Melihat profil UMKM
+- Menghubungi pelaku UMKM melalui WhatsApp
+- Membaca artikel dan informasi seputar UMKM
+- Melihat daftar komunitas UMKM
+- Mengirim pesan melalui halaman kontak
 
-### 🔍 **Manajemen Katalog Produk**
-- **Upload & Management Produk**: UMKM dapat dengan mudah menambahkan, mengedit, dan mengelola produk mereka
-- **Kategori Produk**: Sistem kategori yang terorganisir untuk memudahkan pencarian
-- **Galeri Foto**: Upload multiple foto produk dengan preview otomatis
-- **Status Produk**: Tracking status produk (draft, pending, approved, rejected)
+### Mitra UMKM
+- Registrasi akun
+- Mengelola profil usaha
+- Menambah, mengubah, dan menghapus produk
+- Melihat status persetujuan produk
+- Mengajukan bergabung ke komunitas
+- Membuat diskusi dan memberikan komentar
+- Melihat dashboard ringkasan aktivitas
 
-### 👥 **Manajemen User & UMKM**
-- **Registrasi UMKM**: Proses registrasi UMKM mitra dengan validasi dokumen
-- **Dashboard Admin**: Panel admin untuk monitoring dan approval produk UMKM
-- **Profil UMKM**: Halaman profil lengkap dengan informasi kontak dan media sosial
-- **Role-based Access**: Hak akses yang terpisah untuk admin, UMKM, dan pengunjung
+### Administrator
+- Dashboard statistik
+- Verifikasi akun UMKM
+- Moderasi produk
+- Manajemen kategori produk
+- Manajemen artikel
+- Manajemen komunitas
+- Monitoring pesan dari pengguna
 
-### 📱 **User Experience**
-- **Responsive Design**: Tampilan optimal di desktop, tablet, dan mobile
-- **Search & Filter**: Pencarian produk berdasarkan kategori, lokasi, atau keyword
-- **Sorting Options**: Urutkan produk berdasarkan harga, terbaru, atau popularitas
-- **Contact Form**: Formulir kontak langsung ke UMKM untuk inquiry pembelian
+## Teknologi
 
-### 📊 **Analytics & Monitoring**
-- **Dashboard Analytics**: Statistik produk, UMKM, dan engagement pengunjung
-- **Notification System**: Notifikasi real-time untuk status produk dan aktivitas
-- **Activity Log**: Tracking semua aktivitas dalam sistem untuk audit trail
+| Komponen | Teknologi |
+|---|---|
+| Framework | Laravel 12 |
+| Bahasa | PHP 8.2 |
+| Admin Panel | Filament v3 |
+| Frontend | Blade, Tailwind CSS, Alpine.js |
+| Database | MySQL |
+| Build Tool | Vite |
+| Authentication | Laravel Sanctum |
+| Authorization | Spatie Laravel Permission |
 
----
+## Arsitektur
 
-## 🛠️ Teknologi yang Digunakan
+Project dikembangkan menggunakan pola Model-View-Controller (MVC) yang merupakan arsitektur bawaan Laravel.
 
-### **Backend**
-- **Laravel 12** - Framework PHP modern untuk backend yang robust
-- **MySQL/MariaDB** - Database relasional untuk data produk dan UMKM
-- **PHP 8.2+** - Bahasa pemrograman server-side dengan performa optimal
+Role pengguna dikelola menggunakan Role-Based Access Control (RBAC) dengan tiga level akses:
 
-### **Frontend**
-- **Blade Template Engine** - Templating engine bawaan Laravel
-- **Tailwind CSS 3** - Utility-first CSS framework untuk styling modern
-- **Alpine.js 3** - JavaScript framework untuk interaktivitas ringan
-- **Vite 6** - Modern build tool untuk asset bundling
+- Guest
+- Mitra UMKM
+- Administrator
 
-### **Tools & Dependencies**
-- **Spatie Laravel Permission** - Package untuk role-based access control
-- **Laravel Sanctum** - API authentication
-- **Laravel Notifications** - Sistem notifikasi built-in Laravel
-- **Laravel Pail** - Real-time log viewer
+## Modul
 
----
+- Manajemen Produk
+- Manajemen UMKM
+- Katalog Publik
+- Artikel
+- Komunitas UMKM
+- Verifikasi Produk
+- Dashboard Admin
+- Contact Us
 
-## 🚀 Cara Instalasi
+## Tampilan Aplikasi
 
-### **Prasyarat**
-- PHP 8.2 atau lebih baru
-- Composer
-- MySQL/MariaDB
-- Node.js & NPM (untuk Vite)
+Berikut screenshot utama yang sudah tersedia di folder public/screenshoot:
 
-### **Langkah Instalasi**
+| Halaman | Screenshot |
+|---|---|
+| Beranda | ![Beranda](public/screenshoot/homepage.png) |
+| Katalog Produk | ![Produk](public/screenshoot/produk.png) |
+| Detail Produk | ![Detail Produk](public/screenshoot/produkdetail.png) |
+| Profil UMKM | ![Profil UMKM](public/screenshoot/detailumkm.png) |
+| Dashboard UMKM | ![Dashboard UMKM](public/screenshoot/dashboardumkm.png) |
+| Dashboard Admin | ![Dashboard Admin](public/screenshoot/dashboardadmin.png) |
+| Artikel | ![Artikel](public/screenshoot/artikel.png) |
+| Komunitas | ![Komunitas](public/screenshoot/komunitas.png) |
 
-1. **Clone Repository**
-   ```bash
-   git clone https://github.com/finadio/meeting_room.git
-   cd meeting_room
-   ```
+## Struktur Project
 
-2. **Install Dependencies**
-   ```bash
-   composer install
-   npm install
-   ```
+```text
+app/
+├── Http/
+│   ├── Controllers/
+│   └── Middleware/
+├── Models/
+database/
+├── migrations/
+└── seeders/
+resources/
+├── views/
+└── css/
+routes/
+└── web.php
+```
 
-3. **Konfigurasi Environment**
-   ```bash
-   cp .env.example .env
-   php artisan key:generate
-   ```
+## Instalasi
 
-4. **Setup Database**
-   ```bash
-   # Edit .env file dengan konfigurasi database Anda
-   php artisan migrate --seed
-   ```
+Clone repository:
 
-5. **Build Assets**
-   ```bash
-   npm run build
-   ```
+```bash
+git clone <repository-url>
+cd catalog_msauye
+```
 
-6. **Jalankan Server**
-   ```bash
-   php artisan serve
-   ```
+Install dependency:
 
-Akses aplikasi di: `http://localhost:8000`
+```bash
+composer install
+npm install
+```
 
----
+Konfigurasi environment:
 
-## 📋 Setup Awal
+```bash
+cp .env.example .env
+php artisan key:generate
+```
 
-### **Akun Default**
-- **Admin**: admin@msa.com / password
-- **UMKM Sample**: umkm@example.com / password
+Sesuaikan konfigurasi database pada file `.env`, lalu jalankan migrasi:
 
-### **Struktur Database**
-- `users` - Data user admin dan UMKM
-- `umkms` - Data detail UMKM mitra
-- `products` - Katalog produk UMKM
-- `categories` - Kategori produk
-- `articles` - Artikel dan konten edukasi
-- `contacts` - Formulir kontak dan inquiry
+```bash
+php artisan migrate --seed
+```
 
----
+Buat symbolic link storage:
 
-## 🎯 Panduan Penggunaan
+```bash
+php artisan storage:link
+```
 
-### **Untuk Admin PT BPR MSA**
-1. Login dengan akun admin
-2. Review dan approve produk UMKM yang baru diupload
-3. Monitor aktivitas dan statistik melalui dashboard
-4. Kelola kategori produk dan konten artikel
+Jalankan Vite:
 
-### **Untuk UMKM Mitra**
-1. Registrasi akun sebagai UMKM mitra
-2. Lengkapi profil UMKM dengan informasi lengkap
-3. Upload produk dengan foto dan deskripsi yang menarik
-4. Monitor status produk dan respon dari pengunjung
+```bash
+npm run dev
+```
 
-### **Untuk Pengunjung**
-1. Jelajahi katalog produk UMKM mitra PT BPR MSA
-2. Gunakan fitur search dan filter untuk menemukan produk
-3. Hubungi UMKM langsung melalui formulir kontak
-4. Baca artikel edukasi tentang pengembangan UMKM
+Jalankan aplikasi:
 
----
+```bash
+php artisan serve
+```
 
-## 🤝 Kontribusi & Tim
+## Akun Demo
 
-**Project ini dikembangkan oleh:**
-- Tim Mahasiswa Kerja Praktik PT BPR MSA
-- Dibawah supervisi langsung tim IT PT BPR MSA
-- Sebagai bagian dari program digitalisasi UMKM mitra
+### Administrator
 
-**Untuk pertanyaan atau kontribusi:**
-- Email: [admin@msa.com](mailto:admin@msa.com)
-- WhatsApp: [+62 XXX XXXX XXXX](https://wa.me/62XXXXXXXXXX)
+```text
+Email    : admin@msa.com
+Password : password
+```
 
----
+### Mitra UMKM
 
-## 📄 Lisensi
+```text
+Email    : umkm@example.com
+Password : password
+```
 
-Aplikasi ini dikembangkan secara **open-source** dengan lisensi **MIT License**. Dapat digunakan dan dimodifikasi sesuai kebutuhan, dengan tetap mencantumkan kredit kepada PT BPR MSA.
+## Pengembang
 
----
+**Fina Julianti**
+Mahasiswa Informatika
+Universitas Jenderal Soedirman
 
-## 🙏 Acknowledgments
-
-- **PT BPR MSA** - Untuk kesempatan dan support dalam pengembangan project
-- **Tim IT PT BPR MSA** - Untuk guidance dan best practices
-- **UMKM Mitra** - Untuk partisipasi dan feedback dalam pengembangan sistem
-- **Laravel Community** - Untuk framework dan ekosistem yang luar biasa
-
----
-
-<div align="center">
-  <p><strong>UMKM Catalog PT BPR MSA</strong></p>
-  <p>Membangun Ekonomi Digital Lokal Bersama</p>
-</div>
+Project ini dikembangkan sebagai bagian dari Kerja Praktik di PT BPR Madani Sejahtera Abadi Yogyakarta.
